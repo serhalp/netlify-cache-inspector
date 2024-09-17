@@ -1,30 +1,10 @@
 <script setup lang="ts">
 const inputUrl = ref();
-const runs = ref([]);
 
-const inspectUrl = async (): void => {
-  if (!inputUrl.value.startsWith("http")) {
-    inputUrl.value = `https://${inputUrl.value}`;
-  }
+const emit = defineEmits(["submit"]);
 
-  try {
-    // Destructuring would be confusing, since the response body contains fields named `status` and
-    // `headers` (it's a request about a request...)
-    const responseBody = await $fetch(
-      `/api/inspect-url/${encodeURIComponent(inputUrl.value)}`,
-    );
-
-    runs.value.push({
-      url: inputUrl.value,
-      status: responseBody.status,
-      cacheHeaders: getCacheHeaders(responseBody.headers),
-      durationInMs: responseBody.durationInMs,
-    });
-  } catch (err) {
-    // TODO(serhalp) Proper error handling. ErrorBoundary?
-    console.error("Error fetching URL", err);
-    return;
-  }
+const handleSubmit = () => {
+  emit("submit", { url: inputUrl.value });
 };
 </script>
 
@@ -32,18 +12,9 @@ const inspectUrl = async (): void => {
   <div class="form">
     <label class="url-input">
       <strong>URL:</strong>
-      <input v-model.trim="inputUrl" @keyup.enter="inspectUrl()" />
+      <input v-model.trim="inputUrl" @keyup.enter="handleSubmit()" />
     </label>
-    <button @click="inspectUrl()">Inspect</button>
-  </div>
-
-  <!-- TODO(serhalp) Move this into another component. Wrong place. -->
-  <div class="flex-btwn">
-    <div v-for="run in runs">
-      <h3>{{ run.url }}</h3>
-      <small>HTTP {{ run.status }} ({{ run.durationInMs }} ms)</small>
-      <RawCacheHeaders :cacheHeaders="run.cacheHeaders" />
-    </div>
+    <button @click="handleSubmit()">Inspect</button>
   </div>
 </template>
 

@@ -17,3 +17,9 @@ onUpdated(highlightJson);
     <code :ref="id" class="hljs language-json">{{ JSON.stringify(props.cacheHeaders, null, 2) }}</code>
   </pre>
 </template>
+
+<style scoped>
+code {
+  font-size: 0.7em;
+}
+</style>
