@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const startTime = Date.now();
+  // TODO(serhalp) `$fetch` automatically throws on 4xx, but we'd like to treat those as valid.
   const { status, headers } = await $fetch.raw(url, {
     headers: {
       "x-nf-debug-logging": "1",

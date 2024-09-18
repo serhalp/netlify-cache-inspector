@@ -78,6 +78,7 @@ main {
 
 .run-panels {
   flex-wrap: wrap;
+  align-items: stretch;
 }
 
 .run-panels>* {
