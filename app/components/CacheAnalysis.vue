@@ -67,6 +67,14 @@ const { servedBy, cacheStatus } = getCacheAnalysis(props.cacheHeaders);
 </template>
 
 <style scoped>
+.container {
+  font-size: 0.9em;
+}
+
+hr {
+  margin-top: 0.5em;
+}
+
 .cache-heading h4 {
   padding: 0;
   /* I'm sorry */

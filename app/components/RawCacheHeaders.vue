@@ -19,18 +19,22 @@ onUpdated(highlightJson);
 </template>
 
 <style scoped>
-/* FIXME(serhalp) This is leaky. I'm doing this:
- * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_alignment/Box_alignment_in_flexbox#alignment_and_auto_margins.
- * But this component shouldn't "know" about its parent's layout needs.
- */
 pre {
+  /* The default is too airy */
+  padding-bottom: 0;
+  margin-bottom: 0;
+  /* FIXME(serhalp) This is leaky. I'm doing this:
+   * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_alignment/Box_alignment_in_flexbox#alignment_and_auto_margins.
+   * But this component shouldn't "know" about its parent's layout needs.
+   */
   margin-top: auto;
+  margin-right: auto;
 }
 
 code {
-  font-size: 0.7em;
+  font-size: 0.6em;
 
-  max-width: 40vw;
+  max-width: 30vw;
   overflow-x: scroll;
 }
 </style>
