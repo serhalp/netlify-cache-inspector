@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const runs = ref([]);
+const error = ref(null);
 
 const handleRequestFormSubmit = async ({ url }): void => {
   if (!url.startsWith("http")) {
@@ -19,9 +20,13 @@ const handleRequestFormSubmit = async ({ url }): void => {
       cacheHeaders: getCacheHeaders(responseBody.headers),
       durationInMs: responseBody.durationInMs,
     });
+
+    error.value = null;
   } catch (err) {
-    // TODO(serhalp) Proper error handling. ErrorBoundary?
-    console.error("Error fetching URL", err);
+    error.value =
+      err?.data?.message ??
+      err?.toString?.() ??
+      new Error(`Fetch error: ${err}`);
     return;
   }
 };
@@ -44,6 +49,10 @@ const handleClickClear = (): void => {
 
   <main>
     <RequestForm @submit="handleRequestFormSubmit" />
+
+    <div v-if="error" class="error">
+      {{ error }}
+    </div>
 
     <div class="flex-btwn run-panels">
       <RunPanel v-for="run in runs" v-bind="run" />
@@ -74,6 +83,10 @@ main {
   /* Override very airy defaults from Netlify Examples style, not great for a utility app */
   margin-top: 3em;
   padding-bottom: 3em;
+}
+
+.error {
+  color: var(--red-400);
 }
 
 .run-panels {
