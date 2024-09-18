@@ -46,13 +46,13 @@ export const parseCacheStatus = (
           parameters
             .map((parameter) => {
               const [key, value] = parameter.split("=");
-              if (!key || !value) {
+              if (!key) {
                 console.warn("Ignoring invalid cache status entry", { entry });
                 return null;
               }
               return [key, value];
             })
-            .filter((kv): kv is [string, string] => kv != null),
+            .filter((kv): kv is [string, string | undefined] => kv != null),
         );
         return {
           cacheName: cacheName.slice(1, -1), // "Netlify Edge" -> Netlify Edge
