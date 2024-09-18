@@ -15,6 +15,7 @@ const CACHE_HEADER_NAMES = [
   "Vary",
   "X-BB-Deploy-Id",
   "X-BB-Gen",
+  "X-BB-Host-Id",
   "X-NF-Cache-Info",
   "X-NF-Cache-Result",
   // TODO(serhalp) These two probably shouldn't be here but I use it to determine who served the

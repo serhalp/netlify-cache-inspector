@@ -1,4 +1,4 @@
-export enum ServedBy {
+export enum ServedBySource {
   CDN = "CDN",
   DurableCache = "Durable Cache",
   Function = "Function",
@@ -77,10 +77,10 @@ export const parseCacheStatus = (
   );
 };
 
-const getServedBy = (
+const getServedBySource = (
   cacheHeaders: Headers,
   cacheStatus: ParsedCacheStatusEntry[],
-): ServedBy => {
+): ServedBySource => {
   // Per the spec, these are sorted from "the cache closest to the origin server" to "the cache closest to the user".
   // So, the first cache hit (starting from the user) is the one that served the request.
   // But we don't quite want to return exactly the same concept of "caches" as in `Cache-Status`, so
@@ -91,19 +91,35 @@ const getServedBy = (
   } of cacheStatus) {
     if (!hit) continue;
 
-    if (cacheName === "Netlify Edge") return ServedBy.CDN;
-    if (cacheName === "Netlify Durable") return ServedBy.DurableCache;
+    if (cacheName === "Netlify Edge") return ServedBySource.CDN;
+    if (cacheName === "Netlify Durable") return ServedBySource.DurableCache;
   }
 
   // NOTE: the order is important here, since a response can be served by a Function even
   // though one or more Edge Functions are also invoked (as middleware).
-  if (cacheHeaders.has("X-NF-Function-Type")) return ServedBy.Function;
+  if (cacheHeaders.has("X-NF-Function-Type")) return ServedBySource.Function;
 
-  if (cacheHeaders.has("X-NF-Edge-Functions")) return ServedBy.EdgeFunction;
+  if (cacheHeaders.has("X-NF-Edge-Functions"))
+    return ServedBySource.EdgeFunction;
 
   throw new Error(
     `Could not determine who served the request. Cache status: ${cacheStatus}`,
   );
+};
+
+interface ServedBy {
+  source: ServedBySource;
+  cdnNode: string;
+}
+
+const getServedBy = (
+  cacheHeaders: Headers,
+  cacheStatus: ParsedCacheStatusEntry[],
+): ServedBy => {
+  return {
+    source: getServedBySource(cacheHeaders, cacheStatus),
+    cdnNode: cacheHeaders.get("X-BB-Host-Id") ?? "unknown CDN node",
+  };
 };
 
 export interface CacheAnalysis {

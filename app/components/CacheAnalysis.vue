@@ -7,11 +7,13 @@ const { servedBy, cacheStatus } = getCacheAnalysis(props.cacheHeaders);
 </script>
 
 <template>
-  <div>
-    <dl>
-      <dt>Served by</dt>
-      <dd>{{ servedBy }}</dd>
-    </dl>
+  <div class="container">
+    <div>
+      Served by: <strong>{{ servedBy.source }}</strong>
+    </div>
+    <div>
+      CDN node: <code>{{ servedBy.cdnNode }}</code>
+    </div>
 
     <hr />
 
