@@ -18,11 +18,16 @@ const { servedBy, cacheStatus } = getCacheAnalysis(props.cacheHeaders);
     <hr />
 
     <dl>
-      <template v-for="{ cacheName, parameters } in cacheStatus">
+      <dt class="cache-heading">
+        <h4>🎬 Request from client</h4>
+      </dt>
+      <dd></dd>
+
+      <template v-for="({ cacheName, parameters }, cacheIndex) in cacheStatus">
         <!-- This is a bit of a hack to use the pretty <dt> styling but with sections. -->
         <!-- I should probably just do something custom instead. -->
         <dt class="cache-heading">
-          <h4>{{ cacheName }}</h4>
+          <h4>↳ {{ cacheName }}</h4>
         </dt>
         <dd></dd>
 
@@ -64,6 +69,15 @@ const { servedBy, cacheStatus } = getCacheAnalysis(props.cacheHeaders);
           <dd>{{ parameters.detail }}</dd>
         </template>
       </template>
+
+      <dt class="cache-heading">
+        <h4>
+          ↓
+          <br />
+          🏁 Response to client
+        </h4>
+      </dt>
+      <dd></dd>
     </dl>
   </div>
 </template>
@@ -77,7 +91,15 @@ hr {
   margin-top: 0.5em;
 }
 
-.cache-heading h4 {
+dt {
+  margin-left: 1em;
+}
+
+dt.cache-heading {
+  margin-left: 1em;
+}
+
+dt.cache-heading h4 {
   padding: 0;
   /* I'm sorry */
   margin-left: -0.5em;
