@@ -29,8 +29,8 @@ const handleRequestFormSubmit = async ({
     });
 
     error.value = null;
-    // TODO(serhalp) nuxt doesn't appear to re-export the `FetchError` types from ofetch. Look into
-    // this.
+    // TODO(serhalp) nuxt doesn't appear to re-export the `FetchError` types from ofetch. Look into this.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     error.value =
       err?.data?.message ??
@@ -64,7 +64,7 @@ const handleClickClear = (): void => {
     </div>
 
     <div class="flex-btwn run-panels">
-      <RunPanel v-for="run in runs" v-bind="run" />
+      <RunPanel v-for="(run, i) in runs" v-bind="run" :key="i" />
     </div>
   </main>
 

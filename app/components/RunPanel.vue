@@ -13,8 +13,8 @@ const props = defineProps<{
 
     <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
 
-    <CacheAnalysis :cacheHeaders="props.cacheHeaders" />
-    <RawCacheHeaders :cacheHeaders="props.cacheHeaders" />
+    <CacheAnalysis :cache-headers="props.cacheHeaders" />
+    <RawCacheHeaders :cache-headers="props.cacheHeaders" />
   </div>
 </template>
 

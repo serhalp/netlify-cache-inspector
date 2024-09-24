@@ -24,7 +24,7 @@ const formatDate = (date: Date): string =>
     timeZoneName: "short",
   });
 
-let now = ref(Date.now());
+const now = ref(Date.now());
 
 const cacheAnalysis = computed(() =>
   getCacheAnalysis(props.cacheHeaders, now.value),
@@ -62,11 +62,12 @@ onUnmounted(() => {
           ↓
         </h4>
       </dt>
-      <dd></dd>
+      <dd />
 
-      <template v-for="(
+      <template
+v-for="(
           { cacheName, parameters }, cacheIndex
-        ) in cacheAnalysis.cacheStatus">
+        ) in cacheAnalysis.cacheStatus" :key="cacheIndex">
         <!-- This is a bit of a hack to use the pretty <dt> styling but with sections. -->
         <!-- I should probably just do something custom instead. -->
         <dt class="cache-heading">
@@ -74,7 +75,7 @@ onUnmounted(() => {
             ↳ <em>{{ cacheName }}</em> cache
           </h4>
         </dt>
-        <dd></dd>
+        <dd />
 
         <dt>Hit</dt>
         <dd>{{ parameters.hit ? "✅" : "❌" }}</dd>
@@ -124,7 +125,7 @@ onUnmounted(() => {
           🏁 Response to client
         </h4>
       </dt>
-      <dd></dd>
+      <dd />
 
       <dt>Cacheable</dt>
       <dd>{{ cacheAnalysis.cacheControl.isCacheable ? "✅" : "❌" }}</dd>
@@ -156,27 +157,23 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.ttl">
-        <dt>
-          TTL{{
+        <dt>TTL{{
             cacheAnalysis.cacheControl.netlifyCdnTtl ||
               cacheAnalysis.cacheControl.cdnTtl
               ? " (browser)"
               : ""
-          }}
-        </dt>
+          }}</dt>
         <dd :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)">
           {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
         </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.cdnTtl">
-        <dt>
-          TTL ({{
+        <dt>TTL ({{
             cacheAnalysis.cacheControl.netlifyCdnTtl
               ? "other CDNs"
               : "Netlify CDN"
-          }})
-        </dt>
+          }})</dt>
         <dd :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)">
           {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
         </dd>
