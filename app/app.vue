@@ -1,48 +1,51 @@
 <script setup lang="ts">
 interface Run {
-  url: string;
-  status: number;
-  cacheHeaders: Record<string, string>;
-  durationInMs: number;
+  url: string
+  status: number
+  cacheHeaders: Record<string, string>
+  durationInMs: number
 }
 
-const runs = ref<Run[]>([]);
-const error = ref<string | null>(null);
+const runs = ref<Run[]>([])
+const error = ref<string | null>(null)
 
 const handleRequestFormSubmit = async ({
   url,
 }: {
-  url: string;
+  url: string
 }): Promise<void> => {
   try {
     // Destructuring would be confusing, since the response body contains fields named `status` and
     // `headers` (it's a request about a request...)
     const responseBody = await $fetch(
       `/api/inspect-url/${encodeURIComponent(url)}`,
-    );
+    )
 
     runs.value.push({
       url,
       status: responseBody.status,
       cacheHeaders: getCacheHeaders(responseBody.headers),
       durationInMs: responseBody.durationInMs,
-    });
+    })
 
-    error.value = null;
-    // TODO(serhalp) nuxt doesn't appear to re-export the `FetchError` types from ofetch. Look into this.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    error.value =
-      err?.data?.message ??
-      err?.toString?.() ??
-      new Error(`Fetch error: ${err}`);
-    return;
+    error.value = null
   }
-};
+  catch (
+  // TODO(serhalp) nuxt doesn't appear to re-export the `FetchError` types from ofetch. Look into this.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    err: any
+  ) {
+    error.value
+      = err?.data?.message
+      ?? err?.toString?.()
+      ?? new Error(`Fetch error: ${err}`)
+    return
+  }
+}
 
 const handleClickClear = (): void => {
-  runs.value = [];
-};
+  runs.value = []
+}
 </script>
 
 <template>
@@ -59,17 +62,29 @@ const handleClickClear = (): void => {
   <main>
     <RequestForm @submit="handleRequestFormSubmit" />
 
-    <div v-if="error" class="error">
+    <div
+      v-if="error"
+      class="error"
+    >
       {{ error }}
     </div>
 
     <div class="flex-btwn run-panels">
-      <RunPanel v-for="(run, i) in runs" v-bind="run" :key="i" />
+      <RunPanel
+        v-for="(run, i) in runs"
+        v-bind="run"
+        :key="i"
+      />
     </div>
   </main>
 
   <div class="reset-container">
-    <button v-if="runs.length > 0" @click="handleClickClear()">Clear</button>
+    <button
+      v-if="runs.length > 0"
+      @click="handleClickClear()"
+    >
+      Clear
+    </button>
   </div>
 </template>
 
@@ -79,6 +94,7 @@ body {
   text-align: left;
 }
 </style>
+
 <style scoped>
 header {
   text-align: center;

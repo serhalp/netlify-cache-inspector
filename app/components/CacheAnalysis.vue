@@ -1,46 +1,46 @@
 <script setup lang="ts">
-import { formatDuration, intervalToDuration } from "date-fns";
+import { formatDuration, intervalToDuration } from 'date-fns'
 
 const props = defineProps<{
-  cacheHeaders: Record<string, string>;
-}>();
+  cacheHeaders: Record<string, string>
+}>()
 
 const formatSeconds = (seconds: number): string => {
-  return `${seconds} s`;
-};
+  return `${seconds} s`
+}
 
 const formatHumanSeconds = (seconds: number): string => {
-  const d = new Date(); // arbitrary date
+  const d = new Date() // arbitrary date
   return formatDuration(
     intervalToDuration({
       start: d,
       end: new Date(d.getTime() + Math.abs(seconds) * 1000),
     }),
-  );
-};
+  )
+}
 
 const formatDate = (date: Date): string =>
   date.toLocaleString(undefined, {
-    timeZoneName: "short",
-  });
+    timeZoneName: 'short',
+  })
 
-const now = ref(Date.now());
+const now = ref(Date.now())
 
 const cacheAnalysis = computed(() =>
   getCacheAnalysis(props.cacheHeaders, now.value),
-);
+)
 
-let timerId: NodeJS.Timeout | null = null;
+let timerId: NodeJS.Timeout | null = null
 
 onMounted(() => {
   timerId = setInterval(() => {
-    now.value = Date.now();
-  }, 1000);
-});
+    now.value = Date.now()
+  }, 1000)
+})
 
 onUnmounted(() => {
-  if (timerId) clearInterval(timerId);
-});
+  if (timerId) clearInterval(timerId)
+})
 </script>
 
 <template>
@@ -65,9 +65,11 @@ onUnmounted(() => {
       <dd />
 
       <template
-v-for="(
+        v-for="(
           { cacheName, parameters }, cacheIndex
-        ) in cacheAnalysis.cacheStatus" :key="cacheIndex">
+        ) in cacheAnalysis.cacheStatus"
+        :key="cacheIndex"
+      >
         <!-- This is a bit of a hack to use the pretty <dt> styling but with sections. -->
         <!-- I should probably just do something custom instead. -->
         <dt class="cache-heading">
@@ -157,23 +159,27 @@ v-for="(
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.ttl">
-        <dt>TTL{{
-            cacheAnalysis.cacheControl.netlifyCdnTtl ||
-              cacheAnalysis.cacheControl.cdnTtl
+        <dt>
+          TTL{{
+            cacheAnalysis.cacheControl.netlifyCdnTtl
+              || cacheAnalysis.cacheControl.cdnTtl
               ? " (browser)"
               : ""
-          }}</dt>
+          }}
+        </dt>
         <dd :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)">
           {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
         </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.cdnTtl">
-        <dt>TTL ({{
+        <dt>
+          TTL ({{
             cacheAnalysis.cacheControl.netlifyCdnTtl
               ? "other CDNs"
               : "Netlify CDN"
-          }})</dt>
+          }})
+        </dt>
         <dd :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)">
           {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
         </dd>

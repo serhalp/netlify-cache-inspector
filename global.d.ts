@@ -1,7 +1,7 @@
 declare global {
   const hljs: {
-    highlightElement: (element: HTMLElement) => void;
-  };
+    highlightElement: (element: HTMLElement) => void
+  }
 }
 
-export { };
+export { }

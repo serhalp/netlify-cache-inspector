@@ -1,21 +1,24 @@
 <script setup lang="ts">
 const props = defineProps<{
-  cacheHeaders: Record<string, string>;
-}>();
+  cacheHeaders: Record<string, string>
+}>()
 
-const el = useTemplateRef("code-block");
+const el = useTemplateRef('code-block')
 const highlightJson = () => {
   if (el.value != null) {
-    hljs.highlightElement(el.value);
+    hljs.highlightElement(el.value)
   }
-};
-onMounted(highlightJson);
-onUpdated(highlightJson);
+}
+onMounted(highlightJson)
+onUpdated(highlightJson)
 </script>
 
 <template>
   <pre>
-    <code ref="code-block" class="hljs language-json">{{ JSON.stringify(props.cacheHeaders, null, 2) }}</code>
+    <code
+ref="code-block"
+class="hljs language-json"
+>{{ JSON.stringify(props.cacheHeaders, null, 2) }}</code>
   </pre>
 </template>
 

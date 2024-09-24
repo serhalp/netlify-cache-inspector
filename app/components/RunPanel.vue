@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const props = defineProps<{
-  url: string;
-  status: number;
-  durationInMs: number;
-  cacheHeaders: Record<string, string>;
-}>();
+  url: string
+  status: number
+  durationInMs: number
+  cacheHeaders: Record<string, string>
+}>()
 </script>
 
 <template>
