@@ -13,7 +13,7 @@
     "postinstall": "nuxt prepare",
     "test:unit": "vitest",
     "test": "pnpm run typecheck && pnpm run lint && pnpm run test:unit",
-    "typecheck": "npx nuxi typecheck"
+    "typecheck": "nuxi typecheck"
   },
   "dependencies": {
     "@nuxt/eslint": "^0.5.7",
