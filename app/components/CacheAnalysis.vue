@@ -158,8 +158,8 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.ttl">
         <dt>
           TTL{{
-            cacheAnalysis.cacheControl.netlifyCdnTttl ||
-              cacheAnalysis.cacheControl.cdnTttl
+            cacheAnalysis.cacheControl.netlifyCdnTtl ||
+              cacheAnalysis.cacheControl.cdnTtl
               ? " (browser)"
               : ""
           }}
@@ -172,7 +172,7 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.cdnTtl">
         <dt>
           TTL ({{
-            cacheAnalysis.cacheControl.netlifyCdnTttl
+            cacheAnalysis.cacheControl.netlifyCdnTtl
               ? "other CDNs"
               : "Netlify CDN"
           }})
@@ -182,10 +182,10 @@ onUnmounted(() => {
         </dd>
       </template>
 
-      <template v-if="cacheAnalysis.cacheControl.netlifyCdnTttl">
+      <template v-if="cacheAnalysis.cacheControl.netlifyCdnTtl">
         <dt>TTL (Netlify CDN)</dt>
         <dd :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)">
-          {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTttl) }}
+          {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
         </dd>
       </template>
 
