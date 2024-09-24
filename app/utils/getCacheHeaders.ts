@@ -16,13 +16,16 @@ const CACHE_HEADER_NAMES = [
   "X-BB-Deploy-Id",
   "X-BB-Gen",
   "X-BB-Host-Id",
+  "X-NF-Cache-Key",
   "X-NF-Cache-Info",
   "X-NF-Cache-Result",
+  "X-NF-Durable-Cache-Result",
   // TODO(serhalp) These two probably shouldn't be here but I use it to determine who served the
   // request. Need to refactor to pass the whole headers obj to `getServedBy` to remove this.
   "X-NF-Edge-Functions",
   "X-NF-Function-Type",
   "X-Nextjs-Cache",
+  "X-Nextjs-Date",
 ];
 
 // TODO(serhalp) Magically parse `Netlify-Vary` if present and also include headers referenced by it

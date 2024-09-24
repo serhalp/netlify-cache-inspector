@@ -1,9 +1,15 @@
 <script setup lang="ts">
-const inputUrl = ref();
+const inputUrl = ref(
+  "https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page",
+);
 
 const emit = defineEmits(["submit"]);
 
 const handleSubmit = () => {
+  if (!inputUrl.value.startsWith("http")) {
+    inputUrl.value = `https://${inputUrl.value}`;
+  }
+
   emit("submit", { url: inputUrl.value });
 };
 </script>

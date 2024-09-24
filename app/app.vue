@@ -3,10 +3,6 @@ const runs = ref([]);
 const error = ref(null);
 
 const handleRequestFormSubmit = async ({ url }): void => {
-  if (!url.startsWith("http")) {
-    url = `https://${url}`;
-  }
-
   try {
     // Destructuring would be confusing, since the response body contains fields named `status` and
     // `headers` (it's a request about a request...)
