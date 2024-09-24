@@ -50,4 +50,10 @@ export default defineNuxtConfig({
   },
 
   modules: ["@nuxt/eslint", "@nuxt/test-utils/module"],
+
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
 });
