@@ -30,7 +30,7 @@ const cacheAnalysis = computed(() =>
   getCacheAnalysis(props.cacheHeaders, now.value),
 );
 
-let timerId;
+let timerId: NodeJS.Timeout | null = null;
 
 onMounted(() => {
   timerId = setInterval(() => {

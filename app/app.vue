@@ -1,8 +1,19 @@
 <script setup lang="ts">
-const runs = ref([]);
-const error = ref(null);
+interface Run {
+  url: string;
+  status: number;
+  cacheHeaders: Record<string, string>;
+  durationInMs: number;
+}
 
-const handleRequestFormSubmit = async ({ url }): void => {
+const runs = ref<Run[]>([]);
+const error = ref<string | null>(null);
+
+const handleRequestFormSubmit = async ({
+  url,
+}: {
+  url: string;
+}): Promise<void> => {
   try {
     // Destructuring would be confusing, since the response body contains fields named `status` and
     // `headers` (it's a request about a request...)
@@ -18,7 +29,9 @@ const handleRequestFormSubmit = async ({ url }): void => {
     });
 
     error.value = null;
-  } catch (err) {
+    // TODO(serhalp) nuxt doesn't appear to re-export the `FetchError` types from ofetch. Look into
+    // this.
+  } catch (err: any) {
     error.value =
       err?.data?.message ??
       err?.toString?.() ??

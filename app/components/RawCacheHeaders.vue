@@ -3,10 +3,11 @@ const props = defineProps<{
   cacheHeaders: Record<string, string>;
 }>();
 
-const id = useId();
-const el = useTemplateRef(id);
+const el = useTemplateRef("code-block");
 const highlightJson = () => {
-  hljs.highlightElement(el.value);
+  if (el.value != null) {
+    hljs.highlightElement(el.value);
+  }
 };
 onMounted(highlightJson);
 onUpdated(highlightJson);
@@ -14,7 +15,7 @@ onUpdated(highlightJson);
 
 <template>
   <pre>
-    <code :ref="id" class="hljs language-json">{{ JSON.stringify(props.cacheHeaders, null, 2) }}</code>
+    <code ref="code-block" class="hljs language-json">{{ JSON.stringify(props.cacheHeaders, null, 2) }}</code>
   </pre>
 </template>
 
