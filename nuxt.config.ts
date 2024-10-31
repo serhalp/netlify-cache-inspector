@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-09-13',
@@ -48,6 +48,12 @@ export default defineNuxtConfig({
   routeRules: {
     '/': {
       prerender: true,
+    },
+    '/run/**': {
+      // Cache each run page, since they're immutable other than new deploys
+      headers: {
+        'cache-control': 'public, max-age=0, must-revalidate',
+      },
     },
   },
 

@@ -15,7 +15,7 @@ const props = defineProps<{
     <div class="flex-btwn">
       <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
       <NuxtLink
-        :to="`/?runId=${props.runId}`"
+        :to="`/run/${props.runId}`"
         class="run-permalink"
         title="Share this run"
         target="_blank"
