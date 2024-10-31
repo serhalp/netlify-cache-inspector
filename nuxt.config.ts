@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { resolve } from 'path'
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-09-13',
   future: { compatibilityVersion: 4 },
@@ -55,5 +57,9 @@ export default defineNuxtConfig({
     config: {
       stylistic: true,
     },
+  },
+
+  alias: {
+    '~server': resolve(__dirname, './server'),
   },
 })

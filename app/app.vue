@@ -1,5 +1,6 @@
 <script setup lang="ts">
 interface Run {
+  runId: string
   url: string
   status: number
   cacheHeaders: Record<string, string>
@@ -9,6 +10,28 @@ interface Run {
 const runs = ref<Run[]>([])
 const error = ref<string | null>(null)
 
+// TODO(serhalp) Improve types
+type ApiRun = Omit<Run, 'cacheHeaders'> & { headers: Record<string, string> }
+const getRunFromApiRun = (apiRun: ApiRun): Run => {
+  const { headers, ...run } = apiRun
+  return { ...run, cacheHeaders: getCacheHeaders(headers) }
+}
+
+const route = useRoute()
+
+const { data: initialRuns, pending: _pending, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async () => {
+  if (typeof route.query.runId === 'string') {
+    const { runId } = route.query
+    const responseBody: ApiRun = await $fetch(`/api/runs/${runId}`)
+    return [getRunFromApiRun(responseBody)]
+  }
+  return []
+})
+if (preloadedRunsError.value) {
+  error.value = preloadedRunsError.value.data?.message ?? preloadedRunsError.value.toString()
+}
+runs.value = initialRuns.value
+
 const handleRequestFormSubmit = async ({
   url,
 }: {
@@ -17,17 +40,14 @@ const handleRequestFormSubmit = async ({
   try {
     // Destructuring would be confusing, since the response body contains fields named `status` and
     // `headers` (it's a request about a request...)
-    const responseBody = await $fetch(
-      `/api/inspect-url/${encodeURIComponent(url)}`,
+    const responseBody: ApiRun = await $fetch(
+      '/api/inspect-url',
+      {
+        method: 'POST',
+        body: { url },
+      },
     )
-
-    runs.value.push({
-      url,
-      status: responseBody.status,
-      cacheHeaders: getCacheHeaders(responseBody.headers),
-      durationInMs: responseBody.durationInMs,
-    })
-
+    runs.value.push(getRunFromApiRun(responseBody))
     error.value = null
   }
   catch (

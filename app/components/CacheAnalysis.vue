@@ -20,6 +20,8 @@ const formatHumanSeconds = (seconds: number): string => {
 }
 
 const formatDate = (date: Date): string =>
+  // TODO(serhalp) This results in a hydration mismatch error since the locale is different on the
+  // server than in the user's browser... I'm not sure how to solve this, but the impact is pretty minor.
   date.toLocaleString(undefined, {
     timeZoneName: 'short',
   })

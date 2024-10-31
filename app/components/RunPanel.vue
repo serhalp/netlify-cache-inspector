@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
+  runId: string
   url: string
   status: number
   durationInMs: number
@@ -11,7 +12,17 @@ const props = defineProps<{
   <div class="panel run-panel">
     <h3>{{ props.url }}</h3>
 
-    <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
+    <div class="flex-btwn">
+      <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
+      <NuxtLink
+        :to="`/?runId=${props.runId}`"
+        class="run-permalink"
+        title="Share this run"
+        target="_blank"
+      >
+        🔗 Permalink
+      </NuxtLink>
+    </div>
 
     <CacheAnalysis :cache-headers="props.cacheHeaders" />
     <RawCacheHeaders :cache-headers="props.cacheHeaders" />
@@ -31,5 +42,10 @@ const props = defineProps<{
 .run-panel h3 {
   font-size: 1em;
   align-self: start;
+}
+
+.run-permalink {
+  align-self: flex-end;
+  font-size: 0.7em;
 }
 </style>
