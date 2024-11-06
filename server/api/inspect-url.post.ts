@@ -1,5 +1,14 @@
+import { createHash } from 'crypto'
+import { saveRun } from '~server/db'
+
+const generateRunId = (url: string, timestamp: number): string =>
+  createHash('sha256')
+    .update(`${url}-${timestamp}`)
+    .digest('hex')
+    .slice(0, 8)
+
 export default defineEventHandler(async (event) => {
-  const url = getRouterParam(event, 'url', { decode: true })
+  const { url } = await readBody(event)
 
   if (!url) {
     throw createError({
@@ -26,9 +35,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return {
+  const run = {
+    runId: generateRunId(url, Date.now()),
+    url,
     status,
     headers: Object.fromEntries(headers),
     durationInMs,
   }
+  await saveRun(run)
+
+  return run
 })

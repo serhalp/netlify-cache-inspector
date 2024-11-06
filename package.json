@@ -3,6 +3,9 @@
   "description": "Inspect and compare cache headers for requests to Netlify sites",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -16,9 +19,10 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
+    "@netlify/blobs": "^8.1.0",
     "@nuxt/eslint": "^0.5.7",
     "date-fns": "^4.1.0",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.14.159",
     "vue": "latest",
     "vue-router": "latest"
   },
