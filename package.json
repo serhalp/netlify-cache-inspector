@@ -3,6 +3,9 @@
   "description": "Inspect and compare cache headers for requests to Netlify sites",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
