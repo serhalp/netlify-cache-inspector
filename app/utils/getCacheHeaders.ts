@@ -24,6 +24,7 @@ const CACHE_HEADER_NAMES = [
   // request. Need to refactor to pass the whole headers obj to `getServedBy` to remove this.
   'X-NF-Edge-Functions',
   'X-NF-Function-Type',
+  'X-NF-Request-Id',
   'X-Nextjs-Cache',
   'X-Nextjs-Date',
 ]
