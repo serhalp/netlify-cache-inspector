@@ -138,7 +138,7 @@ const getServedBySource = (
 }
 
 /**
- * There is a bug where sometimes duplicate hosts are returned in the `X-BB-Host-Id` header. This is
+ * There is a bug where sometimes duplicate hosts are returned in the `Debug-X-BB-Host-Id` header. This is
  * doubly confusing because there are legitimate cases where the same node could be involved more
  * than once in the handling of a given request, but we can't distinguish those from dupes. So just dedupe.
  */
@@ -157,7 +157,7 @@ const getServedBy = (
 ): ServedBy => {
   const source = getServedBySource(cacheHeaders, cacheStatus)
   const unfixedCdnNodes
-    = cacheHeaders.get('X-BB-Host-Id') ?? 'unknown CDN node'
+    = cacheHeaders.get('Debug-X-BB-Host-Id') ?? 'unknown CDN node'
   return {
     source,
     cdnNodes: fixDuplicatedCdnNodes(unfixedCdnNodes),
