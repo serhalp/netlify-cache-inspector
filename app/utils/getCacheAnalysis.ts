@@ -126,9 +126,10 @@ const getServedBySource = (
 
   // NOTE: the order is important here, since a response can be served by a Function even
   // though one or more Edge Functions are also invoked (as middleware).
-  if (cacheHeaders.has('X-NF-Function-Type')) return ServedBySource.Function
+  if (cacheHeaders.has('Debug-X-NF-Function-Type'))
+    return ServedBySource.Function
 
-  if (cacheHeaders.has('X-NF-Edge-Functions'))
+  if (cacheHeaders.has('Debug-X-NF-Edge-Functions'))
     return ServedBySource.EdgeFunction
 
   throw new Error(
