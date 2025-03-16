@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@netlify/blobs':
         specifier: ^8.1.0
-        version: 8.1.0
+        version: 8.1.1
       '@nuxt/eslint':
         specifier: ^0.5.7
         version: 0.5.7(eslint@9.14.0(jiti@2.4.2))(magicast@0.3.5)(rollup@4.31.0)(typescript@5.8.2)(vite@6.2.2(@types/node@22.10.10)(jiti@2.4.2)(terser@5.37.0)(yaml@2.7.0))
@@ -19,7 +19,7 @@ importers:
         version: 4.1.0
       nuxt:
         specifier: ^3.14.159
-        version: 3.15.2(@netlify/blobs@8.1.0)(@parcel/watcher@2.5.0)(@types/node@22.10.10)(db0@0.2.1)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.4.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.31.0)(terser@5.37.0)(typescript@5.8.2)(vite@6.2.2(@types/node@22.10.10)(jiti@2.4.2)(terser@5.37.0)(yaml@2.7.0))(vue-tsc@2.2.8(typescript@5.8.2))(yaml@2.7.0)
+        version: 3.15.2(@netlify/blobs@8.1.1)(@parcel/watcher@2.5.0)(@types/node@22.10.10)(db0@0.2.1)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.4.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.31.0)(terser@5.37.0)(typescript@5.8.2)(vite@6.2.2(@types/node@22.10.10)(jiti@2.4.2)(terser@5.37.0)(yaml@2.7.0))(vue-tsc@2.2.8(typescript@5.8.2))(yaml@2.7.0)
       vue:
         specifier: latest
         version: 3.5.13(typescript@5.8.2)
@@ -810,8 +810,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@netlify/blobs@8.1.0':
-    resolution: {integrity: sha512-9hIbusvAZjSGBJ42OyFC2AxsEph1LuKQahMWFcPGEIsOqIYHhMRkYA7wSUMhH7naydjNmllpcp3pJLOK4RhFaQ==}
+  '@netlify/blobs@8.1.1':
+    resolution: {integrity: sha512-7Dg3PzArvQ0Owq4wpkLECC9iaDBOxuWUN2uwbQtUF6tZssyez2QN+eO0CjuIhhZUivbw+X9bwsyiEjWkdJnv/A==}
     engines: {node: ^14.16.0 || >=16.0.0}
 
   '@netlify/functions@2.8.2':
@@ -5374,7 +5374,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@netlify/blobs@8.1.0': {}
+  '@netlify/blobs@8.1.1': {}
 
   '@netlify/functions@2.8.2':
     dependencies:
@@ -8142,7 +8142,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  nitropack@2.10.4(@netlify/blobs@8.1.0)(typescript@5.8.2):
+  nitropack@2.10.4(@netlify/blobs@8.1.1)(typescript@5.8.2):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.4
       '@netlify/functions': 2.8.2
@@ -8209,7 +8209,7 @@ snapshots:
       unctx: 2.4.1
       unenv: 1.10.0
       unimport: 3.14.6(rollup@4.31.0)
-      unstorage: 1.14.4(@netlify/blobs@8.1.0)(db0@0.2.1)(ioredis@5.4.2)
+      unstorage: 1.14.4(@netlify/blobs@8.1.1)(db0@0.2.1)(ioredis@5.4.2)
       untyped: 1.5.2
       unwasm: 0.3.9
     transitivePeerDependencies:
@@ -8286,7 +8286,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@3.15.2(@netlify/blobs@8.1.0)(@parcel/watcher@2.5.0)(@types/node@22.10.10)(db0@0.2.1)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.4.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.31.0)(terser@5.37.0)(typescript@5.8.2)(vite@6.2.2(@types/node@22.10.10)(jiti@2.4.2)(terser@5.37.0)(yaml@2.7.0))(vue-tsc@2.2.8(typescript@5.8.2))(yaml@2.7.0):
+  nuxt@3.15.2(@netlify/blobs@8.1.1)(@parcel/watcher@2.5.0)(@types/node@22.10.10)(db0@0.2.1)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.4.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.31.0)(terser@5.37.0)(typescript@5.8.2)(vite@6.2.2(@types/node@22.10.10)(jiti@2.4.2)(terser@5.37.0)(yaml@2.7.0))(vue-tsc@2.2.8(typescript@5.8.2))(yaml@2.7.0):
     dependencies:
       '@nuxt/cli': 3.20.0(magicast@0.3.5)
       '@nuxt/devalue': 2.0.2
@@ -8324,7 +8324,7 @@ snapshots:
       magic-string: 0.30.17
       mlly: 1.7.4
       nanotar: 0.1.1
-      nitropack: 2.10.4(@netlify/blobs@8.1.0)(typescript@5.8.2)
+      nitropack: 2.10.4(@netlify/blobs@8.1.1)(typescript@5.8.2)
       nypm: 0.4.1
       ofetch: 1.4.1
       ohash: 1.1.4
@@ -8346,7 +8346,7 @@ snapshots:
       unimport: 3.14.6(rollup@4.31.0)
       unplugin: 2.1.2
       unplugin-vue-router: 0.10.9(rollup@4.31.0)(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))
-      unstorage: 1.14.4(@netlify/blobs@8.1.0)(db0@0.2.1)(ioredis@5.4.2)
+      unstorage: 1.14.4(@netlify/blobs@8.1.1)(db0@0.2.1)(ioredis@5.4.2)
       untyped: 1.5.2
       vue: 3.5.13(typescript@5.8.2)
       vue-bundle-renderer: 2.1.1
@@ -9468,7 +9468,7 @@ snapshots:
       acorn: 8.14.0
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.14.4(@netlify/blobs@8.1.0)(db0@0.2.1)(ioredis@5.4.2):
+  unstorage@1.14.4(@netlify/blobs@8.1.1)(db0@0.2.1)(ioredis@5.4.2):
     dependencies:
       anymatch: 3.1.3
       chokidar: 3.6.0
@@ -9479,7 +9479,7 @@ snapshots:
       ofetch: 1.4.1
       ufo: 1.5.4
     optionalDependencies:
-      '@netlify/blobs': 8.1.0
+      '@netlify/blobs': 8.1.1
       db0: 0.2.1
       ioredis: 5.4.2
 
