@@ -37,9 +37,8 @@ export default defineNuxtConfig({
         {
           src: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js',
         },
-        // TODO(serhalp) Check if this is really the idiomatic way to do this...
         {
-          children: 'hljs.highlightAll();',
+          onload: `hljs.highlightAll()`,
         },
       ],
     },
