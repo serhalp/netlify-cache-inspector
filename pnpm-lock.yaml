@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@netlify/blobs':
         specifier: ^9.0.0
-        version: 9.1.2
+        version: 9.1.3
       '@nuxt/eslint':
         specifier: ^0.5.7
         version: 0.5.7(eslint@9.14.0(jiti@2.4.2))(magicast@0.3.5)(rollup@4.41.1)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.23)(jiti@2.4.2)(terser@5.40.0)(yaml@2.8.0))
@@ -19,7 +19,7 @@ importers:
         version: 4.1.0
       nuxt:
         specifier: ^3.16.0
-        version: 3.17.4(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@22.15.23)(db0@0.3.2)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.6.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.41.1)(terser@5.40.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.23)(jiti@2.4.2)(terser@5.40.0)(yaml@2.8.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.8.0)
+        version: 3.17.4(@netlify/blobs@9.1.3)(@parcel/watcher@2.5.1)(@types/node@22.15.23)(db0@0.3.2)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.6.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.41.1)(terser@5.40.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.23)(jiti@2.4.2)(terser@5.40.0)(yaml@2.8.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.8.0)
       vue:
         specifier: latest
         version: 3.5.15(typescript@5.8.3)
@@ -269,6 +269,10 @@ packages:
 
   '@emnapi/wasi-threads@1.0.2':
     resolution: {integrity: sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==}
+
+  '@envelop/instrumentation@1.0.0':
+    resolution: {integrity: sha512-cxgkB66RQB95H3X27jlnxCRNTmPuSTgmBAq6/4n2Dtv4hsk4yz8FadA1ggmd0uZzvKqWD6CR+WFgTjhDqg7eyw==}
+    engines: {node: '>=18.0.0'}
 
   '@es-joy/jsdoccomment@0.49.0':
     resolution: {integrity: sha512-xjZTSFgECpb9Ohuk5yMX5RhUEbfeQcuOp8IF60e+wyzWEF0M5xeSgqsfLtvPEX8BIyOX9saZqzuGPmZ8oWc+5Q==}
@@ -862,9 +866,17 @@ packages:
     resolution: {integrity: sha512-7dMjExSH4zj4ShvLem49mE3mf0K171Tx2pV4WDWhJbRUWW3SJIR2qntz0LvUGS97N5HO1SmnzrgWUhEXCsApiw==}
     engines: {node: ^14.16.0 || >=16.0.0}
 
+  '@netlify/blobs@9.1.3':
+    resolution: {integrity: sha512-9nPv+SidMjtRnTuHYHX2ako+Idl2JstPi37M2ZxMLSIvUzPA09KVPtHH2NqvE8sCrN7RCxqov4/l3adUqqRguA==}
+    engines: {node: ^14.16.0 || >=16.0.0}
+
   '@netlify/dev-utils@2.2.0':
     resolution: {integrity: sha512-5XUvZuffe3KetyhbWwd4n2ktd7wraocCYw10tlM+/u/95iAz29GjNiuNxbCD1T6Bn1MyGc4QLVNKOWhzJkVFAw==}
     engines: {node: ^14.16.0 || >=16.0.0}
+
+  '@netlify/dev-utils@3.0.0':
+    resolution: {integrity: sha512-o4PnZ8/V3cOmFL8DLeWex/RZuNzL7Xf2iIB63gwW/CgI97XwdXOPLV3psDJX/fw69d1ygnfhoJ2QT81fgz2wZg==}
+    engines: {node: ^18.14.0 || >=20}
 
   '@netlify/functions@3.1.10':
     resolution: {integrity: sha512-sI93kcJ2cUoMgDRPnrEm0lZhuiDVDqM6ngS/UbHTApIH3+eg3yZM5p/0SDFQQq9Bad0/srFmgBmTdXushzY5kg==}
@@ -877,6 +889,10 @@ packages:
   '@netlify/runtime-utils@1.3.1':
     resolution: {integrity: sha512-7/vIJlMYrPJPlEW84V2yeRuG3QBu66dmlv9neTmZ5nXzwylhBEOhy11ai+34A8mHCSZI4mKns25w3HM9kaDdJg==}
     engines: {node: '>=16.0.0'}
+
+  '@netlify/runtime-utils@2.0.0':
+    resolution: {integrity: sha512-DWML4fl+aIxq52qO4K7lJqFzjlIHCIklzsbMHo1t4iYDWUR2D9Mx9wZryznZvws41YuImwIoXIv6wXmw8AQXdg==}
+    engines: {node: ^18.14.0 || >=20}
 
   '@netlify/serverless-functions-api@1.41.2':
     resolution: {integrity: sha512-pfCkH50JV06SGMNsNPjn8t17hOcId4fA881HeYQgMBOrewjsw4csaYgHEnCxCEu24Y5x75E2ULbFpqm9CvRCqw==}
@@ -1810,6 +1826,10 @@ packages:
   '@whatwg-node/promise-helpers@1.3.2':
     resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
     engines: {node: '>=16.0.0'}
+
+  '@whatwg-node/server@0.10.10':
+    resolution: {integrity: sha512-GwpdMgUmwIp0jGjP535YtViP/nnmETAyHpGPWPZKdX++Qht/tSLbGXgFUMSsQvEACmZAR1lAPNu2CnYL1HpBgg==}
+    engines: {node: '>=18.0.0'}
 
   '@whatwg-node/server@0.9.71':
     resolution: {integrity: sha512-ueFCcIPaMgtuYDS9u0qlUoEvj6GiSsKrwnOLPp9SshqjtcRaR1IEHRjoReq3sXNydsF5i0ZnmuYgXq9dV53t0g==}
@@ -5465,6 +5485,11 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@envelop/instrumentation@1.0.0':
+    dependencies:
+      '@whatwg-node/promise-helpers': 1.3.2
+      tslib: 2.8.1
+
   '@es-joy/jsdoccomment@0.49.0':
     dependencies:
       comment-parser: 1.4.1
@@ -5862,6 +5887,11 @@ snapshots:
       '@netlify/dev-utils': 2.2.0
       '@netlify/runtime-utils': 1.3.1
 
+  '@netlify/blobs@9.1.3':
+    dependencies:
+      '@netlify/dev-utils': 3.0.0
+      '@netlify/runtime-utils': 2.0.0
+
   '@netlify/dev-utils@2.2.0':
     dependencies:
       '@whatwg-node/server': 0.9.71
@@ -5872,6 +5902,19 @@ snapshots:
       find-up: 7.0.0
       lodash.debounce: 4.0.8
       netlify: 13.3.5
+      parse-gitignore: 2.0.0
+      uuid: 11.1.0
+      write-file-atomic: 6.0.0
+
+  '@netlify/dev-utils@3.0.0':
+    dependencies:
+      '@whatwg-node/server': 0.10.10
+      chokidar: 4.0.3
+      decache: 4.6.2
+      dot-prop: 9.0.0
+      env-paths: 3.0.0
+      find-up: 7.0.0
+      lodash.debounce: 4.0.8
       parse-gitignore: 2.0.0
       uuid: 11.1.0
       write-file-atomic: 6.0.0
@@ -5898,6 +5941,8 @@ snapshots:
   '@netlify/open-api@2.37.0': {}
 
   '@netlify/runtime-utils@1.3.1': {}
+
+  '@netlify/runtime-utils@2.0.0': {}
 
   '@netlify/serverless-functions-api@1.41.2': {}
 
@@ -7128,6 +7173,14 @@ snapshots:
 
   '@whatwg-node/promise-helpers@1.3.2':
     dependencies:
+      tslib: 2.8.1
+
+  '@whatwg-node/server@0.10.10':
+    dependencies:
+      '@envelop/instrumentation': 1.0.0
+      '@whatwg-node/disposablestack': 0.0.6
+      '@whatwg-node/fetch': 0.10.8
+      '@whatwg-node/promise-helpers': 1.3.2
       tslib: 2.8.1
 
   '@whatwg-node/server@0.9.71':
@@ -8961,7 +9014,7 @@ snapshots:
       p-wait-for: 5.0.2
       qs: 6.14.0
 
-  nitropack@2.11.12(@netlify/blobs@9.1.2):
+  nitropack@2.11.12(@netlify/blobs@9.1.3):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@netlify/functions': 3.1.10(rollup@4.41.1)
@@ -9029,7 +9082,7 @@ snapshots:
       unenv: 2.0.0-rc.17
       unimport: 5.0.1
       unplugin-utils: 0.2.4
-      unstorage: 1.16.0(@netlify/blobs@9.1.2)(db0@0.3.2)(ioredis@5.6.1)
+      unstorage: 1.16.0(@netlify/blobs@9.1.3)(db0@0.3.2)(ioredis@5.6.1)
       untyped: 2.0.0
       unwasm: 0.3.9
       youch: 4.1.0-beta.7
@@ -9131,7 +9184,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@3.17.4(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@22.15.23)(db0@0.3.2)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.6.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.41.1)(terser@5.40.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.23)(jiti@2.4.2)(terser@5.40.0)(yaml@2.8.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.8.0):
+  nuxt@3.17.4(@netlify/blobs@9.1.3)(@parcel/watcher@2.5.1)(@types/node@22.15.23)(db0@0.3.2)(eslint@9.14.0(jiti@2.4.2))(ioredis@5.6.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.41.1)(terser@5.40.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.23)(jiti@2.4.2)(terser@5.40.0)(yaml@2.8.0))(vue-tsc@2.2.10(typescript@5.8.3))(yaml@2.8.0):
     dependencies:
       '@nuxt/cli': 3.25.1(magicast@0.3.5)
       '@nuxt/devalue': 2.0.2
@@ -9167,7 +9220,7 @@ snapshots:
       mlly: 1.7.4
       mocked-exports: 0.1.1
       nanotar: 0.2.0
-      nitropack: 2.11.12(@netlify/blobs@9.1.2)
+      nitropack: 2.11.12(@netlify/blobs@9.1.3)
       nypm: 0.6.0
       ofetch: 1.4.1
       ohash: 2.0.11
@@ -9189,7 +9242,7 @@ snapshots:
       unimport: 5.0.1
       unplugin: 2.3.5
       unplugin-vue-router: 0.12.0(vue-router@4.5.1(vue@3.5.15(typescript@5.8.3)))(vue@3.5.15(typescript@5.8.3))
-      unstorage: 1.16.0(@netlify/blobs@9.1.2)(db0@0.3.2)(ioredis@5.6.1)
+      unstorage: 1.16.0(@netlify/blobs@9.1.3)(db0@0.3.2)(ioredis@5.6.1)
       untyped: 2.0.0
       vue: 3.5.15(typescript@5.8.3)
       vue-bundle-renderer: 2.1.1
@@ -10401,7 +10454,7 @@ snapshots:
       picomatch: 4.0.2
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.16.0(@netlify/blobs@9.1.2)(db0@0.3.2)(ioredis@5.6.1):
+  unstorage@1.16.0(@netlify/blobs@9.1.3)(db0@0.3.2)(ioredis@5.6.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 4.0.3
@@ -10412,7 +10465,7 @@ snapshots:
       ofetch: 1.4.1
       ufo: 1.6.1
     optionalDependencies:
-      '@netlify/blobs': 9.1.2
+      '@netlify/blobs': 9.1.3
       db0: 0.3.2
       ioredis: 5.6.1
 
