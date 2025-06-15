@@ -10,6 +10,7 @@ interface Run {
 
 const runs = ref<Run[]>([])
 const error = ref<string | null>(null)
+const loading = ref<boolean>(false)
 
 // TODO(serhalp) Improve types
 type ApiRun = Omit<Run, 'cacheHeaders'> & { headers: Record<string, string> }
@@ -23,14 +24,21 @@ const handleRequestFormSubmit = async ({
 }: {
   url: string
 }): Promise<void> => {
+  loading.value = true
   try {
-    const responseBody: ApiRun = await $fetch(
-      '/api/inspect-url',
-      {
-        method: 'POST',
-        body: { url },
+    const response = await fetch('/api/inspect-url', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({ url }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+
+    const responseBody: ApiRun = await response.json()
     runs.value.push(getRunFromApiRun(responseBody))
     error.value = null
   }
@@ -42,6 +50,9 @@ const handleRequestFormSubmit = async ({
       ?? new Error(`Fetch error: ${err}`)
     return
   }
+  finally {
+    loading.value = false
+  }
 }
 
 const handleClickClear = (): void => {
@@ -51,7 +62,17 @@ const handleClickClear = (): void => {
 
 <template>
   <main>
-    <RequestForm @submit="handleRequestFormSubmit" />
+    <RequestForm
+      :loading="loading"
+      @submit="handleRequestFormSubmit"
+    />
+
+    <div
+      v-if="loading"
+      class="loading-indicator"
+    >
+      ⏳ Inspecting URL...
+    </div>
 
     <div
       v-if="error"
@@ -80,6 +101,13 @@ const handleClickClear = (): void => {
 </template>
 
 <style scoped>
+.loading-indicator {
+  text-align: center;
+  padding: 1em;
+  color: var(--blue-600, #2563eb);
+  font-weight: 500;
+}
+
 .error {
   color: var(--red-400);
 }
