@@ -3,9 +3,15 @@ const inputUrl = ref(
   'https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page',
 )
 
+const props = defineProps<{
+  loading?: boolean
+}>()
+
 const emit = defineEmits(['submit'])
 
 const handleSubmit = () => {
+  if (props.loading) return
+
   if (!inputUrl.value.startsWith('http')) {
     inputUrl.value = `https://${inputUrl.value}`
   }
@@ -23,8 +29,11 @@ const handleSubmit = () => {
         @keyup.enter="handleSubmit()"
       />
     </label>
-    <button @click="handleSubmit()">
-      Inspect
+    <button
+      :disabled="props.loading"
+      @click="handleSubmit()"
+    >
+      {{ props.loading ? 'Inspecting...' : 'Inspect' }}
     </button>
   </div>
 </template>
