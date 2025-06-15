@@ -6,12 +6,12 @@ import { mount } from '@vue/test-utils'
 import RequestForm from './RequestForm.vue'
 
 describe('RequestForm', () => {
-  it('shows correct button text when not loading', () => {
+  it('displays "Inspect" button text when not in loading state', () => {
     const wrapper = mount(RequestForm)
     expect(wrapper.find('button').text()).toBe('Inspect')
   })
 
-  it('shows correct button text when loading', () => {
+  it('displays "Inspecting..." button text when in loading state', () => {
     const wrapper = mount(RequestForm, {
       props: { loading: true },
     })
