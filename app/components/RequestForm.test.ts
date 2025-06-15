@@ -10,14 +10,14 @@ describe('RequestForm', () => {
 
   it('shows correct button text when loading', () => {
     const wrapper = mount(RequestForm, {
-      props: { loading: true }
+      props: { loading: true },
     })
     expect(wrapper.find('button').text()).toBe('Inspecting...')
   })
 
   it('disables button when loading', () => {
     const wrapper = mount(RequestForm, {
-      props: { loading: true }
+      props: { loading: true },
     })
     expect(wrapper.find('button').attributes('disabled')).toBeDefined()
   })
@@ -35,7 +35,7 @@ describe('RequestForm', () => {
 
   it('does not emit submit event when loading', async () => {
     const wrapper = mount(RequestForm, {
-      props: { loading: true }
+      props: { loading: true },
     })
     await wrapper.find('button').trigger('click')
     expect(wrapper.emitted('submit')).toBeFalsy()
