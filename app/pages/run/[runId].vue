@@ -80,8 +80,8 @@ const handleRequestFormSubmit = async ({
   catch (err: any) {
     error.value
       = err?.data?.message
-        ?? err?.toString?.()
-        ?? new Error(`Fetch error: ${err}`)
+      ?? err?.toString?.()
+      ?? new Error(`Fetch error: ${err}`)
     return
   }
   finally {
