@@ -17,6 +17,17 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Validate the URL format before processing
+  try {
+    new URL(url)
+  }
+  catch {
+    throw createError({
+      statusCode: 400,
+      message: 'Invalid URL format provided',
+    })
+  }
+
   const startTime = Date.now()
   // TODO(serhalp) `$fetch` automatically throws on 4xx, but we'd like to treat those as valid.
   const { status, headers } = await $fetch.raw(url, {

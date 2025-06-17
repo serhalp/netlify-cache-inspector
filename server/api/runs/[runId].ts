@@ -12,6 +12,22 @@ export default defineEventHandler(async (event) => {
 
   try {
     const run = await getRun(runId)
+
+    // Validate that the URL in the run is properly formatted
+    if (run.url) {
+      try {
+        // This will throw if the URL is malformed
+        new URL(run.url)
+      }
+      catch (urlError) {
+        console.error('Invalid URL in stored run:', run.url, urlError)
+        throw createError({
+          statusCode: 500,
+          message: 'Stored run contains invalid URL',
+        })
+      }
+    }
+
     return run
   }
   catch (error) {
