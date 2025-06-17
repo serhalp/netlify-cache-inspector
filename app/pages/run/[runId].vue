@@ -16,19 +16,6 @@ const loading = ref<boolean>(false)
 type ApiRun = Omit<Run, 'cacheHeaders'> & { headers: Record<string, string> }
 const getRunFromApiRun = (apiRun: ApiRun): Run => {
   const { headers, ...run } = apiRun
-
-  // Validate URL if present to prevent parsing issues
-  if (run.url) {
-    try {
-      // This will throw if the URL is malformed
-      new URL(run.url)
-    }
-    catch (urlError) {
-      console.error('Invalid URL in API response:', run.url, urlError)
-      throw new Error(`Invalid URL in run data: ${run.url}`)
-    }
-  }
-
   return { ...run, cacheHeaders: getCacheHeaders(headers) }
 }
 
