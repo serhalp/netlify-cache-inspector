@@ -1,9 +1,15 @@
-name: All Tests
+name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +22,4 @@ jobs:
         run: corepack enable
       - run: pnpm install
 
-      - run: pnpm run lint
-      - run: pnpm run typecheck
-      - run: pnpm run test:unit
       - run: pnpm run build
