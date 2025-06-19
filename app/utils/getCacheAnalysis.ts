@@ -7,7 +7,7 @@ export enum ServedBySource {
   EdgeFunction = 'Edge Function',
 }
 
-interface ParsedCacheStatusEntry {
+export interface ParsedCacheStatusEntry {
   cacheName: string
   parameters: {
     'hit': boolean
@@ -87,8 +87,8 @@ export const parseCacheStatus = (
           'fwd': parametersByKey.get(
             'fwd',
           ) as ParsedCacheStatusEntry['parameters']['fwd'],
-          'fwd-status': Number(parametersByKey.get('fwd-status')),
-          'ttl': Number(parametersByKey.get('ttl')),
+          'fwd-status': parametersByKey.has('fwd-status') ? Number(parametersByKey.get('fwd-status')) : undefined,
+          'ttl': parametersByKey.has('ttl') ? Number(parametersByKey.get('ttl')) : undefined,
           'stored': parametersByKey.has('stored'),
           'collapsed': parametersByKey.has('collapsed'),
           'key': parametersByKey.get('key'),
@@ -146,12 +146,12 @@ const fixDuplicatedCdnNodes = (unfixedCdnNodes: string): string => {
   return Array.from(new Set(unfixedCdnNodes.split(', '))).join(', ')
 }
 
-interface ServedBy {
+export interface ServedBy {
   source: ServedBySource
   cdnNodes: string
 }
 
-const getServedBy = (
+export const getServedBy = (
   cacheHeaders: Headers,
   cacheStatus: ParsedCacheStatusEntry[],
 ): ServedBy => {
@@ -189,7 +189,7 @@ export const getTimeToLive = (
   }
 }
 
-interface ParsedCacheControl {
+export interface ParsedCacheControl {
   // TODO(serhalp) Split into `isCacheable`, `isCdnCacheable`, `isNetlifyCdnCacheable`
   isCacheable: boolean
   age?: number
@@ -206,7 +206,7 @@ interface ParsedCacheControl {
   // TODO(serhalp) `swc`, `cdnSwc`, `netlifyCdnSwc`
 }
 
-const parseCacheControl = (
+export const parseCacheControl = (
   cacheHeaders: Headers,
   now: number,
 ): ParsedCacheControl => {
