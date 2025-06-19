@@ -1,9 +1,9 @@
-name: All Tests
+name: Unit Tests
 
 on: [push, pull_request]
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,4 @@ jobs:
         run: corepack enable
       - run: pnpm install
 
-      - run: pnpm run lint
-      - run: pnpm run typecheck
       - run: pnpm run test:unit
-      - run: pnpm run build
