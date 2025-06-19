@@ -2,6 +2,9 @@ name: Type Check
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   typecheck:
     runs-on: ubuntu-latest
