@@ -108,8 +108,8 @@ onUnmounted(() => {
 
         <dt
           class="data-key"
-          :class="{ 'key-highlighted': isKeyHovered('Hit') }"
-          @mouseenter="handleDataKeyHover('Hit', getDisplayValue(parameters.hit))"
+          :class="{ 'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
+          @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, getDisplayValue(parameters.hit))"
           @mouseleave="handleDataKeyLeave"
         >
           Hit
@@ -117,9 +117,9 @@ onUnmounted(() => {
         <dd
           class="data-value"
           :class="{
-            'key-highlighted': isKeyHovered('Hit'),
-            'value-matching': isKeyHovered('Hit') && isValueMatching(getDisplayValue(parameters.hit)),
-            'value-different': isKeyHovered('Hit') && !isValueMatching(getDisplayValue(parameters.hit)),
+            'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`),
+            'value-matching': isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.hit)),
+            'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.hit)),
           }"
         >
           {{ parameters.hit ? "✅" : "❌" }}
@@ -128,8 +128,8 @@ onUnmounted(() => {
         <template v-if="parameters.fwd">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('Forwarded because') }"
-            @mouseenter="handleDataKeyHover('Forwarded because', getDisplayValue(parameters.fwd))"
+            :class="{ 'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, getDisplayValue(parameters.fwd))"
             @mouseleave="handleDataKeyLeave"
           >
             Forwarded because
@@ -137,9 +137,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('Forwarded because'),
-              'value-matching': isKeyHovered('Forwarded because') && isValueMatching(getDisplayValue(parameters.fwd)),
-              'value-different': isKeyHovered('Forwarded because') && !isValueMatching(getDisplayValue(parameters.fwd)),
+              'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`),
+              'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.fwd)),
+              'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.fwd)),
             }"
           >
             {{ parameters.fwd }}
@@ -149,8 +149,8 @@ onUnmounted(() => {
         <template v-if="parameters['fwd-status']">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('Forwarded status') }"
-            @mouseenter="handleDataKeyHover('Forwarded status', getDisplayValue(parameters['fwd-status']))"
+            :class="{ 'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, getDisplayValue(parameters['fwd-status']))"
             @mouseleave="handleDataKeyLeave"
           >
             Forwarded status
@@ -158,9 +158,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('Forwarded status'),
-              'value-matching': isKeyHovered('Forwarded status') && isValueMatching(getDisplayValue(parameters['fwd-status'])),
-              'value-different': isKeyHovered('Forwarded status') && !isValueMatching(getDisplayValue(parameters['fwd-status'])),
+              'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`),
+              'value-matching': isKeyHovered(`Forwarded status-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters['fwd-status'])),
+              'value-different': isKeyHovered(`Forwarded status-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters['fwd-status'])),
             }"
           >
             {{ parameters["fwd-status"] }}
@@ -170,8 +170,8 @@ onUnmounted(() => {
         <template v-if="parameters.ttl">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('TTL') }"
-            @mouseenter="handleDataKeyHover('TTL', getDisplayValue(parameters.ttl))"
+            :class="{ 'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, getDisplayValue(parameters.ttl))"
             @mouseleave="handleDataKeyLeave"
           >
             TTL
@@ -179,9 +179,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('TTL'),
-              'value-matching': isKeyHovered('TTL') && isValueMatching(getDisplayValue(parameters.ttl)),
-              'value-different': isKeyHovered('TTL') && !isValueMatching(getDisplayValue(parameters.ttl)),
+              'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`),
+              'value-matching': isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.ttl)),
+              'value-different': isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.ttl)),
             }"
             :title="formatHumanSeconds(parameters.ttl)"
           >
@@ -192,8 +192,8 @@ onUnmounted(() => {
         <template v-if="parameters.stored">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('Stored the response') }"
-            @mouseenter="handleDataKeyHover('Stored the response', getDisplayValue(parameters.stored))"
+            :class="{ 'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, getDisplayValue(parameters.stored))"
             @mouseleave="handleDataKeyLeave"
           >
             Stored the response
@@ -201,9 +201,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('Stored the response'),
-              'value-matching': isKeyHovered('Stored the response') && isValueMatching(getDisplayValue(parameters.stored)),
-              'value-different': isKeyHovered('Stored the response') && !isValueMatching(getDisplayValue(parameters.stored)),
+              'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`),
+              'value-matching': isKeyHovered(`Stored the response-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.stored)),
+              'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.stored)),
             }"
           >
             {{ parameters.stored ? "✅" : "❌" }}
@@ -213,8 +213,8 @@ onUnmounted(() => {
         <template v-if="parameters.collapsed">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('Collapsed w/ other reqs') }"
-            @mouseenter="handleDataKeyHover('Collapsed w/ other reqs', getDisplayValue(parameters.collapsed))"
+            :class="{ 'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, getDisplayValue(parameters.collapsed))"
             @mouseleave="handleDataKeyLeave"
           >
             Collapsed w/ other reqs
@@ -222,9 +222,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('Collapsed w/ other reqs'),
-              'value-matching': isKeyHovered('Collapsed w/ other reqs') && isValueMatching(getDisplayValue(parameters.collapsed)),
-              'value-different': isKeyHovered('Collapsed w/ other reqs') && !isValueMatching(getDisplayValue(parameters.collapsed)),
+              'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`),
+              'value-matching': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.collapsed)),
+              'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.collapsed)),
             }"
           >
             {{ parameters.collapsed ? "✅" : "❌" }}
@@ -234,8 +234,8 @@ onUnmounted(() => {
         <template v-if="parameters.key">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('Cache key') }"
-            @mouseenter="handleDataKeyHover('Cache key', getDisplayValue(parameters.key))"
+            :class="{ 'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, getDisplayValue(parameters.key))"
             @mouseleave="handleDataKeyLeave"
           >
             Cache key
@@ -243,9 +243,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('Cache key'),
-              'value-matching': isKeyHovered('Cache key') && isValueMatching(getDisplayValue(parameters.key)),
-              'value-different': isKeyHovered('Cache key') && !isValueMatching(getDisplayValue(parameters.key)),
+              'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`),
+              'value-matching': isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.key)),
+              'value-different': isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.key)),
             }"
           >
             {{ parameters.key }}
@@ -255,8 +255,8 @@ onUnmounted(() => {
         <template v-if="parameters.detail">
           <dt
             class="data-key"
-            :class="{ 'key-highlighted': isKeyHovered('Extra details') }"
-            @mouseenter="handleDataKeyHover('Extra details', getDisplayValue(parameters.detail))"
+            :class="{ 'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`) }"
+            @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, getDisplayValue(parameters.detail))"
             @mouseleave="handleDataKeyLeave"
           >
             Extra details
@@ -264,9 +264,9 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'key-highlighted': isKeyHovered('Extra details'),
-              'value-matching': isKeyHovered('Extra details') && isValueMatching(getDisplayValue(parameters.detail)),
-              'value-different': isKeyHovered('Extra details') && !isValueMatching(getDisplayValue(parameters.detail)),
+              'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`),
+              'value-matching': isKeyHovered(`Extra details-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.detail)),
+              'value-different': isKeyHovered(`Extra details-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.detail)),
             }"
           >
             {{ parameters.detail }}

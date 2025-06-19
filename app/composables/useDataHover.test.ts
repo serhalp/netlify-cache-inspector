@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect } from 'vitest'
-import { useDataHover } from '../composables/useDataHover'
+import { useDataHover } from './useDataHover'
 
 describe('useDataHover', () => {
   it('should initialize with null hover state', () => {
@@ -11,7 +11,7 @@ describe('useDataHover', () => {
     expect(hoverState.value.dataValue).toBe(null)
   })
 
-  it('should set hover state correctly', () => {
+  it('should set hover state with data key and value', () => {
     const { setHover, hoverState } = useDataHover()
     setHover('Age', '5s')
     expect(hoverState.value.dataKey).toBe('Age')
@@ -43,9 +43,9 @@ describe('useDataHover', () => {
   it('should handle shared state across multiple instances', () => {
     const instance1 = useDataHover()
     const instance2 = useDataHover()
-    
+
     instance1.setHover('Hit', '✅')
-    
+
     expect(instance2.isKeyHovered('Hit')).toBe(true)
     expect(instance2.isValueMatching('✅')).toBe(true)
   })
