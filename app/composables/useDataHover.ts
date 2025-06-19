@@ -58,16 +58,11 @@ export const useDataHover = () => {
       const deltaMs = currentRawValue.getTime() - hoveredRawValue.getTime()
       if (deltaMs === 0) return null
 
-      // Convert to seconds and use formatDuration for human-readable format
-      const deltaSeconds = Math.abs(deltaMs) / 1000
       const sign = deltaMs > 0 ? '+' : '-'
-
-      // Use formatDuration from date-fns for human-readable format
-      const d = new Date() // arbitrary date
       const humanDuration = formatDuration(
         intervalToDuration({
-          start: d,
-          end: new Date(d.getTime() + deltaSeconds * 1000),
+          start: hoveredRawValue,
+          end: currentRawValue,
         }),
       )
 

@@ -83,7 +83,7 @@ describe('useDataHover', () => {
     expect(getDelta(5)).toBe(null)
   })
 
-  it('should compare Dates using getTime', () => {
+  it('should compare Date values using getTime for accurate matching', () => {
     const { setHover, isValueMatching } = useDataHover()
     const date1 = new Date('2023-01-01T00:00:00Z')
     const date2 = new Date('2023-01-01T00:00:00Z')

@@ -67,8 +67,8 @@ const handleRequestFormSubmit = async ({
   catch (err: any) {
     error.value
       = err?.data?.message
-      ?? err?.toString?.()
-      ?? new Error(`Fetch error: ${err}`)
+        ?? err?.toString?.()
+        ?? new Error(`Fetch error: ${err}`)
     return
   }
   finally {
@@ -107,6 +107,7 @@ const handleClickClear = (): void => {
         v-for="(run, i) in runs"
         v-bind="run"
         :key="i"
+        :total-runs="runs.length"
       />
     </div>
 

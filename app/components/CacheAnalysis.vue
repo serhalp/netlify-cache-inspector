@@ -3,6 +3,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 const props = defineProps<{
   cacheHeaders: Record<string, string>
+  totalRuns?: number
 }>()
 
 const { setHover, clearHover, isKeyHovered, isValueMatching, getDelta } = useDataHover()
@@ -35,35 +36,15 @@ const cacheAnalysis = computed(() =>
 )
 
 // Helper function to handle hover events on data keys
-const handleDataKeyHover = (dataKey: string, rawValue: unknown) => {
-  // Type guard to ensure we have a valid value for display
-  if (typeof rawValue === 'boolean' || typeof rawValue === 'number' || typeof rawValue === 'string' || rawValue instanceof Date) {
-    const displayValue = getDisplayValue(rawValue)
-    setHover(dataKey, displayValue, rawValue)
-  }
-  else {
-    // For unknown types, convert to string
-    const displayValue = String(rawValue)
-    setHover(dataKey, displayValue, rawValue)
+const handleDataKeyHover = (dataKey: string, rawValue: boolean | number | string | Date | null | undefined) => {
+  // Only enable hover when there are multiple runs to compare
+  if ((props.totalRuns ?? 1) > 1) {
+    setHover(dataKey, null, rawValue)
   }
 }
 
 const handleDataKeyLeave = () => {
   clearHover()
-}
-
-// Helper function to get the display value for comparison
-const getDisplayValue = (value: boolean | number | string | Date): string => {
-  if (typeof value === 'boolean') {
-    return value ? '✅' : '❌'
-  }
-  if (typeof value === 'number') {
-    return formatSeconds(value)
-  }
-  if (value instanceof Date) {
-    return formatDate(value)
-  }
-  return String(value)
 }
 
 let timerId: NodeJS.Timeout | null = null
@@ -568,6 +549,16 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+:root {
+  --hover-bg-light: rgba(59, 130, 246, 0.1);
+  --hover-bg-highlighted: rgba(59, 130, 246, 0.2);
+  --match-bg: rgba(34, 197, 94, 0.2);
+  --match-border: rgb(34, 197, 94);
+  --different-bg: rgba(239, 68, 68, 0.1);
+  --different-border: rgb(239, 68, 68);
+  --delta-text: rgb(107, 114, 128);
+}
+
 .container {
   font-size: 0.9em;
 }
@@ -609,11 +600,11 @@ dd code {
 }
 
 .data-key:hover {
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: var(--hover-bg-light);
 }
 
 .data-key.key-highlighted {
-  background-color: rgba(59, 130, 246, 0.2);
+  background-color: var(--hover-bg-highlighted);
   font-weight: 600;
 }
 
@@ -622,14 +613,14 @@ dd code {
 }
 
 .data-value.value-matching {
-  background-color: rgba(34, 197, 94, 0.2);
-  border-left: 3px solid rgb(34, 197, 94);
+  background-color: var(--match-bg);
+  border-left: 3px solid var(--match-border);
   padding-left: 0.5em;
 }
 
 .data-value.value-different {
-  background-color: rgba(239, 68, 68, 0.1);
-  border-left: 3px solid rgb(239, 68, 68);
+  background-color: var(--different-bg);
+  border-left: 3px solid var(--different-border);
   padding-left: 0.5em;
 }
 
@@ -637,7 +628,7 @@ dd code {
 .delta {
   font-size: 0.8em;
   font-weight: 500;
-  color: rgb(107, 114, 128);
+  color: var(--delta-text);
   margin-left: 0.25em;
 }
 </style>

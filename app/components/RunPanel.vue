@@ -5,6 +5,7 @@ const props = defineProps<{
   status: number
   durationInMs: number
   cacheHeaders: Record<string, string>
+  totalRuns?: number
 }>()
 </script>
 
@@ -24,7 +25,10 @@ const props = defineProps<{
       </NuxtLink>
     </div>
 
-    <CacheAnalysis :cache-headers="props.cacheHeaders" />
+    <CacheAnalysis
+      :cache-headers="props.cacheHeaders"
+      :total-runs="props.totalRuns"
+    />
     <RawCacheHeaders :cache-headers="props.cacheHeaders" />
   </div>
 </template>
