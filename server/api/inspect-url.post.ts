@@ -17,8 +17,21 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Validate and normalize URL before processing
+  let normalizedUrl: string
+  try {
+    const parsedUrl = new URL(url)
+    normalizedUrl = parsedUrl.href // This ensures proper URL encoding
+  }
+  catch {
+    throw createError({
+      statusCode: 400,
+      message: `Invalid URL provided: ${url}`,
+    })
+  }
+
   const startTime = Date.now()
-  const { status, headers } = await $fetch.raw(url, {
+  const { status, headers } = await $fetch.raw(normalizedUrl, {
     headers: {
       'x-nf-debug-logging': '1',
     },
@@ -36,12 +49,13 @@ export default defineEventHandler(async (event) => {
   }
 
   const run = {
-    runId: generateRunId(url, Date.now()),
-    url,
+    runId: generateRunId(normalizedUrl, Date.now()),
+    url: normalizedUrl, // Use normalized URL
     status,
     headers: Object.fromEntries(headers),
     durationInMs,
   }
+
   await saveRun(run)
 
   return run
