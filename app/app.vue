@@ -2,7 +2,7 @@
   <NuxtRouteAnnouncer />
 
   <header>
-    <h1>Netlify Cache Inspector</h1>
+    <h1><a href="https://www.example.com">Netlify Cache Inspector</a></h1>
 
     <p class="subheading">
       Inspect and compare cache headers for requests to Netlify sites
