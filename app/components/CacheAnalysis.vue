@@ -35,8 +35,16 @@ const cacheAnalysis = computed(() =>
 )
 
 // Helper function to handle hover events on data keys
-const handleDataKeyHover = (dataKey: string, dataValue: string, rawValue: unknown = null) => {
-  setHover(dataKey, dataValue, rawValue)
+const handleDataKeyHover = (dataKey: string, rawValue: unknown) => {
+  // Type guard to ensure we have a valid value for display
+  if (typeof rawValue === 'boolean' || typeof rawValue === 'number' || typeof rawValue === 'string' || rawValue instanceof Date) {
+    const displayValue = getDisplayValue(rawValue)
+    setHover(dataKey, displayValue, rawValue)
+  } else {
+    // For unknown types, convert to string
+    const displayValue = String(rawValue)
+    setHover(dataKey, displayValue, rawValue)
+  }
 }
 
 const handleDataKeyLeave = () => {
@@ -109,7 +117,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
-          @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, getDisplayValue(parameters.hit))"
+          @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
           @mouseleave="handleDataKeyLeave"
         >
           Hit
@@ -118,8 +126,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`),
-            'value-matching': isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.hit)),
-            'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.hit)),
+            'value-matching': isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(parameters.hit),
+            'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(parameters.hit),
           }"
         >
           {{ parameters.hit ? "✅" : "❌" }}
@@ -129,7 +137,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, getDisplayValue(parameters.fwd))"
+            @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
             @mouseleave="handleDataKeyLeave"
           >
             Forwarded because
@@ -138,8 +146,8 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.fwd)),
-              'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.fwd)),
+              'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(parameters.fwd),
+              'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(parameters.fwd),
             }"
           >
             {{ parameters.fwd }}
@@ -150,7 +158,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, getDisplayValue(parameters['fwd-status']))"
+            @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
             @mouseleave="handleDataKeyLeave"
           >
             Forwarded status
@@ -159,8 +167,8 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Forwarded status-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters['fwd-status'])),
-              'value-different': isKeyHovered(`Forwarded status-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters['fwd-status'])),
+              'value-matching': isKeyHovered(`Forwarded status-${cacheIndex}`) && isValueMatching(parameters['fwd-status']),
+              'value-different': isKeyHovered(`Forwarded status-${cacheIndex}`) && !isValueMatching(parameters['fwd-status']),
             }"
           >
             {{ parameters["fwd-status"] }}
@@ -171,7 +179,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, getDisplayValue(parameters.ttl), parameters.ttl)"
+            @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
             @mouseleave="handleDataKeyLeave"
           >
             TTL
@@ -180,14 +188,14 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`),
-              'value-matching': isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.ttl)),
-              'value-different': isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.ttl)),
+              'value-matching': isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(parameters.ttl),
+              'value-different': isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl),
             }"
             :title="formatHumanSeconds(parameters.ttl)"
           >
             {{ formatSeconds(parameters.ttl) }}
             <span
-              v-if="isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.ttl)) && getDelta(parameters.ttl)"
+              v-if="isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl) && getDelta(parameters.ttl)"
               class="delta"
             >
               ({{ getDelta(parameters.ttl) }})
@@ -199,7 +207,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, getDisplayValue(parameters.stored))"
+            @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
             @mouseleave="handleDataKeyLeave"
           >
             Stored the response
@@ -208,8 +216,8 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Stored the response-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.stored)),
-              'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.stored)),
+              'value-matching': isKeyHovered(`Stored the response-${cacheIndex}`) && isValueMatching(parameters.stored),
+              'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(parameters.stored),
             }"
           >
             {{ parameters.stored ? "✅" : "❌" }}
@@ -220,7 +228,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, getDisplayValue(parameters.collapsed))"
+            @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
             @mouseleave="handleDataKeyLeave"
           >
             Collapsed w/ other reqs
@@ -229,8 +237,8 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.collapsed)),
-              'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.collapsed)),
+              'value-matching': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && isValueMatching(parameters.collapsed),
+              'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(parameters.collapsed),
             }"
           >
             {{ parameters.collapsed ? "✅" : "❌" }}
@@ -241,7 +249,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, getDisplayValue(parameters.key))"
+            @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
             @mouseleave="handleDataKeyLeave"
           >
             Cache key
@@ -250,8 +258,8 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.key)),
-              'value-different': isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.key)),
+              'value-matching': isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(parameters.key),
+              'value-different': isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(parameters.key),
             }"
           >
             {{ parameters.key }}
@@ -262,7 +270,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, getDisplayValue(parameters.detail))"
+            @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
             @mouseleave="handleDataKeyLeave"
           >
             Extra details
@@ -271,8 +279,8 @@ onUnmounted(() => {
             class="data-value"
             :class="{
               'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Extra details-${cacheIndex}`) && isValueMatching(getDisplayValue(parameters.detail)),
-              'value-different': isKeyHovered(`Extra details-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.detail)),
+              'value-matching': isKeyHovered(`Extra details-${cacheIndex}`) && isValueMatching(parameters.detail),
+              'value-different': isKeyHovered(`Extra details-${cacheIndex}`) && !isValueMatching(parameters.detail),
             }"
           >
             {{ parameters.detail }}
@@ -292,7 +300,7 @@ onUnmounted(() => {
       <dt
         class="data-key"
         :class="{ 'key-highlighted': isKeyHovered('Cacheable') }"
-        @mouseenter="handleDataKeyHover('Cacheable', getDisplayValue(cacheAnalysis.cacheControl.isCacheable))"
+        @mouseenter="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
         @mouseleave="handleDataKeyLeave"
       >
         Cacheable
@@ -301,8 +309,8 @@ onUnmounted(() => {
         class="data-value"
         :class="{
           'key-highlighted': isKeyHovered('Cacheable'),
-          'value-matching': isKeyHovered('Cacheable') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.isCacheable)),
-          'value-different': isKeyHovered('Cacheable') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.isCacheable)),
+          'value-matching': isKeyHovered('Cacheable') && isValueMatching(cacheAnalysis.cacheControl.isCacheable),
+          'value-different': isKeyHovered('Cacheable') && !isValueMatching(cacheAnalysis.cacheControl.isCacheable),
         }"
       >
         {{ cacheAnalysis.cacheControl.isCacheable ? "✅" : "❌" }}
@@ -312,7 +320,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Age') }"
-          @mouseenter="handleDataKeyHover('Age', getDisplayValue(cacheAnalysis.cacheControl.age), cacheAnalysis.cacheControl.age)"
+          @mouseenter="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
           @mouseleave="handleDataKeyLeave"
         >
           Age
@@ -321,14 +329,14 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('Age'),
-            'value-matching': isKeyHovered('Age') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.age)),
-            'value-different': isKeyHovered('Age') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.age)),
+            'value-matching': isKeyHovered('Age') && isValueMatching(cacheAnalysis.cacheControl.age),
+            'value-different': isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age),
           }"
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.age)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.age) }}
           <span
-            v-if="isKeyHovered('Age') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.age)) && getDelta(cacheAnalysis.cacheControl.age)"
+            v-if="isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age) && getDelta(cacheAnalysis.cacheControl.age)"
             class="delta"
           >
             ({{ getDelta(cacheAnalysis.cacheControl.age) }})
@@ -340,7 +348,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Date') }"
-          @mouseenter="handleDataKeyHover('Date', getDisplayValue(cacheAnalysis.cacheControl.date))"
+          @mouseenter="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
           @mouseleave="handleDataKeyLeave"
         >
           Date
@@ -349,8 +357,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('Date'),
-            'value-matching': isKeyHovered('Date') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.date)),
-            'value-different': isKeyHovered('Date') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.date)),
+            'value-matching': isKeyHovered('Date') && isValueMatching(cacheAnalysis.cacheControl.date),
+            'value-different': isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date),
           }"
         >
           {{ formatDate(cacheAnalysis.cacheControl.date) }}
@@ -361,7 +369,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('ETag') }"
-          @mouseenter="handleDataKeyHover('ETag', getDisplayValue(cacheAnalysis.cacheControl.etag))"
+          @mouseenter="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
           @mouseleave="handleDataKeyLeave"
         >
           ETag
@@ -370,8 +378,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('ETag'),
-            'value-matching': isKeyHovered('ETag') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.etag)),
-            'value-different': isKeyHovered('ETag') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.etag)),
+            'value-matching': isKeyHovered('ETag') && isValueMatching(cacheAnalysis.cacheControl.etag),
+            'value-different': isKeyHovered('ETag') && !isValueMatching(cacheAnalysis.cacheControl.etag),
           }"
         >
           <code>{{ cacheAnalysis.cacheControl.etag }}</code>
@@ -382,7 +390,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Expires at') }"
-          @mouseenter="handleDataKeyHover('Expires at', getDisplayValue(cacheAnalysis.cacheControl.expiresAt))"
+          @mouseenter="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
           @mouseleave="handleDataKeyLeave"
         >
           Expires at
@@ -391,8 +399,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('Expires at'),
-            'value-matching': isKeyHovered('Expires at') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.expiresAt)),
-            'value-different': isKeyHovered('Expires at') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.expiresAt)),
+            'value-matching': isKeyHovered('Expires at') && isValueMatching(cacheAnalysis.cacheControl.expiresAt),
+            'value-different': isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt),
           }"
         >
           {{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}
@@ -403,7 +411,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (browser)') }"
-          @mouseenter="handleDataKeyHover('TTL (browser)', getDisplayValue(cacheAnalysis.cacheControl.ttl), cacheAnalysis.cacheControl.ttl)"
+          @mouseenter="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
           @mouseleave="handleDataKeyLeave"
         >
           TTL{{
@@ -417,14 +425,14 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('TTL (browser)'),
-            'value-matching': isKeyHovered('TTL (browser)') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.ttl)),
-            'value-different': isKeyHovered('TTL (browser)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.ttl)),
+            'value-matching': isKeyHovered('TTL (browser)') && isValueMatching(cacheAnalysis.cacheControl.ttl),
+            'value-different': isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl),
           }"
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
           <span
-            v-if="isKeyHovered('TTL (browser)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.ttl)) && getDelta(cacheAnalysis.cacheControl.ttl)"
+            v-if="isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl) && getDelta(cacheAnalysis.cacheControl.ttl)"
             class="delta"
           >
             ({{ getDelta(cacheAnalysis.cacheControl.ttl) }})
@@ -436,7 +444,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (CDN)') }"
-          @mouseenter="handleDataKeyHover('TTL (CDN)', getDisplayValue(cacheAnalysis.cacheControl.cdnTtl), cacheAnalysis.cacheControl.cdnTtl)"
+          @mouseenter="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
           @mouseleave="handleDataKeyLeave"
         >
           TTL ({{
@@ -449,14 +457,14 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('TTL (CDN)'),
-            'value-matching': isKeyHovered('TTL (CDN)') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.cdnTtl)),
-            'value-different': isKeyHovered('TTL (CDN)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.cdnTtl)),
+            'value-matching': isKeyHovered('TTL (CDN)') && isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
+            'value-different': isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
           }"
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
           <span
-            v-if="isKeyHovered('TTL (CDN)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.cdnTtl)) && getDelta(cacheAnalysis.cacheControl.cdnTtl)"
+            v-if="isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl) && getDelta(cacheAnalysis.cacheControl.cdnTtl)"
             class="delta"
           >
             ({{ getDelta(cacheAnalysis.cacheControl.cdnTtl) }})
@@ -468,7 +476,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
-          @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl), cacheAnalysis.cacheControl.netlifyCdnTtl)"
+          @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
           @mouseleave="handleDataKeyLeave"
         >
           TTL (Netlify CDN)
@@ -477,14 +485,14 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('TTL (Netlify CDN)'),
-            'value-matching': isKeyHovered('TTL (Netlify CDN)') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl)),
-            'value-different': isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl)),
+            'value-matching': isKeyHovered('TTL (Netlify CDN)') && isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
+            'value-different': isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
           }"
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
           <span
-            v-if="isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl)) && getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)"
+            v-if="isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl) && getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)"
             class="delta"
           >
             ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl) }})
@@ -496,7 +504,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Vary') }"
-          @mouseenter="handleDataKeyHover('Vary', getDisplayValue(cacheAnalysis.cacheControl.vary))"
+          @mouseenter="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
           @mouseleave="handleDataKeyLeave"
         >
           Vary
@@ -505,8 +513,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('Vary'),
-            'value-matching': isKeyHovered('Vary') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.vary)),
-            'value-different': isKeyHovered('Vary') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.vary)),
+            'value-matching': isKeyHovered('Vary') && isValueMatching(cacheAnalysis.cacheControl.vary),
+            'value-different': isKeyHovered('Vary') && !isValueMatching(cacheAnalysis.cacheControl.vary),
           }"
         >
           <code>{{ cacheAnalysis.cacheControl.vary }}</code>
@@ -517,7 +525,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Netlify-Vary') }"
-          @mouseenter="handleDataKeyHover('Netlify-Vary', getDisplayValue(cacheAnalysis.cacheControl.netlifyVary))"
+          @mouseenter="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
           @mouseleave="handleDataKeyLeave"
         >
           Netlify-Vary
@@ -526,8 +534,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('Netlify-Vary'),
-            'value-matching': isKeyHovered('Netlify-Vary') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyVary)),
-            'value-different': isKeyHovered('Netlify-Vary') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyVary)),
+            'value-matching': isKeyHovered('Netlify-Vary') && isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
+            'value-different': isKeyHovered('Netlify-Vary') && !isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
           }"
         >
           <code>{{ cacheAnalysis.cacheControl.netlifyVary }}</code>
@@ -538,7 +546,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Revalidation') }"
-          @mouseenter="handleDataKeyHover('Revalidation', getDisplayValue(cacheAnalysis.cacheControl.revalidate))"
+          @mouseenter="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
           @mouseleave="handleDataKeyLeave"
         >
           Revalidation
@@ -547,8 +555,8 @@ onUnmounted(() => {
           class="data-value"
           :class="{
             'key-highlighted': isKeyHovered('Revalidation'),
-            'value-matching': isKeyHovered('Revalidation') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.revalidate)),
-            'value-different': isKeyHovered('Revalidation') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.revalidate)),
+            'value-matching': isKeyHovered('Revalidation') && isValueMatching(cacheAnalysis.cacheControl.revalidate),
+            'value-different': isKeyHovered('Revalidation') && !isValueMatching(cacheAnalysis.cacheControl.revalidate),
           }"
         >
           <code>{{ cacheAnalysis.cacheControl.revalidate }}</code>

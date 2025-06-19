@@ -180,9 +180,9 @@ export const getTimeToLive = (
 
   const effectiveMaxAge
     = maxAge
-      ?? (expiresAt != null
-        ? (expiresAt.getTime() - trulyEffectiveDate.getTime()) / 1000
-        : undefined)
+    ?? (expiresAt != null
+      ? (expiresAt.getTime() - trulyEffectiveDate.getTime()) / 1000
+      : undefined)
 
   if (effectiveMaxAge != null) {
     return effectiveMaxAge - effectiveAge

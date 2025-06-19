@@ -1,6 +1,7 @@
 /**
  * Composable for managing hover state across cache analysis data elements
  */
+import { formatDuration, intervalToDuration } from 'date-fns'
 
 interface HoverState {
   dataKey: string | null
@@ -27,14 +28,22 @@ export const useDataHover = () => {
     return hoverState.value.dataKey === key
   }
 
-  const isValueMatching = (value: string) => {
-    return hoverState.value.dataValue === value
+  const isValueMatching = (rawValue: unknown) => {
+    const hoveredRawValue = hoverState.value.rawValue
+
+    // Handle Date comparison specially
+    if (hoveredRawValue instanceof Date && rawValue instanceof Date) {
+      return hoveredRawValue.getTime() === rawValue.getTime()
+    }
+
+    // For all other types, use direct equality
+    return hoveredRawValue === rawValue
   }
 
   const getDelta = (currentRawValue: unknown): string | null => {
     const hoveredRawValue = hoverState.value.rawValue
 
-    // Only calculate delta for numbers
+    // Calculate delta for numbers
     if (typeof hoveredRawValue === 'number' && typeof currentRawValue === 'number') {
       const delta = currentRawValue - hoveredRawValue
       if (delta === 0) return null
@@ -42,6 +51,27 @@ export const useDataHover = () => {
       // Format delta with appropriate sign and unit
       const sign = delta > 0 ? '+' : ''
       return `${sign}${delta}s`
+    }
+
+    // Calculate delta for Dates
+    if (hoveredRawValue instanceof Date && currentRawValue instanceof Date) {
+      const deltaMs = currentRawValue.getTime() - hoveredRawValue.getTime()
+      if (deltaMs === 0) return null
+
+      // Convert to seconds and use formatDuration for human-readable format
+      const deltaSeconds = Math.abs(deltaMs) / 1000
+      const sign = deltaMs > 0 ? '+' : '-'
+
+      // Use formatDuration from date-fns for human-readable format
+      const d = new Date() // arbitrary date
+      const humanDuration = formatDuration(
+        intervalToDuration({
+          start: d,
+          end: new Date(d.getTime() + deltaSeconds * 1000),
+        }),
+      )
+
+      return `${sign}${humanDuration}`
     }
 
     return null

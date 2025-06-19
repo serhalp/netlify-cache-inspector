@@ -29,28 +29,28 @@ describe('useDataHover', () => {
     expect(hoverState.value.rawValue).toBe(null)
   })
 
-  it('should correctly identify hovered keys', () => {
+  it('should identify hovered keys', () => {
     const { setHover, isKeyHovered } = useDataHover()
     setHover('Cacheable', '✅')
     expect(isKeyHovered('Cacheable')).toBe(true)
     expect(isKeyHovered('Age')).toBe(false)
   })
 
-  it('should correctly match values', () => {
+  it('should match raw values for comparison', () => {
     const { setHover, isValueMatching } = useDataHover()
-    setHover('TTL', '10s')
-    expect(isValueMatching('10s')).toBe(true)
-    expect(isValueMatching('5s')).toBe(false)
+    setHover('TTL', '10s', 10)
+    expect(isValueMatching(10)).toBe(true)
+    expect(isValueMatching(5)).toBe(false)
   })
 
-  it('should handle shared state across multiple instances', () => {
+  it('should maintain shared state across multiple instances', () => {
     const instance1 = useDataHover()
     const instance2 = useDataHover()
 
     instance1.setHover('Hit', '✅', true)
 
     expect(instance2.isKeyHovered('Hit')).toBe(true)
-    expect(instance2.isValueMatching('✅')).toBe(true)
+    expect(instance2.isValueMatching(true)).toBe(true)
   })
 
   it('should calculate positive delta for numbers', () => {
@@ -81,5 +81,47 @@ describe('useDataHover', () => {
     const { setHover, getDelta } = useDataHover()
     setHover('Hit', '✅', true)
     expect(getDelta(5)).toBe(null)
+  })
+
+  it('should compare Dates using getTime', () => {
+    const { setHover, isValueMatching } = useDataHover()
+    const date1 = new Date('2023-01-01T00:00:00Z')
+    const date2 = new Date('2023-01-01T00:00:00Z')
+    const date3 = new Date('2023-01-02T00:00:00Z')
+
+    setHover('Date', 'Jan 1, 2023', date1)
+    expect(isValueMatching(date2)).toBe(true)
+    expect(isValueMatching(date3)).toBe(false)
+  })
+
+  it('should calculate positive delta for Dates', () => {
+    const { setHover, getDelta } = useDataHover()
+    const date1 = new Date('2023-01-01T00:00:00Z')
+    const date2 = new Date('2023-01-01T00:01:00Z') // 1 minute later
+
+    setHover('Date', 'Jan 1, 2023', date1)
+    const delta = getDelta(date2)
+    expect(delta).toContain('+')
+    expect(delta).toContain('minute')
+  })
+
+  it('should calculate negative delta for Dates', () => {
+    const { setHover, getDelta } = useDataHover()
+    const date1 = new Date('2023-01-01T00:01:00Z')
+    const date2 = new Date('2023-01-01T00:00:00Z') // 1 minute earlier
+
+    setHover('Date', 'Jan 1, 2023', date1)
+    const delta = getDelta(date2)
+    expect(delta).toContain('-')
+    expect(delta).toContain('minute')
+  })
+
+  it('should return null for equal Dates', () => {
+    const { setHover, getDelta } = useDataHover()
+    const date1 = new Date('2023-01-01T00:00:00Z')
+    const date2 = new Date('2023-01-01T00:00:00Z')
+
+    setHover('Date', 'Jan 1, 2023', date1)
+    expect(getDelta(date2)).toBe(null)
   })
 })
