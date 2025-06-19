@@ -26,19 +26,11 @@ const handleRequestFormSubmit = async ({
 }): Promise<void> => {
   loading.value = true
   try {
-    const response = await fetch('/api/inspect-url', {
+    const responseBody: ApiRun = await $fetch<ApiRun>('/api/inspect-url', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ url }),
+      body: { url },
     })
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
-    }
-
-    const responseBody: ApiRun = await response.json()
     runs.value.push(getRunFromApiRun(responseBody))
     error.value = null
   }
