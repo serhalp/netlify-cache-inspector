@@ -5,7 +5,7 @@ const props = defineProps<{
   cacheHeaders: Record<string, string>
 }>()
 
-const { setHover, clearHover, isKeyHovered, isValueMatching } = useDataHover()
+const { setHover, clearHover, isKeyHovered, isValueMatching, getDelta } = useDataHover()
 
 const formatSeconds = (seconds: number): string => {
   return `${seconds} s`
@@ -35,8 +35,8 @@ const cacheAnalysis = computed(() =>
 )
 
 // Helper function to handle hover events on data keys
-const handleDataKeyHover = (dataKey: string, dataValue: string) => {
-  setHover(dataKey, dataValue)
+const handleDataKeyHover = (dataKey: string, dataValue: string, rawValue: unknown = null) => {
+  setHover(dataKey, dataValue, rawValue)
 }
 
 const handleDataKeyLeave = () => {
@@ -171,7 +171,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
-            @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, getDisplayValue(parameters.ttl))"
+            @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, getDisplayValue(parameters.ttl), parameters.ttl)"
             @mouseleave="handleDataKeyLeave"
           >
             TTL
@@ -186,6 +186,12 @@ onUnmounted(() => {
             :title="formatHumanSeconds(parameters.ttl)"
           >
             {{ formatSeconds(parameters.ttl) }}
+            <span
+              v-if="isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(getDisplayValue(parameters.ttl)) && getDelta(parameters.ttl)"
+              class="delta"
+            >
+              ({{ getDelta(parameters.ttl) }})
+            </span>
           </dd>
         </template>
 
@@ -306,7 +312,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Age') }"
-          @mouseenter="handleDataKeyHover('Age', getDisplayValue(cacheAnalysis.cacheControl.age))"
+          @mouseenter="handleDataKeyHover('Age', getDisplayValue(cacheAnalysis.cacheControl.age), cacheAnalysis.cacheControl.age)"
           @mouseleave="handleDataKeyLeave"
         >
           Age
@@ -321,6 +327,12 @@ onUnmounted(() => {
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.age)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.age) }}
+          <span
+            v-if="isKeyHovered('Age') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.age)) && getDelta(cacheAnalysis.cacheControl.age)"
+            class="delta"
+          >
+            ({{ getDelta(cacheAnalysis.cacheControl.age) }})
+          </span>
         </dd>
       </template>
 
@@ -391,7 +403,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (browser)') }"
-          @mouseenter="handleDataKeyHover('TTL (browser)', getDisplayValue(cacheAnalysis.cacheControl.ttl))"
+          @mouseenter="handleDataKeyHover('TTL (browser)', getDisplayValue(cacheAnalysis.cacheControl.ttl), cacheAnalysis.cacheControl.ttl)"
           @mouseleave="handleDataKeyLeave"
         >
           TTL{{
@@ -411,6 +423,12 @@ onUnmounted(() => {
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
+          <span
+            v-if="isKeyHovered('TTL (browser)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.ttl)) && getDelta(cacheAnalysis.cacheControl.ttl)"
+            class="delta"
+          >
+            ({{ getDelta(cacheAnalysis.cacheControl.ttl) }})
+          </span>
         </dd>
       </template>
 
@@ -418,7 +436,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (CDN)') }"
-          @mouseenter="handleDataKeyHover('TTL (CDN)', getDisplayValue(cacheAnalysis.cacheControl.cdnTtl))"
+          @mouseenter="handleDataKeyHover('TTL (CDN)', getDisplayValue(cacheAnalysis.cacheControl.cdnTtl), cacheAnalysis.cacheControl.cdnTtl)"
           @mouseleave="handleDataKeyLeave"
         >
           TTL ({{
@@ -437,6 +455,12 @@ onUnmounted(() => {
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
+          <span
+            v-if="isKeyHovered('TTL (CDN)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.cdnTtl)) && getDelta(cacheAnalysis.cacheControl.cdnTtl)"
+            class="delta"
+          >
+            ({{ getDelta(cacheAnalysis.cacheControl.cdnTtl) }})
+          </span>
         </dd>
       </template>
 
@@ -444,7 +468,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
-          @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl))"
+          @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl), cacheAnalysis.cacheControl.netlifyCdnTtl)"
           @mouseleave="handleDataKeyLeave"
         >
           TTL (Netlify CDN)
@@ -459,6 +483,12 @@ onUnmounted(() => {
           :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)"
         >
           {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
+          <span
+            v-if="isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyCdnTtl)) && getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)"
+            class="delta"
+          >
+            ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl) }})
+          </span>
         </dd>
       </template>
 
@@ -592,5 +622,13 @@ dd code {
   background-color: rgba(239, 68, 68, 0.1);
   border-left: 3px solid rgb(239, 68, 68);
   padding-left: 0.5em;
+}
+
+/* Delta display styles */
+.delta {
+  font-size: 0.8em;
+  font-weight: 500;
+  color: rgb(107, 114, 128);
+  margin-left: 0.25em;
 }
 </style>
