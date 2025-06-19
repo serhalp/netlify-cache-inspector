@@ -181,6 +181,25 @@ describe('ComponentName', () => {
 - Currently using TypeScript 5.8.3 which triggers ESLint warnings (safe to ignore)
 - Nuxt generates types automatically in `.nuxt/` directory
 
+## Commit & PR Conventions
+
+### Conventional Commits
+- **All commits** must follow [Conventional Commits](https://www.conventionalcommits.org/) specification
+- **PR titles** must also follow Conventional Commits format
+- Common types: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`, `style:`, `ci:`
+- Examples:
+  ```
+  feat: add cache analysis dashboard
+  fix: resolve memory leak in cache inspection
+  chore: update dependencies to latest versions
+  docs: update API documentation for new endpoints
+  ```
+
+### Scope Guidelines
+- Use specific scopes when helpful: `feat(api):`, `fix(ui):`, `chore(deps):`
+- Breaking changes: Add `!` after type/scope: `feat!:` or `feat(api)!:`
+- Add `BREAKING CHANGE:` in commit body for major changes
+
 ## AI Agent Guidelines
 
 ### Automated Detection
@@ -194,6 +213,8 @@ describe('ComponentName', () => {
 - Use TypeScript strictly - no `any` types without justification
 - Follow Vue 3 Composition API patterns consistently
 - Check ESLint output and fix issues
+- **Generate commit messages** that follow Conventional Commits format
+- **Suggest PR titles** that follow Conventional Commits format
 
 ---
 
