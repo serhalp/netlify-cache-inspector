@@ -24,16 +24,8 @@ const route = useRoute()
 const { data: initialRuns, pending: _pending, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async (): Promise<Run[]> => {
   const { runId } = route.params
   if (typeof runId === 'string') {
-    console.log(`[DEBUG] Fetching run with ID: ${runId}`)
-    try {
-      const responseBody: ApiRun = await $fetch<ApiRun>(`/api/runs/${runId}`)
-      console.log(`[DEBUG] Received API response:`, responseBody)
-      return [getRunFromApiRun(responseBody)]
-    }
-    catch (error) {
-      console.error(`[DEBUG] Error fetching run ${runId}:`, error)
-      throw error
-    }
+    const responseBody: ApiRun = await $fetch<ApiRun>(`/api/runs/${runId}`)
+    return [getRunFromApiRun(responseBody)]
   }
   return []
 })

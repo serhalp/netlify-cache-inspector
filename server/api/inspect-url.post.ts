@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
   try {
     const parsedUrl = new URL(url)
     normalizedUrl = parsedUrl.href // This ensures proper URL encoding
-    console.log(`[DEBUG] Normalized URL: ${normalizedUrl}`)
   }
   catch {
     throw createError({
@@ -57,7 +56,6 @@ export default defineEventHandler(async (event) => {
     durationInMs,
   }
 
-  console.log(`[DEBUG] Saving run with normalized URL: ${normalizedUrl}`)
   await saveRun(run)
 
   return run
