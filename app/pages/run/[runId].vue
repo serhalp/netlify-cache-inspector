@@ -24,7 +24,7 @@ const route = useRoute()
 const { data: initialRuns, pending: _pending, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async (): Promise<Run[]> => {
   const { runId } = route.params
   if (typeof runId === 'string') {
-    const responseBody: ApiRun = await $fetch<ApiRun>(`/api/runs/${runId}`)
+    const responseBody = await $fetch(`/api/runs/${runId}`)
     return [getRunFromApiRun(responseBody)]
   }
   return []
