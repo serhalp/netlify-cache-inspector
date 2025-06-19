@@ -126,13 +126,45 @@ onUnmounted(() => {
         </dd>
 
         <template v-if="parameters.fwd">
-          <dt>Forwarded because</dt>
-          <dd>{{ parameters.fwd }}</dd>
+          <dt
+            class="data-key"
+            :class="{ 'key-highlighted': isKeyHovered('Forwarded because') }"
+            @mouseenter="handleDataKeyHover('Forwarded because', getDisplayValue(parameters.fwd))"
+            @mouseleave="handleDataKeyLeave"
+          >
+            Forwarded because
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'key-highlighted': isKeyHovered('Forwarded because'),
+              'value-matching': isKeyHovered('Forwarded because') && isValueMatching(getDisplayValue(parameters.fwd)),
+              'value-different': isKeyHovered('Forwarded because') && !isValueMatching(getDisplayValue(parameters.fwd)),
+            }"
+          >
+            {{ parameters.fwd }}
+          </dd>
         </template>
 
         <template v-if="parameters['fwd-status']">
-          <dt>Forwarded status</dt>
-          <dd>{{ parameters["fwd-status"] }}</dd>
+          <dt
+            class="data-key"
+            :class="{ 'key-highlighted': isKeyHovered('Forwarded status') }"
+            @mouseenter="handleDataKeyHover('Forwarded status', getDisplayValue(parameters['fwd-status']))"
+            @mouseleave="handleDataKeyLeave"
+          >
+            Forwarded status
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'key-highlighted': isKeyHovered('Forwarded status'),
+              'value-matching': isKeyHovered('Forwarded status') && isValueMatching(getDisplayValue(parameters['fwd-status'])),
+              'value-different': isKeyHovered('Forwarded status') && !isValueMatching(getDisplayValue(parameters['fwd-status'])),
+            }"
+          >
+            {{ parameters["fwd-status"] }}
+          </dd>
         </template>
 
         <template v-if="parameters.ttl">
@@ -179,18 +211,66 @@ onUnmounted(() => {
         </template>
 
         <template v-if="parameters.collapsed">
-          <dt>Collapsed w/ other reqs</dt>
-          <dd>{{ parameters.collapsed ? "✅" : "❌" }}</dd>
+          <dt
+            class="data-key"
+            :class="{ 'key-highlighted': isKeyHovered('Collapsed w/ other reqs') }"
+            @mouseenter="handleDataKeyHover('Collapsed w/ other reqs', getDisplayValue(parameters.collapsed))"
+            @mouseleave="handleDataKeyLeave"
+          >
+            Collapsed w/ other reqs
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'key-highlighted': isKeyHovered('Collapsed w/ other reqs'),
+              'value-matching': isKeyHovered('Collapsed w/ other reqs') && isValueMatching(getDisplayValue(parameters.collapsed)),
+              'value-different': isKeyHovered('Collapsed w/ other reqs') && !isValueMatching(getDisplayValue(parameters.collapsed)),
+            }"
+          >
+            {{ parameters.collapsed ? "✅" : "❌" }}
+          </dd>
         </template>
 
         <template v-if="parameters.key">
-          <dt>Cache key</dt>
-          <dd>{{ parameters.key }}</dd>
+          <dt
+            class="data-key"
+            :class="{ 'key-highlighted': isKeyHovered('Cache key') }"
+            @mouseenter="handleDataKeyHover('Cache key', getDisplayValue(parameters.key))"
+            @mouseleave="handleDataKeyLeave"
+          >
+            Cache key
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'key-highlighted': isKeyHovered('Cache key'),
+              'value-matching': isKeyHovered('Cache key') && isValueMatching(getDisplayValue(parameters.key)),
+              'value-different': isKeyHovered('Cache key') && !isValueMatching(getDisplayValue(parameters.key)),
+            }"
+          >
+            {{ parameters.key }}
+          </dd>
         </template>
 
         <template v-if="parameters.detail">
-          <dt>Extra details</dt>
-          <dd>{{ parameters.detail }}</dd>
+          <dt
+            class="data-key"
+            :class="{ 'key-highlighted': isKeyHovered('Extra details') }"
+            @mouseenter="handleDataKeyHover('Extra details', getDisplayValue(parameters.detail))"
+            @mouseleave="handleDataKeyLeave"
+          >
+            Extra details
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'key-highlighted': isKeyHovered('Extra details'),
+              'value-matching': isKeyHovered('Extra details') && isValueMatching(getDisplayValue(parameters.detail)),
+              'value-different': isKeyHovered('Extra details') && !isValueMatching(getDisplayValue(parameters.detail)),
+            }"
+          >
+            {{ parameters.detail }}
+          </dd>
         </template>
       </template>
 
@@ -245,22 +325,66 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.date">
-        <dt>Date</dt>
-        <dd>
+        <dt
+          class="data-key"
+          :class="{ 'key-highlighted': isKeyHovered('Date') }"
+          @mouseenter="handleDataKeyHover('Date', getDisplayValue(cacheAnalysis.cacheControl.date))"
+          @mouseleave="handleDataKeyLeave"
+        >
+          Date
+        </dt>
+        <dd
+          class="data-value"
+          :class="{
+            'key-highlighted': isKeyHovered('Date'),
+            'value-matching': isKeyHovered('Date') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.date)),
+            'value-different': isKeyHovered('Date') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.date)),
+          }"
+        >
           {{ formatDate(cacheAnalysis.cacheControl.date) }}
         </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.etag">
-        <dt>ETag</dt>
-        <dd>
+        <dt
+          class="data-key"
+          :class="{ 'key-highlighted': isKeyHovered('ETag') }"
+          @mouseenter="handleDataKeyHover('ETag', getDisplayValue(cacheAnalysis.cacheControl.etag))"
+          @mouseleave="handleDataKeyLeave"
+        >
+          ETag
+        </dt>
+        <dd
+          class="data-value"
+          :class="{
+            'key-highlighted': isKeyHovered('ETag'),
+            'value-matching': isKeyHovered('ETag') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.etag)),
+            'value-different': isKeyHovered('ETag') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.etag)),
+          }"
+        >
           <code>{{ cacheAnalysis.cacheControl.etag }}</code>
         </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.expiresAt">
-        <dt>Expires at</dt>
-        <dd>{{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}</dd>
+        <dt
+          class="data-key"
+          :class="{ 'key-highlighted': isKeyHovered('Expires at') }"
+          @mouseenter="handleDataKeyHover('Expires at', getDisplayValue(cacheAnalysis.cacheControl.expiresAt))"
+          @mouseleave="handleDataKeyLeave"
+        >
+          Expires at
+        </dt>
+        <dd
+          class="data-value"
+          :class="{
+            'key-highlighted': isKeyHovered('Expires at'),
+            'value-matching': isKeyHovered('Expires at') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.expiresAt)),
+            'value-different': isKeyHovered('Expires at') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.expiresAt)),
+          }"
+        >
+          {{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}
+        </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.ttl">
@@ -339,22 +463,64 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.vary">
-        <dt>Vary</dt>
-        <dd>
+        <dt
+          class="data-key"
+          :class="{ 'key-highlighted': isKeyHovered('Vary') }"
+          @mouseenter="handleDataKeyHover('Vary', getDisplayValue(cacheAnalysis.cacheControl.vary))"
+          @mouseleave="handleDataKeyLeave"
+        >
+          Vary
+        </dt>
+        <dd
+          class="data-value"
+          :class="{
+            'key-highlighted': isKeyHovered('Vary'),
+            'value-matching': isKeyHovered('Vary') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.vary)),
+            'value-different': isKeyHovered('Vary') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.vary)),
+          }"
+        >
           <code>{{ cacheAnalysis.cacheControl.vary }}</code>
         </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.netlifyVary">
-        <dt>Netlify-Vary</dt>
-        <dd>
+        <dt
+          class="data-key"
+          :class="{ 'key-highlighted': isKeyHovered('Netlify-Vary') }"
+          @mouseenter="handleDataKeyHover('Netlify-Vary', getDisplayValue(cacheAnalysis.cacheControl.netlifyVary))"
+          @mouseleave="handleDataKeyLeave"
+        >
+          Netlify-Vary
+        </dt>
+        <dd
+          class="data-value"
+          :class="{
+            'key-highlighted': isKeyHovered('Netlify-Vary'),
+            'value-matching': isKeyHovered('Netlify-Vary') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyVary)),
+            'value-different': isKeyHovered('Netlify-Vary') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.netlifyVary)),
+          }"
+        >
           <code>{{ cacheAnalysis.cacheControl.netlifyVary }}</code>
         </dd>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.revalidate">
-        <dt>Revalidation</dt>
-        <dd>
+        <dt
+          class="data-key"
+          :class="{ 'key-highlighted': isKeyHovered('Revalidation') }"
+          @mouseenter="handleDataKeyHover('Revalidation', getDisplayValue(cacheAnalysis.cacheControl.revalidate))"
+          @mouseleave="handleDataKeyLeave"
+        >
+          Revalidation
+        </dt>
+        <dd
+          class="data-value"
+          :class="{
+            'key-highlighted': isKeyHovered('Revalidation'),
+            'value-matching': isKeyHovered('Revalidation') && isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.revalidate)),
+            'value-different': isKeyHovered('Revalidation') && !isValueMatching(getDisplayValue(cacheAnalysis.cacheControl.revalidate)),
+          }"
+        >
           <code>{{ cacheAnalysis.cacheControl.revalidate }}</code>
         </dd>
       </template>
