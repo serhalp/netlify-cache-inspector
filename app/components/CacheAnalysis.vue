@@ -40,7 +40,8 @@ const handleDataKeyHover = (dataKey: string, rawValue: unknown) => {
   if (typeof rawValue === 'boolean' || typeof rawValue === 'number' || typeof rawValue === 'string' || rawValue instanceof Date) {
     const displayValue = getDisplayValue(rawValue)
     setHover(dataKey, displayValue, rawValue)
-  } else {
+  }
+  else {
     // For unknown types, convert to string
     const displayValue = String(rawValue)
     setHover(dataKey, displayValue, rawValue)
