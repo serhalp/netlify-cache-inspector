@@ -11,6 +11,16 @@ interface Run {
 const runs = getStore({ name: 'runs' })
 
 export const saveRun = async (run: Run): Promise<void> => {
+  // Validate the run data before saving
+  if (run.url) {
+    try {
+      new URL(run.url)
+    }
+    catch {
+      throw new Error(`Cannot save run with invalid URL: ${run.url}`)
+    }
+  }
+
   await runs.setJSON(run.runId, run)
 }
 
