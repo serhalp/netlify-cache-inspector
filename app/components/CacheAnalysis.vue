@@ -35,11 +35,9 @@ const cacheAnalysis = computed(() =>
   getCacheAnalysis(props.cacheHeaders, now.value),
 )
 
-// Helper function to handle hover events on data keys
 const handleDataKeyHover = (dataKey: string, rawValue: boolean | number | string | Date | null | undefined) => {
-  // Only enable hover when it's enabled for comparison
   if (props.enableDiffOnHover) {
-    setHover(dataKey, null, rawValue)
+    setHover(dataKey, rawValue)
   }
 }
 
@@ -344,6 +342,12 @@ onUnmounted(() => {
           }"
         >
           {{ formatDate(cacheAnalysis.cacheControl.date) }}
+          <span
+            v-if="isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date) && getDelta(cacheAnalysis.cacheControl.date)"
+            class="delta"
+          >
+            ({{ getDelta(cacheAnalysis.cacheControl.date) }})
+          </span>
         </dd>
       </template>
 
@@ -386,6 +390,12 @@ onUnmounted(() => {
           }"
         >
           {{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}
+          <span
+            v-if="isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt) && getDelta(cacheAnalysis.cacheControl.expiresAt)"
+            class="delta"
+          >
+            ({{ getDelta(cacheAnalysis.cacheControl.expiresAt) }})
+          </span>
         </dd>
       </template>
 

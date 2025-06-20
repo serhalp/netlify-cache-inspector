@@ -5,23 +5,21 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 interface HoverState {
   dataKey: string | null
-  dataValue: string | null
   rawValue: unknown | null
 }
 
 const hoverState = ref<HoverState>({
   dataKey: null,
-  dataValue: null,
   rawValue: null,
 })
 
 export const useDataHover = () => {
-  const setHover = (dataKey: string | null, dataValue: string | null = null, rawValue: unknown = null) => {
-    hoverState.value = { dataKey, dataValue, rawValue }
+  const setHover = (dataKey: string | null, rawValue: unknown = null) => {
+    hoverState.value = { dataKey, rawValue }
   }
 
   const clearHover = () => {
-    hoverState.value = { dataKey: null, dataValue: null, rawValue: null }
+    hoverState.value = { dataKey: null, rawValue: null }
   }
 
   const isKeyHovered = (key: string) => {
