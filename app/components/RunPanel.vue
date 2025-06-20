@@ -5,6 +5,7 @@ const props = defineProps<{
   status: number
   durationInMs: number
   cacheHeaders: Record<string, string>
+  enableDiffOnHover: boolean
 }>()
 </script>
 
@@ -24,7 +25,10 @@ const props = defineProps<{
       </NuxtLink>
     </div>
 
-    <CacheAnalysis :cache-headers="props.cacheHeaders" />
+    <CacheAnalysis
+      :cache-headers="props.cacheHeaders"
+      :enable-diff-on-hover="props.enableDiffOnHover"
+    />
     <RawCacheHeaders :cache-headers="props.cacheHeaders" />
   </div>
 </template>

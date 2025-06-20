@@ -95,6 +95,7 @@ const handleClickClear = (): void => {
         v-for="(run, i) in runs"
         v-bind="run"
         :key="i"
+        :enable-diff-on-hover="runs.length > 1"
       />
     </div>
 
