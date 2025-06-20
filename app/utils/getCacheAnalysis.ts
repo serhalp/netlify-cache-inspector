@@ -1,10 +1,6 @@
 import { getServedBy, type ServedBy } from './getServedBy'
 import { parseCacheControl, type ParsedCacheControl } from './parseCacheControl'
 
-// Re-export types used by tests and other modules
-export { type ServedBy, type ParsedCacheControl }
-export { ServedBySource, type ParsedCacheStatusEntry } from './getServedBy'
-
 const CACHE_NAMES_SORTED_BY_RFC_9211 = [
   'Next.js',
   'Netlify Durable',
@@ -80,31 +76,6 @@ export const parseCacheStatus = (
   // As a user interpreting what happened, you want these to start from yourself.
   // TODO(serhalp) More of a presentation layer concern? Move to the component?
   return sortedEntries.toReversed()
-}
-
-export const getTimeToLive = (
-  age: number | undefined,
-  date: Date | undefined,
-  expiresAt: Date | undefined,
-  maxAge: number | null,
-  now: number,
-): number | undefined => {
-  // TODO(serhalp) This implementation is madness. There must be a simpler way to do this and/or a
-  // library we can use.
-
-  const effectiveDate = date ?? new Date(now)
-  const effectiveAge = age ?? (now - effectiveDate.getTime()) / 1000
-  const trulyEffectiveDate = date ?? new Date(now - 1000 * effectiveAge)
-
-  const effectiveMaxAge
-    = maxAge
-      ?? (expiresAt != null
-        ? (expiresAt.getTime() - trulyEffectiveDate.getTime()) / 1000
-        : undefined)
-
-  if (effectiveMaxAge != null) {
-    return effectiveMaxAge - effectiveAge
-  }
 }
 
 export interface CacheAnalysis {

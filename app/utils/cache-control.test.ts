@@ -4,9 +4,14 @@ import { parse, CacheControl } from './cache-control'
 
 describe('parse', () => {
   it('parses max-age directive from cache control header', () => {
-    const result = parse('max-age=3600, public')
+    const result = parse('max-age=3600')
 
     expect(result.maxAge).toBe(3600)
+  })
+
+  it('parses public directive from cache control header', () => {
+    const result = parse('public')
+
     expect(result.public).toBe(true)
   })
 

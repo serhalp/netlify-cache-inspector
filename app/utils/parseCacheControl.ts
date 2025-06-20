@@ -1,5 +1,5 @@
 import { parse as parseCacheControlHeader } from './cache-control'
-import { getTimeToLive } from './getCacheAnalysis'
+import { getTimeToLive } from './getTimeToLive'
 
 export interface ParsedCacheControl {
   // TODO(serhalp) Split into `isCacheable`, `isCdnCacheable`, `isNetlifyCdnCacheable`
