@@ -31,6 +31,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const startTime = Date.now()
+  // Use $fetch.raw to get both response status and headers, and ignoreResponseError
+  // to prevent automatic error throwing on 4xx/5xx responses (we want to inspect those too)
   const { status, headers } = await $fetch.raw(normalizedUrl, {
     headers: {
       'x-nf-debug-logging': '1',
