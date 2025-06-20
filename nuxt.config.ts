@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      title: 'Netlify Cache Inspector',
       link: [
         // See https://example-styles.netlify.app/.
         {
