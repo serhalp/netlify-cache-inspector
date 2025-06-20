@@ -1,33 +1,9 @@
-import { parse as parseCacheControlHeader } from './cache-control'
+import { getServedBy, type ServedBy } from './getServedBy'
+import { parseCacheControl, type ParsedCacheControl } from './parseCacheControl'
 
-export enum ServedBySource {
-  CDN = 'CDN',
-  DurableCache = 'Durable Cache',
-  Function = 'Function',
-  EdgeFunction = 'Edge Function',
-}
-
-export interface ParsedCacheStatusEntry {
-  cacheName: string
-  parameters: {
-    'hit': boolean
-    'fwd'?:
-      | 'bypass'
-      | 'method'
-      | 'uri-miss'
-      | 'vary-miss'
-      | 'miss'
-      | 'request'
-      | 'stale'
-      | 'partial'
-    'fwd-status'?: number
-    'ttl'?: number
-    'stored'?: boolean
-    'collapsed'?: boolean
-    'key'?: string
-    'detail'?: string
-  }
-}
+// Re-export types used by tests and other modules
+export { type ServedBy, type ParsedCacheControl }
+export { ServedBySource, type ParsedCacheStatusEntry } from './getServedBy'
 
 const CACHE_NAMES_SORTED_BY_RFC_9211 = [
   'Next.js',
@@ -106,64 +82,6 @@ export const parseCacheStatus = (
   return sortedEntries.toReversed()
 }
 
-const getServedBySource = (
-  cacheHeaders: Headers,
-  cacheStatus: ParsedCacheStatusEntry[],
-): ServedBySource => {
-  // Per the spec, these are sorted from "the cache closest to the origin server" to "the cache closest to the user".
-  // So, the first cache hit (starting from the user) is the one that served the request.
-  // But we don't quite want to return exactly the same concept of "caches" as in `Cache-Status`, so
-  // we need a bit of extra logic to map to other sources.
-  for (const {
-    cacheName,
-    parameters: { hit },
-  } of cacheStatus) {
-    if (!hit) continue
-
-    if (cacheName === 'Netlify Edge') return ServedBySource.CDN
-    if (cacheName === 'Netlify Durable') return ServedBySource.DurableCache
-  }
-
-  // NOTE: the order is important here, since a response can be served by a Function even
-  // though one or more Edge Functions are also invoked (as middleware).
-  if (cacheHeaders.has('Debug-X-NF-Function-Type'))
-    return ServedBySource.Function
-
-  if (cacheHeaders.has('Debug-X-NF-Edge-Functions'))
-    return ServedBySource.EdgeFunction
-
-  throw new Error(
-    `Could not determine who served the request. Cache status: ${cacheStatus}`,
-  )
-}
-
-/**
- * There is a bug where sometimes duplicate hosts are returned in the `Debug-X-BB-Host-Id` header. This is
- * doubly confusing because there are legitimate cases where the same node could be involved more
- * than once in the handling of a given request, but we can't distinguish those from dupes. So just dedupe.
- */
-const fixDuplicatedCdnNodes = (unfixedCdnNodes: string): string => {
-  return Array.from(new Set(unfixedCdnNodes.split(', '))).join(', ')
-}
-
-export interface ServedBy {
-  source: ServedBySource
-  cdnNodes: string
-}
-
-export const getServedBy = (
-  cacheHeaders: Headers,
-  cacheStatus: ParsedCacheStatusEntry[],
-): ServedBy => {
-  const source = getServedBySource(cacheHeaders, cacheStatus)
-  const unfixedCdnNodes
-    = cacheHeaders.get('Debug-X-BB-Host-Id') ?? 'unknown CDN node'
-  return {
-    source,
-    cdnNodes: fixDuplicatedCdnNodes(unfixedCdnNodes),
-  }
-}
-
 export const getTimeToLive = (
   age: number | undefined,
   date: Date | undefined,
@@ -186,94 +104,6 @@ export const getTimeToLive = (
 
   if (effectiveMaxAge != null) {
     return effectiveMaxAge - effectiveAge
-  }
-}
-
-export interface ParsedCacheControl {
-  // TODO(serhalp) Split into `isCacheable`, `isCdnCacheable`, `isNetlifyCdnCacheable`
-  isCacheable: boolean
-  age?: number
-  date?: Date
-  etag?: string
-  expiresAt?: Date
-  ttl?: number
-  cdnTtl?: number
-  netlifyCdnTtl?: number
-  vary?: string
-  netlifyVary?: string
-  // TODO(serhalp) Split into `revalidate`, `cdnRevalidate`, `netlifyCdnRevalidate`
-  revalidate?: 'must-revalidate' | 'immutable'
-  // TODO(serhalp) `swc`, `cdnSwc`, `netlifyCdnSwc`
-}
-
-export const parseCacheControl = (
-  cacheHeaders: Headers,
-  now: number,
-): ParsedCacheControl => {
-  const ageHeader = cacheHeaders.get('Age')
-  const dateHeader = cacheHeaders.get('Date')
-  const expiresHeader = cacheHeaders.get('Expires')
-  const cacheControl = parseCacheControlHeader(
-    cacheHeaders.get('Cache-Control'),
-  )
-  const cdnCacheControl = parseCacheControlHeader(
-    cacheHeaders.get('CDN-Cache-Control'),
-  )
-  const netlifyCdnCacheControl = parseCacheControlHeader(
-    cacheHeaders.get('Netlify-CDN-Cache-Control'),
-  )
-
-  const age
-    = ageHeader != null && ageHeader.length > 0
-      ? Number.parseInt(ageHeader)
-      : undefined
-  const date = dateHeader ? new Date(dateHeader) : undefined
-  const expiresAt = expiresHeader ? new Date(expiresHeader) : undefined
-
-  return {
-    // TODO(serhalp) Actually implement complete logic
-    isCacheable:
-      cacheControl.private !== true
-      && cacheControl.noStore !== true
-      && cacheControl.noCache !== true,
-    age,
-    date,
-    etag: cacheHeaders.get('ETag') ?? undefined,
-    expiresAt,
-    ttl: getTimeToLive(age, date, expiresAt, cacheControl.maxAge, now),
-    cdnTtl: getTimeToLive(
-      age,
-      date,
-      expiresAt,
-      // TODO(serhalp) Verify this is the correct order of precedence
-      cdnCacheControl.sharedMaxAge
-      ?? cdnCacheControl.maxAge
-      ?? cacheControl.sharedMaxAge
-      ?? cacheControl.maxAge,
-      now,
-    ),
-    netlifyCdnTtl: getTimeToLive(
-      age,
-      date,
-      expiresAt,
-      // TODO(serhalp) Verify this is the correct order of precedence
-      netlifyCdnCacheControl.sharedMaxAge
-      ?? netlifyCdnCacheControl.maxAge
-      ?? cdnCacheControl.sharedMaxAge
-      ?? cdnCacheControl.maxAge
-      ?? cacheControl.sharedMaxAge
-      ?? cacheControl.maxAge,
-      now,
-    ),
-    vary: cacheHeaders.get('Vary') ?? undefined,
-    netlifyVary: cacheHeaders.get('Netlify-Vary') ?? undefined,
-    // TODO(serhalp) Support weirder cases? `proxy-revalidate`, must-understand`, etc.
-    revalidate:
-      cacheControl.mustRevalidate === true
-        ? 'must-revalidate'
-        : cacheControl.immutable === true
-          ? 'immutable'
-          : undefined,
   }
 }
 

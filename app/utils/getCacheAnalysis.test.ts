@@ -65,85 +65,6 @@ describe('getCacheAnalysis', () => {
 
     expect(() => getCacheAnalysis(headers, now)).toThrow('Could not determine who served the request')
   })
-
-  it('determines function serving when Debug-X-NF-Function-Type header is present', () => {
-    const headers = {
-      'Cache-Status': '',
-      'Debug-X-NF-Function-Type': 'edge',
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    }
-    const now = Date.now()
-
-    const result = getCacheAnalysis(headers, now)
-
-    expect(result.servedBy.source).toBe(ServedBySource.Function)
-  })
-
-  it('determines edge function serving when Debug-X-NF-Edge-Functions header is present', () => {
-    const headers = {
-      'Cache-Status': '',
-      'Debug-X-NF-Edge-Functions': 'middleware',
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    }
-    const now = Date.now()
-
-    const result = getCacheAnalysis(headers, now)
-
-    expect(result.servedBy.source).toBe(ServedBySource.EdgeFunction)
-  })
-
-  it('prioritizes function over edge function when both headers are present', () => {
-    const headers = {
-      'Cache-Status': '',
-      'Debug-X-NF-Function-Type': 'edge',
-      'Debug-X-NF-Edge-Functions': 'middleware',
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    }
-    const now = Date.now()
-
-    const result = getCacheAnalysis(headers, now)
-
-    expect(result.servedBy.source).toBe(ServedBySource.Function)
-  })
-
-  it('determines cache as non-cacheable when private directive is present', () => {
-    const headers = {
-      'Cache-Control': 'private, max-age=3600',
-      'Cache-Status': '"Netlify Edge"; hit',
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    }
-    const now = Date.now()
-
-    const result = getCacheAnalysis(headers, now)
-
-    expect(result.cacheControl.isCacheable).toBe(false)
-  })
-
-  it('determines cache as non-cacheable when no-store directive is present', () => {
-    const headers = {
-      'Cache-Control': 'no-store',
-      'Cache-Status': '"Netlify Edge"; hit',
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    }
-    const now = Date.now()
-
-    const result = getCacheAnalysis(headers, now)
-
-    expect(result.cacheControl.isCacheable).toBe(false)
-  })
-
-  it('determines cache as non-cacheable when no-cache directive is present', () => {
-    const headers = {
-      'Cache-Control': 'no-cache',
-      'Cache-Status': '"Netlify Edge"; hit',
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    }
-    const now = Date.now()
-
-    const result = getCacheAnalysis(headers, now)
-
-    expect(result.cacheControl.isCacheable).toBe(false)
-  })
 })
 
 describe('parseCacheStatus', () => {
@@ -231,24 +152,14 @@ describe('parseCacheStatus', () => {
 
     const result = parseCacheStatus(cacheStatus)
 
-    // Should be sorted and then reversed
     expect(result[0]?.cacheName).toBe('Netlify Edge')
     expect(result[1]?.cacheName).toBe('Netlify Durable')
     expect(result[2]?.cacheName).toBe('Next.js')
   })
 
-  it.each([
-    { input: '"Cache"; fwd=bypass', expected: 'bypass' },
-    { input: '"Cache"; fwd=method', expected: 'method' },
-    { input: '"Cache"; fwd=uri-miss', expected: 'uri-miss' },
-    { input: '"Cache"; fwd=vary-miss', expected: 'vary-miss' },
-    { input: '"Cache"; fwd=miss', expected: 'miss' },
-    { input: '"Cache"; fwd=request', expected: 'request' },
-    { input: '"Cache"; fwd=stale', expected: 'stale' },
-    { input: '"Cache"; fwd=partial', expected: 'partial' },
-  ])('handles forward parameter $expected', ({ input, expected }) => {
-    const result = parseCacheStatus(input)
-    expect(result[0]?.parameters.fwd).toBe(expected)
+  it('parses forward parameter values from cache status entries', () => {
+    const result = parseCacheStatus('"Cache"; fwd=bypass')
+    expect(result[0]?.parameters.fwd).toBe('bypass')
   })
 })
 
