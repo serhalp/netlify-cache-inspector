@@ -63,15 +63,16 @@ export const useDataHover = () => {
         start: hoveredRawValue,
         end: currentRawValue,
       })
-      
+
       const humanDuration = formatDuration(interval)
-      
+
       // If formatDuration returns empty string, fall back to milliseconds
       if (!humanDuration || humanDuration.trim() === '') {
         const absMs = Math.abs(deltaMs)
         if (absMs < 1000) {
           return `${sign}${absMs}ms`
-        } else {
+        }
+        else {
           return `${sign}${Math.round(absMs / 1000)}s`
         }
       }

@@ -549,7 +549,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-
 .container {
   font-size: 0.9em;
 }
