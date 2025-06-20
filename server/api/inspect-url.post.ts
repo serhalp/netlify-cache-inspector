@@ -17,12 +17,27 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Validate and normalize URL before processing
+  let normalizedUrl: string
+  try {
+    const parsedUrl = new URL(url)
+    normalizedUrl = parsedUrl.href // This ensures proper URL encoding
+  }
+  catch {
+    throw createError({
+      statusCode: 400,
+      message: `Invalid URL provided: ${url}`,
+    })
+  }
+
   const startTime = Date.now()
-  // TODO(serhalp) `$fetch` automatically throws on 4xx, but we'd like to treat those as valid.
-  const { status, headers } = await $fetch.raw(url, {
+  // Use $fetch.raw to get both response status and headers, and ignoreResponseError
+  // to prevent automatic error throwing on 4xx/5xx responses (we want to inspect those too)
+  const { status, headers } = await $fetch.raw(normalizedUrl, {
     headers: {
       'x-nf-debug-logging': '1',
     },
+    ignoreResponseError: true,
   })
   const durationInMs = Date.now() - startTime
 
@@ -36,12 +51,13 @@ export default defineEventHandler(async (event) => {
   }
 
   const run = {
-    runId: generateRunId(url, Date.now()),
-    url,
+    runId: generateRunId(normalizedUrl, Date.now()),
+    url: normalizedUrl, // Use normalized URL
     status,
     headers: Object.fromEntries(headers),
     durationInMs,
   }
+
   await saveRun(run)
 
   return run
