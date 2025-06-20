@@ -31,11 +31,13 @@ export default defineEventHandler(async (event) => {
   }
 
   const startTime = Date.now()
-  // TODO(serhalp) `$fetch` automatically throws on 4xx, but we'd like to treat those as valid.
+  // Use $fetch.raw to get both response status and headers, and ignoreResponseError
+  // to prevent automatic error throwing on 4xx/5xx responses (we want to inspect those too)
   const { status, headers } = await $fetch.raw(normalizedUrl, {
     headers: {
       'x-nf-debug-logging': '1',
     },
+    ignoreResponseError: true,
   })
   const durationInMs = Date.now() - startTime
 
