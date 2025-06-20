@@ -59,12 +59,22 @@ export const useDataHover = () => {
       if (deltaMs === 0) return null
 
       const sign = deltaMs > 0 ? '+' : '-'
-      const humanDuration = formatDuration(
-        intervalToDuration({
-          start: hoveredRawValue,
-          end: currentRawValue,
-        }),
-      )
+      const interval = intervalToDuration({
+        start: hoveredRawValue,
+        end: currentRawValue,
+      })
+      
+      const humanDuration = formatDuration(interval)
+      
+      // If formatDuration returns empty string, fall back to milliseconds
+      if (!humanDuration || humanDuration.trim() === '') {
+        const absMs = Math.abs(deltaMs)
+        if (absMs < 1000) {
+          return `${sign}${absMs}ms`
+        } else {
+          return `${sign}${Math.round(absMs / 1000)}s`
+        }
+      }
 
       return `${sign}${humanDuration}`
     }

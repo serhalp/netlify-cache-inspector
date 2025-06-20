@@ -5,7 +5,7 @@ const props = defineProps<{
   status: number
   durationInMs: number
   cacheHeaders: Record<string, string>
-  totalRuns?: number
+  enableDiffOnHover: boolean
 }>()
 </script>
 
@@ -27,7 +27,7 @@ const props = defineProps<{
 
     <CacheAnalysis
       :cache-headers="props.cacheHeaders"
-      :total-runs="props.totalRuns"
+      :enable-diff-on-hover="props.enableDiffOnHover"
     />
     <RawCacheHeaders :cache-headers="props.cacheHeaders" />
   </div>

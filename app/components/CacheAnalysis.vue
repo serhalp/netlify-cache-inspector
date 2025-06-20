@@ -3,7 +3,7 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 
 const props = defineProps<{
   cacheHeaders: Record<string, string>
-  totalRuns?: number
+  enableDiffOnHover: boolean
 }>()
 
 const { setHover, clearHover, isKeyHovered, isValueMatching, getDelta } = useDataHover()
@@ -37,8 +37,8 @@ const cacheAnalysis = computed(() =>
 
 // Helper function to handle hover events on data keys
 const handleDataKeyHover = (dataKey: string, rawValue: boolean | number | string | Date | null | undefined) => {
-  // Only enable hover when there are multiple runs to compare
-  if ((props.totalRuns ?? 1) > 1) {
+  // Only enable hover when it's enabled for comparison
+  if (props.enableDiffOnHover) {
     setHover(dataKey, null, rawValue)
   }
 }
@@ -549,15 +549,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-:root {
-  --hover-bg-light: rgba(59, 130, 246, 0.1);
-  --hover-bg-highlighted: rgba(59, 130, 246, 0.2);
-  --match-bg: rgba(34, 197, 94, 0.2);
-  --match-border: rgb(34, 197, 94);
-  --different-bg: rgba(239, 68, 68, 0.1);
-  --different-border: rgb(239, 68, 68);
-  --delta-text: rgb(107, 114, 128);
-}
 
 .container {
   font-size: 0.9em;
@@ -600,11 +591,11 @@ dd code {
 }
 
 .data-key:hover {
-  background-color: var(--hover-bg-light);
+  background-color: rgba(59, 130, 246, 0.1);
 }
 
 .data-key.key-highlighted {
-  background-color: var(--hover-bg-highlighted);
+  background-color: rgba(59, 130, 246, 0.2);
   font-weight: 600;
 }
 
@@ -613,14 +604,14 @@ dd code {
 }
 
 .data-value.value-matching {
-  background-color: var(--match-bg);
-  border-left: 3px solid var(--match-border);
+  background-color: rgba(34, 197, 94, 0.2);
+  border-left: 3px solid rgb(34, 197, 94);
   padding-left: 0.5em;
 }
 
 .data-value.value-different {
-  background-color: var(--different-bg);
-  border-left: 3px solid var(--different-border);
+  background-color: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid rgb(239, 68, 68);
   padding-left: 0.5em;
 }
 
@@ -628,7 +619,7 @@ dd code {
 .delta {
   font-size: 0.8em;
   font-weight: 500;
-  color: var(--delta-text);
+  color: rgb(107, 114, 128);
   margin-left: 0.25em;
 }
 </style>
