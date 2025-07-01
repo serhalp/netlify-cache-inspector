@@ -10,8 +10,10 @@ vi.mock('~/utils/getCacheHeaders', () => ({
   default: vi.fn((headers: Record<string, string>) => headers),
 }))
 
-// Mock fetch
+// Mock fetch and $fetch
 global.fetch = vi.fn()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+global.$fetch = vi.fn() as any
 
 describe('useRunManager', () => {
   beforeEach(() => {
@@ -57,11 +59,9 @@ describe('useRunManager', () => {
       headers: { 'cache-control': 'max-age=3600' },
     }
 
-    const mockFetch = vi.mocked(fetch)
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockApiRun,
-    } as Response)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mockFetch = vi.mocked($fetch as any)
+    mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()
 
@@ -73,17 +73,14 @@ describe('useRunManager', () => {
     expect(runs.value[0]?.url).toBe('https://example.com')
     expect(mockFetch).toHaveBeenCalledWith('/api/inspect-url', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: 'https://example.com' }),
+      body: { url: 'https://example.com' },
     })
   })
 
   it('handles API request error', async () => {
-    const mockFetch = vi.mocked(fetch)
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      status: 500,
-    } as Response)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mockFetch = vi.mocked($fetch as any)
+    mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()
 

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ApiRun } from '~/types/run'
-
 const { runs, error, loading, handleRequestFormSubmit, handleClickClear, getRunFromApiRun, setRuns, setError } = useRunManager()
 
 const route = useRoute()
