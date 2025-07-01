@@ -18,12 +18,18 @@ if (preloadedRunsError.value) {
 if (initialRuns.value) {
   setRuns(initialRuns.value)
 }
+
+// Get the URL from the first run for pre-filling the form
+const prefilledUrl = computed(() => {
+  return runs.value?.[0]?.url || initialRuns.value?.[0]?.url
+})
 </script>
 
 <template>
   <main>
     <RequestForm
       :loading="loading"
+      :initial-url="prefilledUrl"
       @submit="handleRequestFormSubmit"
     />
 

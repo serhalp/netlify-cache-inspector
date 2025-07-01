@@ -1,11 +1,12 @@
 <script setup lang="ts">
-const inputUrl = ref(
-  'https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page',
-)
-
 const props = defineProps<{
   loading?: boolean
+  initialUrl?: string
 }>()
+
+const inputUrl = ref(
+  props.initialUrl ?? 'https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page',
+)
 
 const emit = defineEmits(['submit'])
 
