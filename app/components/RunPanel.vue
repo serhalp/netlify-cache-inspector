@@ -7,6 +7,12 @@ const props = defineProps<{
   cacheHeaders: Record<string, string>
   enableDiffOnHover: boolean
 }>()
+
+const showRawHeaders = ref(false)
+
+const toggleRawHeaders = () => {
+  showRawHeaders.value = !showRawHeaders.value
+}
 </script>
 
 <template>
@@ -15,21 +21,33 @@ const props = defineProps<{
 
     <div class="flex-btwn">
       <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
-      <NuxtLink
-        :to="`/run/${props.runId}`"
-        class="run-permalink"
-        title="Share this run"
-        target="_blank"
-      >
-        🔗 Permalink
-      </NuxtLink>
+      <div class="panel-actions">
+        <button
+          class="toggle-raw-headers"
+          :title="showRawHeaders ? 'Hide raw headers' : 'Show raw headers'"
+          @click="toggleRawHeaders"
+        >
+          {{ showRawHeaders ? 'Hide Raw Headers' : 'Show Raw Headers' }}
+        </button>
+        <NuxtLink
+          :to="`/run/${props.runId}`"
+          class="run-permalink"
+          title="Share this run"
+          target="_blank"
+        >
+          🔗 Permalink
+        </NuxtLink>
+      </div>
     </div>
 
     <CacheAnalysis
       :cache-headers="props.cacheHeaders"
       :enable-diff-on-hover="props.enableDiffOnHover"
     />
-    <RawCacheHeaders :cache-headers="props.cacheHeaders" />
+    <RawCacheHeaders
+      v-if="showRawHeaders"
+      :cache-headers="props.cacheHeaders"
+    />
   </div>
 </template>
 
@@ -46,6 +64,26 @@ const props = defineProps<{
 .run-panel h3 {
   font-size: 1em;
   align-self: start;
+}
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.toggle-raw-headers {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.25em 0.5em;
+  font-size: 0.7em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle-raw-headers:hover {
+  background-color: rgba(59, 130, 246, 0.1);
 }
 
 .run-permalink {
