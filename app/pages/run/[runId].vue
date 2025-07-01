@@ -8,11 +8,7 @@ const route = useRoute()
 const { data: initialRuns, pending: _pending, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async () => {
   const { runId } = route.params
   if (typeof runId === 'string') {
-    const response = await fetch(`/api/runs/${runId}`)
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
-    }
-    const responseBody: ApiRun = await response.json()
+    const responseBody = await $fetch(`/api/runs/${runId}`)
     return [getRunFromApiRun(responseBody)]
   }
   return []

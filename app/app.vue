@@ -2,7 +2,14 @@
   <NuxtRouteAnnouncer />
 
   <header>
-    <h1>Netlify Cache Inspector</h1>
+    <h1>
+      <NuxtLink
+        to="/"
+        class="home-link"
+      >
+        Netlify Cache Inspector
+      </NuxtLink>
+    </h1>
 
     <p class="subheading">
       Inspect and compare cache headers for requests to Netlify sites
@@ -34,5 +41,16 @@ header {
 
 .subheading {
   font-size: 1.5em;
+}
+
+.home-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-link:hover,
+.home-link:focus {
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>

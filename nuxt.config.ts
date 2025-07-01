@@ -2,12 +2,13 @@
 import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-09-13',
-  future: { compatibilityVersion: 4 },
+
+  modules: ['@nuxt/eslint', '@nuxt/test-utils/module'],
   devtools: { enabled: true },
 
   app: {
     head: {
+      title: 'Netlify Cache Inspector',
       link: [
         // See https://example-styles.netlify.app/.
         {
@@ -44,6 +45,10 @@ export default defineNuxtConfig({
     },
   },
 
+  alias: {
+    '~server': resolve(__dirname, './server'),
+  },
+
   routeRules: {
     '/': {
       prerender: true,
@@ -55,16 +60,12 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  modules: ['@nuxt/eslint', '@nuxt/test-utils/module'],
+  future: { compatibilityVersion: 4 },
+  compatibilityDate: '2024-09-13',
 
   eslint: {
     config: {
       stylistic: true,
     },
-  },
-
-  alias: {
-    '~server': resolve(__dirname, './server'),
   },
 })
