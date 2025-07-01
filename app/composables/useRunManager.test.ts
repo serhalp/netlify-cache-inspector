@@ -37,6 +37,7 @@ describe('useRunManager', () => {
       status: 200,
       durationInMs: 100,
       headers: { 'cache-control': 'max-age=3600' },
+      reportId: 'test-report',
     }
 
     const run = getRunFromApiRun(apiRun)
@@ -57,6 +58,7 @@ describe('useRunManager', () => {
       status: 200,
       durationInMs: 100,
       headers: { 'cache-control': 'max-age=3600' },
+      reportId: 'test-report',
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,7 +75,10 @@ describe('useRunManager', () => {
     expect(runs.value[0]?.url).toBe('https://example.com')
     expect(mockFetch).toHaveBeenCalledWith('/api/inspect-url', {
       method: 'POST',
-      body: { url: 'https://example.com' },
+      body: { 
+        url: 'https://example.com',
+        currentReportId: null,
+      },
     })
   })
 

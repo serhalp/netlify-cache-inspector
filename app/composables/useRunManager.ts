@@ -4,9 +4,10 @@ export const useRunManager = () => {
   const runs = ref<Run[]>([])
   const error = ref<string | null>(null)
   const loading = ref<boolean>(false)
+  const currentReportId = ref<string | null>(null)
 
   const getRunFromApiRun = (apiRun: ApiRun): Run => {
-    const { headers, ...run } = apiRun
+    const { headers, reportId, ...run } = apiRun
     return { ...run, cacheHeaders: getCacheHeaders(headers) }
   }
 
@@ -19,10 +20,19 @@ export const useRunManager = () => {
     try {
       const responseBody: ApiRun = await $fetch<ApiRun>('/api/inspect-url', {
         method: 'POST',
-        body: { url },
+        body: { 
+          url,
+          currentReportId: currentReportId.value
+        },
       })
 
       runs.value.push(getRunFromApiRun(responseBody))
+      
+      // Update current report ID with the new one returned from the API
+      if (responseBody.reportId) {
+        currentReportId.value = responseBody.reportId
+      }
+      
       error.value = null
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,6 +50,7 @@ export const useRunManager = () => {
 
   const handleClickClear = (): void => {
     runs.value = []
+    currentReportId.value = null
   }
 
   const addRun = (run: Run): void => {
@@ -54,11 +65,16 @@ export const useRunManager = () => {
     error.value = newError
   }
 
+  const setCurrentReportId = (reportId: string | null): void => {
+    currentReportId.value = reportId
+  }
+
   return {
     // State
     runs: readonly(runs),
     error: readonly(error),
     loading: readonly(loading),
+    currentReportId: readonly(currentReportId),
 
     // Methods
     handleRequestFormSubmit,
@@ -66,6 +82,7 @@ export const useRunManager = () => {
     addRun,
     setRuns,
     setError,
+    setCurrentReportId,
     getRunFromApiRun,
   }
 }
