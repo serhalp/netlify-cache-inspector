@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { formatDuration, intervalToDuration } from 'date-fns'
+import { getFieldTooltip, getCacheNameTooltip, getForwardReasonTooltip, formatTooltip } from '~/utils/tooltips'
 
 const props = defineProps<{
   cacheHeaders: Record<string, string>
@@ -61,10 +62,10 @@ onUnmounted(() => {
 <template>
   <div class="container">
     <div>
-      Served by: <strong>{{ cacheAnalysis.servedBy.source }}</strong>
+      <span :title="formatTooltip(getFieldTooltip('served-by'))">Served by:</span> <strong>{{ cacheAnalysis.servedBy.source }}</strong>
     </div>
     <div>
-      CDN node(s): <code>{{ cacheAnalysis.servedBy.cdnNodes }}</code>
+      <span :title="formatTooltip(getFieldTooltip('cdn-nodes'))">CDN node(s):</span> <code>{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
     <hr />
@@ -88,7 +89,7 @@ onUnmounted(() => {
         <!-- This is a bit of a hack to use the pretty <dt> styling but with sections. -->
         <!-- I should probably just do something custom instead. -->
         <dt class="cache-heading">
-          <h4>
+          <h4 :title="formatTooltip(getCacheNameTooltip(cacheName))">
             ↳ <em>{{ cacheName }}</em> cache
           </h4>
         </dt>
@@ -97,6 +98,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
+          :title="formatTooltip(getFieldTooltip('hit'))"
           @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -117,6 +119,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('forwarded-because'))"
             @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
             @mouseleave="handleDataKeyLeave"
           >
@@ -129,6 +132,7 @@ onUnmounted(() => {
               'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(parameters.fwd),
               'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(parameters.fwd),
             }"
+            :title="formatTooltip(getForwardReasonTooltip(parameters.fwd))"
           >
             {{ parameters.fwd }}
           </dd>
@@ -138,6 +142,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('forwarded-status'))"
             @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
             @mouseleave="handleDataKeyLeave"
           >
@@ -159,6 +164,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('ttl'))"
             @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
             @mouseleave="handleDataKeyLeave"
           >
@@ -187,6 +193,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('stored-response'))"
             @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
             @mouseleave="handleDataKeyLeave"
           >
@@ -208,6 +215,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('collapsed-requests'))"
             @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
             @mouseleave="handleDataKeyLeave"
           >
@@ -229,6 +237,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('cache-key'))"
             @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
             @mouseleave="handleDataKeyLeave"
           >
@@ -250,6 +259,7 @@ onUnmounted(() => {
           <dt
             class="data-key"
             :class="{ 'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`) }"
+            :title="formatTooltip(getFieldTooltip('extra-details'))"
             @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
             @mouseleave="handleDataKeyLeave"
           >
@@ -280,6 +290,7 @@ onUnmounted(() => {
       <dt
         class="data-key"
         :class="{ 'key-highlighted': isKeyHovered('Cacheable') }"
+        :title="formatTooltip(getFieldTooltip('cacheable'))"
         @mouseenter="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
         @mouseleave="handleDataKeyLeave"
       >
@@ -300,6 +311,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Age') }"
+          :title="formatTooltip(getFieldTooltip('age'))"
           @mouseenter="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -328,6 +340,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Date') }"
+          :title="formatTooltip(getFieldTooltip('date'))"
           @mouseenter="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -355,6 +368,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('ETag') }"
+          :title="formatTooltip(getFieldTooltip('etag'))"
           @mouseenter="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -376,6 +390,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Expires at') }"
+          :title="formatTooltip(getFieldTooltip('expires-at'))"
           @mouseenter="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -403,6 +418,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (browser)') }"
+          :title="formatTooltip(getFieldTooltip('ttl-browser'))"
           @mouseenter="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -436,6 +452,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (CDN)') }"
+          :title="formatTooltip(getFieldTooltip('ttl-cdn'))"
           @mouseenter="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -468,6 +485,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
+          :title="formatTooltip(getFieldTooltip('ttl-netlify-cdn'))"
           @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -496,6 +514,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Vary') }"
+          :title="formatTooltip(getFieldTooltip('vary'))"
           @mouseenter="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -517,6 +536,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Netlify-Vary') }"
+          :title="formatTooltip(getFieldTooltip('netlify-vary'))"
           @mouseenter="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
           @mouseleave="handleDataKeyLeave"
         >
@@ -538,6 +558,7 @@ onUnmounted(() => {
         <dt
           class="data-key"
           :class="{ 'key-highlighted': isKeyHovered('Revalidation') }"
+          :title="formatTooltip(getFieldTooltip('revalidation'))"
           @mouseenter="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
           @mouseleave="handleDataKeyLeave"
         >
