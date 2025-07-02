@@ -15,7 +15,7 @@ vi.mock('./CacheAnalysis.vue', () => ({
 
 vi.mock('./RawCacheHeaders.vue', () => ({
   default: {
-    name: 'RawCacheHeaders', 
+    name: 'RawCacheHeaders',
     template: '<div class="raw-cache-headers-mock">Raw Cache Headers</div>',
   },
 }))
@@ -138,7 +138,7 @@ describe('RunPanel', () => {
     })
 
     const toggleButton = wrapper.find('.toggle-raw-headers')
-    
+
     // Click to show
     await toggleButton.trigger('click')
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(true)
@@ -164,7 +164,7 @@ describe('RunPanel', () => {
     })
 
     const toggleButton = wrapper.find('.toggle-raw-headers')
-    
+
     // Initial state
     expect(toggleButton.attributes('title')).toBe('Show raw headers')
 
