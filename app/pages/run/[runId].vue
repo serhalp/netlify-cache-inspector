@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { runs, error, loading, handleRequestFormSubmit, handleClickClear, getRunFromApiRun, setRuns, setError } = useRunManager()
+const { runs, error, loading, handleRequestFormSubmit, handleClickClear, getRunFromApiRun, setRuns, setError, setCurrentReportId, currentReportId } = useRunManager()
 
 const route = useRoute()
 
@@ -17,6 +17,8 @@ if (preloadedRunsError.value) {
 }
 if (initialRuns.value) {
   setRuns(initialRuns.value)
+  // When viewing a single run, clear any existing report ID so new runs start fresh
+  setCurrentReportId(null)
 }
 </script>
 
@@ -32,6 +34,7 @@ if (initialRuns.value) {
       :error="error"
       :loading="loading"
       :on-clear="handleClickClear"
+      :current-report-id="currentReportId"
     />
   </main>
 </template>
