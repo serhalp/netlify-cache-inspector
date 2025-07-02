@@ -75,7 +75,7 @@ describe('useRunManager', () => {
     expect(runs.value[0]?.url).toBe('https://example.com')
     expect(mockFetch).toHaveBeenCalledWith('/api/inspect-url', {
       method: 'POST',
-      body: { 
+      body: {
         url: 'https://example.com',
         currentReportId: null,
       },

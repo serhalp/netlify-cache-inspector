@@ -24,10 +24,10 @@ describe('useRunManager - Report Functionality', () => {
     const { currentReportId, setCurrentReportId } = useRunManager()
 
     expect(currentReportId.value).toBe(null)
-    
+
     setCurrentReportId('test-report-123')
     expect(currentReportId.value).toBe('test-report-123')
-    
+
     setCurrentReportId(null)
     expect(currentReportId.value).toBe(null)
   })
@@ -47,19 +47,19 @@ describe('useRunManager - Report Functionality', () => {
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { handleRequestFormSubmit, setCurrentReportId, currentReportId } = useRunManager()
-    
+
     setCurrentReportId('existing-report-123')
-    
+
     await handleRequestFormSubmit({ url: 'https://example.com' })
 
     expect(mockFetch).toHaveBeenCalledWith('/api/inspect-url', {
       method: 'POST',
-      body: { 
+      body: {
         url: 'https://example.com',
         currentReportId: 'existing-report-123',
       },
     })
-    
+
     // Should update to the new report ID returned from API
     expect(currentReportId.value).toBe('new-report-456')
   })
@@ -79,22 +79,22 @@ describe('useRunManager - Report Functionality', () => {
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { handleRequestFormSubmit, currentReportId } = useRunManager()
-    
+
     expect(currentReportId.value).toBe(null)
-    
+
     await handleRequestFormSubmit({ url: 'https://example.com' })
-    
+
     expect(currentReportId.value).toBe('new-report-789')
   })
 
   it('clears currentReportId when clearing runs', () => {
     const { handleClickClear, setCurrentReportId, currentReportId } = useRunManager()
-    
+
     setCurrentReportId('test-report-123')
     expect(currentReportId.value).toBe('test-report-123')
-    
+
     handleClickClear()
-    
+
     expect(currentReportId.value).toBe(null)
   })
 
@@ -113,11 +113,11 @@ describe('useRunManager - Report Functionality', () => {
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { handleRequestFormSubmit, currentReportId, setCurrentReportId } = useRunManager()
-    
+
     setCurrentReportId('existing-report')
-    
+
     await handleRequestFormSubmit({ url: 'https://example.com' })
-    
+
     // Should keep existing reportId if API doesn't return one
     expect(currentReportId.value).toBe('existing-report')
   })

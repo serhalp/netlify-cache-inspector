@@ -20,19 +20,19 @@ export const useRunManager = () => {
     try {
       const responseBody: ApiRun = await $fetch<ApiRun>('/api/inspect-url', {
         method: 'POST',
-        body: { 
+        body: {
           url,
-          currentReportId: currentReportId.value
+          currentReportId: currentReportId.value,
         },
       })
 
       runs.value.push(getRunFromApiRun(responseBody))
-      
+
       // Update current report ID with the new one returned from the API
       if (responseBody.reportId) {
         currentReportId.value = responseBody.reportId
       }
-      
+
       error.value = null
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

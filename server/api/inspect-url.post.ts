@@ -69,20 +69,20 @@ export default defineEventHandler(async (event) => {
   // Handle report creation/updating
   let newReportId: string
   const timestamp = Date.now()
-  
+
   if (currentReportId) {
     try {
       // Get existing report and create a new one with the additional run
       const existingReport = await getReport(currentReportId)
       const newRunIds = [...existingReport.runIds, run.runId]
       newReportId = generateReportId(newRunIds, timestamp)
-      
+
       const newReport = {
         reportId: newReportId,
         runIds: newRunIds,
         createdAt: timestamp,
       }
-      
+
       await saveReport(newReport)
     }
     catch {
@@ -93,10 +93,11 @@ export default defineEventHandler(async (event) => {
         runIds: [run.runId],
         createdAt: timestamp,
       }
-      
+
       await saveReport(newReport)
     }
-  } else {
+  }
+  else {
     // Create a new report with just this run
     newReportId = generateReportId([run.runId], timestamp)
     const newReport = {
@@ -104,7 +105,7 @@ export default defineEventHandler(async (event) => {
       runIds: [run.runId],
       createdAt: timestamp,
     }
-    
+
     await saveReport(newReport)
   }
 

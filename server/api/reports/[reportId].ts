@@ -12,19 +12,19 @@ export default defineEventHandler(async (event) => {
 
   try {
     const report = await getReport(reportId)
-    
+
     // Fetch all runs for this report
     const runs = await Promise.all(
-      report.runIds.map(runId => getRun(runId))
+      report.runIds.map(runId => getRun(runId)),
     )
-    
+
     // Set cache headers similar to /run/ endpoints
     setHeader(event, 'Cache-Control', 'public, max-age=31536000, immutable')
-    
+
     return {
       reportId: report.reportId,
       createdAt: report.createdAt,
-      runs
+      runs,
     }
   }
   catch (error) {

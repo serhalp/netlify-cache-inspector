@@ -18,7 +18,8 @@ const copyToClipboard = async (text: string) => {
   if (typeof navigator !== 'undefined' && navigator.clipboard) {
     try {
       await navigator.clipboard.writeText(text)
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Failed to copy to clipboard:', err)
     }
   }
@@ -57,21 +58,21 @@ const copyToClipboard = async (text: string) => {
       >
         <label>Report Permalink:</label>
         <div class="permalink-container">
-          <input 
+          <input
             :value="generateReportPermalink(currentReportId)"
             readonly
             class="permalink-input"
-          >
+          />
           <button
-            @click="copyToClipboard(generateReportPermalink(currentReportId))"
             class="copy-button"
             title="Copy to clipboard"
+            @click="copyToClipboard(generateReportPermalink(currentReportId))"
           >
             📋
           </button>
         </div>
       </div>
-      
+
       <button
         v-if="runs.length > 0"
         @click="onClear()"
