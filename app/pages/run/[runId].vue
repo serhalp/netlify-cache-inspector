@@ -21,8 +21,7 @@ if (initialRuns.value) {
 
 // Get the URL from the loaded run - we know it exists since we successfully loaded the run
 const runUrl = computed(() => {
-  const loadedRun = runs.value[0] || initialRuns.value?.[0]
-  return loadedRun?.url
+  return initialRuns.value?.[0]?.url
 })
 </script>
 
@@ -30,7 +29,7 @@ const runUrl = computed(() => {
   <main>
     <!-- Only render RequestForm when we have loaded the initial run -->
     <RequestForm
-      v-if="!initialLoading && runUrl"
+      v-if="!initialLoading"
       :loading="loading"
       :initial-url="runUrl"
       @submit="handleRequestFormSubmit"
