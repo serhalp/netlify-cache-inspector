@@ -58,6 +58,15 @@ describe('getServedBy', () => {
     })
     const cacheStatus: ParsedCacheStatusEntry[] = [
       {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+      {
         cacheName: 'Netlify Durable',
         parameters: {
           hit: true,
@@ -77,7 +86,26 @@ describe('getServedBy', () => {
       'Debug-X-NF-Function-Type': 'edge',
       'Debug-X-BB-Host-Id': 'node1.example.com',
     })
-    const cacheStatus: ParsedCacheStatusEntry[] = []
+    const cacheStatus: ParsedCacheStatusEntry[] = [
+      {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+      {
+        cacheName: 'Netlify Durable',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+    ]
 
     const result = getServedBy(headers, cacheStatus)
 
@@ -90,7 +118,26 @@ describe('getServedBy', () => {
       'Debug-X-NF-Edge-Functions': 'middleware',
       'Debug-X-BB-Host-Id': 'node1.example.com',
     })
-    const cacheStatus: ParsedCacheStatusEntry[] = []
+    const cacheStatus: ParsedCacheStatusEntry[] = [
+      {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+      {
+        cacheName: 'Netlify Durable',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+    ]
 
     const result = getServedBy(headers, cacheStatus)
 
@@ -102,7 +149,26 @@ describe('getServedBy', () => {
       'Debug-X-NF-Edge-Functions': 'middleware',
       'Debug-X-BB-Host-Id': 'node1.example.com',
     })
-    const cacheStatus: ParsedCacheStatusEntry[] = []
+    const cacheStatus: ParsedCacheStatusEntry[] = [
+      {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+      {
+        cacheName: 'Netlify Durable',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+    ]
 
     const result = getServedBy(headers, cacheStatus)
 
@@ -163,6 +229,37 @@ describe('getServedBy', () => {
     const cacheStatus: ParsedCacheStatusEntry[] = [
       {
         cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+    ]
+
+    const result = getServedBy(headers, cacheStatus)
+
+    expect(result.source).toBe(ServedBySource.CdnOrigin)
+    expect(result.cdnNodes).toBe('node1.example.com')
+  })
+
+  it('returns CdnOrigin when Netlify Edge miss and Netlify Durable miss (no cache hits)', () => {
+    const headers = new Headers({
+      'Debug-X-BB-Host-Id': 'node1.example.com',
+    })
+    const cacheStatus: ParsedCacheStatusEntry[] = [
+      {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+      {
+        cacheName: 'Netlify Durable',
         parameters: {
           hit: false,
           fwd: 'miss',
