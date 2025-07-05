@@ -29,16 +29,24 @@ const showRawHeaders = ref(false)
 
     <div
       v-if="runs.length > 0"
-      class="controls-container"
+      class="controls-bar"
     >
-      <label class="toggle-raw-headers-label">
+      <label class="toggle-control">
         <input
           v-model="showRawHeaders"
           type="checkbox"
-          class="toggle-raw-headers-checkbox"
+          class="sr-only"
         />
-        <span class="toggle-raw-headers-text">Show raw headers</span>
+        <span class="toggle-switch" />
+        <span class="toggle-label">Show raw headers</span>
       </label>
+
+      <button
+        class="clear-button"
+        @click="onClear()"
+      >
+        Clear
+      </button>
     </div>
 
     <div class="flex-btwn run-panels">
@@ -49,15 +57,6 @@ const showRawHeaders = ref(false)
         :enable-diff-on-hover="runs.length > 1"
         :show-raw-headers="showRawHeaders"
       />
-    </div>
-
-    <div class="reset-container">
-      <button
-        v-if="runs.length > 0"
-        @click="onClear()"
-      >
-        Clear
-      </button>
     </div>
   </div>
 </template>
@@ -84,35 +83,104 @@ const showRawHeaders = ref(false)
   flex: 1 1 20em;
 }
 
-.controls-container {
+.controls-bar {
   display: flex;
-  justify-content: center;
-  padding: 1em 0;
-  border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 1em;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
-.toggle-raw-headers-label {
+.toggle-control {
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.75rem;
   cursor: pointer;
-  font-size: 0.9em;
   user-select: none;
-}
-
-.toggle-raw-headers-checkbox {
-  width: 1.2em;
-  height: 1.2em;
-  cursor: pointer;
-}
-
-.toggle-raw-headers-text {
+  font-size: 0.875rem;
+  font-weight: 500;
   color: #374151;
 }
 
-.reset-container {
-  text-align: center;
-  background-color: inherit;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 2.5rem;
+  height: 1.5rem;
+  background-color: #cbd5e1;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+input:checked + .toggle-switch {
+  background-color: #3b82f6;
+}
+
+input:checked + .toggle-switch::after {
+  transform: translateX(1rem);
+}
+
+.toggle-control:hover .toggle-switch {
+  background-color: #94a3b8;
+}
+
+input:checked + .toggle-switch:hover {
+  background-color: #2563eb;
+}
+
+.toggle-label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.clear-button {
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.clear-button:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+.clear-button:active {
+  transform: translateY(0);
 }
 </style>

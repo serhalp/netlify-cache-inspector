@@ -88,11 +88,11 @@ describe('RunDisplay', () => {
       },
     })
 
-    const toggleLabel = wrapper.find('.toggle-raw-headers-label')
-    expect(toggleLabel.exists()).toBe(true)
-    expect(toggleLabel.text()).toBe('Show raw headers')
+    const toggleControl = wrapper.find('.toggle-control')
+    expect(toggleControl.exists()).toBe(true)
+    expect(toggleControl.text()).toBe('Show raw headers')
 
-    const checkbox = wrapper.find('.toggle-raw-headers-checkbox')
+    const checkbox = wrapper.find('input[type="checkbox"]')
     expect(checkbox.exists()).toBe(true)
     expect((checkbox.element as HTMLInputElement).checked).toBe(false)
   })
@@ -107,7 +107,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    expect(wrapper.find('.toggle-raw-headers-label').exists()).toBe(false)
+    expect(wrapper.find('.toggle-control').exists()).toBe(false)
   })
 
   it('passes showRawHeaders prop to run panels when toggled', async () => {
@@ -120,7 +120,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    const checkbox = wrapper.find('.toggle-raw-headers-checkbox')
+    const checkbox = wrapper.find('input[type="checkbox"]')
     await checkbox.setValue(true)
 
     const runPanels = wrapper.findAll('.run-panel-mock')
@@ -139,7 +139,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    const clearButton = wrapper.find('button')
+    const clearButton = wrapper.find('.clear-button')
     expect(clearButton.exists()).toBe(true)
     expect(clearButton.text()).toBe('Clear')
   })
@@ -154,7 +154,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    expect(wrapper.find('button').exists()).toBe(false)
+    expect(wrapper.find('.clear-button').exists()).toBe(false)
   })
 
   it('calls onClear when clear button is clicked', async () => {
@@ -168,7 +168,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    await wrapper.find('button').trigger('click')
+    await wrapper.find('.clear-button').trigger('click')
     expect(mockOnClear).toHaveBeenCalledOnce()
   })
 })
