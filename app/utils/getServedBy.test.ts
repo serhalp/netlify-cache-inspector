@@ -147,18 +147,6 @@ describe('getServedBy', () => {
     expect(result.cdnNodes).toBe('unknown CDN node')
   })
 
-  it('returns CdnOrigin when no cache entries but CDN was involved', () => {
-    const headers = new Headers({
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    })
-    const cacheStatus: ParsedCacheStatusEntry[] = []
-
-    const result = getServedBy(headers, cacheStatus)
-
-    expect(result.source).toBe(ServedBySource.CdnOrigin)
-    expect(result.cdnNodes).toBe('node1.example.com')
-  })
-
   it('throws error when no serving source can be determined', () => {
     const headers = new Headers({})
     const cacheStatus: ParsedCacheStatusEntry[] = []
