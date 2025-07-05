@@ -1,5 +1,7 @@
-import { getServedBy, type ServedBy } from './getServedBy'
-import { parseCacheControl, type ParsedCacheControl } from './parseCacheControl'
+import { getServedBy } from './getServedBy'
+import type { ServedBy } from './getServedBy'
+import { parseCacheControl } from './parseCacheControl'
+import type { ParsedCacheControl } from './parseCacheControl'
 
 const CACHE_NAMES_SORTED_BY_RFC_9211 = [
   'Next.js',

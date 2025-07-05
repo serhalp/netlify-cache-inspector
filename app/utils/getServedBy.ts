@@ -58,6 +58,11 @@ const getServedBySource = (
   if (cacheHeaders.has('Debug-X-NF-Edge-Functions'))
     return ServedBySource.EdgeFunction
 
+  // If no cache hits and no function headers, but CDN was involved (indicated by Debug-X-BB-Host-Id),
+  // then the CDN served the request (likely a cache miss that was forwarded to origin)
+  if (cacheHeaders.has('Debug-X-BB-Host-Id'))
+    return ServedBySource.CDN
+
   throw new Error(
     `Could not determine who served the request. Cache status: ${cacheStatus}`,
   )

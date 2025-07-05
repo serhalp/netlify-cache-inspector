@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
-import { getServedBy, ServedBySource, type ParsedCacheStatusEntry } from './getServedBy'
+import { getServedBy, ServedBySource } from './getServedBy'
+import type { ParsedCacheStatusEntry } from './getServedBy'
 
 describe('getServedBy', () => {
   it('returns CDN when Netlify Edge cache has a hit', () => {
@@ -182,5 +183,27 @@ describe('getServedBy', () => {
     const result = getServedBy(headers, cacheStatus)
 
     expect(result.source).toBe(ServedBySource.DurableCache)
+  })
+
+  it('falls back to CDN when no cache hits and no function headers but CDN host is present', () => {
+    const headers = new Headers({
+      'Debug-X-BB-Host-Id': 'cdn-glo-aws-cmh-57, cdn-glo-aws-cmh-57',
+    })
+    const cacheStatus: ParsedCacheStatusEntry[] = [
+      {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+    ]
+
+    const result = getServedBy(headers, cacheStatus)
+
+    expect(result.source).toBe(ServedBySource.CDN)
+    expect(result.cdnNodes).toBe('cdn-glo-aws-cmh-57')
   })
 })

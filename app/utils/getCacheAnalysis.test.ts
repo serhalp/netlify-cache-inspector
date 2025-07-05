@@ -82,12 +82,22 @@ describe('getCacheAnalysis', () => {
       'debug-x-nf-cache-info': 'hit=0,fresh=0,swr=0,cacheable=1,mem=0,rww=0,ort=1,owt=1',
       'debug-x-nf-cache-result': 'miss',
       'etag': '"92de5e34923e8d6e08269210e3bae88d-ssl-df"',
-      'vary': 'Accept-Encoding'
+      'vary': 'Accept-Encoding',
     }
     const now = Date.now()
 
-    // This currently throws an error, but should return a valid analysis
-    expect(() => getCacheAnalysis(headers, now)).toThrow('Could not determine who served the request')
+    // This should now work correctly instead of throwing an error
+    const result = getCacheAnalysis(headers, now)
+
+    expect(result).toHaveProperty('servedBy')
+    expect(result).toHaveProperty('cacheStatus')
+    expect(result).toHaveProperty('cacheControl')
+    expect(result.servedBy.source).toBe(ServedBySource.CDN)
+    expect(result.servedBy.cdnNodes).toBe('cdn-glo-aws-cmh-57')
+    expect(result.cacheStatus).toHaveLength(1)
+    expect(result.cacheStatus[0]?.cacheName).toBe('Netlify Edge')
+    expect(result.cacheStatus[0]?.parameters.hit).toBe(false)
+    expect(result.cacheStatus[0]?.parameters.fwd).toBe('miss')
   })
 })
 
