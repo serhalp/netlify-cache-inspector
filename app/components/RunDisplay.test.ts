@@ -10,8 +10,8 @@ import type { Run } from '~/types/run'
 vi.mock('./RunPanel.vue', () => ({
   default: {
     name: 'RunPanel',
-    template: '<div class="run-panel-mock">{{ runId }}</div>',
-    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders'],
+    template: '<div class="run-panel-mock">{{ runId }}-{{ showRawHeaders }}</div>',
+    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders', 'enableDiffOnHover', 'showRawHeaders'],
   },
 }))
 
@@ -74,8 +74,58 @@ describe('RunDisplay', () => {
 
     const runPanels = wrapper.findAll('.run-panel-mock')
     expect(runPanels).toHaveLength(2)
-    expect(runPanels[0]?.text()).toBe('test-run-1')
-    expect(runPanels[1]?.text()).toBe('test-run-2')
+    expect(runPanels[0]?.text()).toBe('test-run-1-false')
+    expect(runPanels[1]?.text()).toBe('test-run-2-false')
+  })
+
+  it('shows raw headers toggle when runs exist', () => {
+    const wrapper = mount(RunDisplay, {
+      props: {
+        runs: mockRuns,
+        error: null,
+        loading: false,
+        onClear: vi.fn(),
+      },
+    })
+
+    const toggleLabel = wrapper.find('.toggle-raw-headers-label')
+    expect(toggleLabel.exists()).toBe(true)
+    expect(toggleLabel.text()).toBe('Show raw headers')
+
+    const checkbox = wrapper.find('.toggle-raw-headers-checkbox')
+    expect(checkbox.exists()).toBe(true)
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false)
+  })
+
+  it('hides raw headers toggle when no runs exist', () => {
+    const wrapper = mount(RunDisplay, {
+      props: {
+        runs: [],
+        error: null,
+        loading: false,
+        onClear: vi.fn(),
+      },
+    })
+
+    expect(wrapper.find('.toggle-raw-headers-label').exists()).toBe(false)
+  })
+
+  it('passes showRawHeaders prop to run panels when toggled', async () => {
+    const wrapper = mount(RunDisplay, {
+      props: {
+        runs: mockRuns,
+        error: null,
+        loading: false,
+        onClear: vi.fn(),
+      },
+    })
+
+    const checkbox = wrapper.find('.toggle-raw-headers-checkbox')
+    await checkbox.setValue(true)
+
+    const runPanels = wrapper.findAll('.run-panel-mock')
+    expect(runPanels[0]?.text()).toBe('test-run-1-true')
+    expect(runPanels[1]?.text()).toBe('test-run-2-true')
   })
 
   it('shows clear button when runs exist', () => {
