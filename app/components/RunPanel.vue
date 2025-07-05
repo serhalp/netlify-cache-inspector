@@ -6,6 +6,7 @@ const props = defineProps<{
   durationInMs: number
   cacheHeaders: Record<string, string>
   enableDiffOnHover: boolean
+  showRawHeaders: boolean
 }>()
 </script>
 
@@ -29,7 +30,10 @@ const props = defineProps<{
       :cache-headers="props.cacheHeaders"
       :enable-diff-on-hover="props.enableDiffOnHover"
     />
-    <RawCacheHeaders :cache-headers="props.cacheHeaders" />
+    <RawCacheHeaders
+      v-if="props.showRawHeaders"
+      :cache-headers="props.cacheHeaders"
+    />
   </div>
 </template>
 
