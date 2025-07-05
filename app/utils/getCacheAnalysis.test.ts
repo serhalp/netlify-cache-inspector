@@ -16,7 +16,7 @@ describe('getCacheAnalysis', () => {
     expect(result).toHaveProperty('servedBy')
     expect(result).toHaveProperty('cacheStatus')
     expect(result).toHaveProperty('cacheControl')
-    expect(result.servedBy.source).toBe(ServedBySource.CDN)
+    expect(result.servedBy.source).toBe(ServedBySource.CdnEdge)
   })
 
   it('integrates Cache-Status parsing correctly', () => {
@@ -67,32 +67,16 @@ describe('getCacheAnalysis', () => {
     expect(() => getCacheAnalysis(headers, now)).toThrow('Could not determine who served the request')
   })
 
-  it('handles cache miss without function headers (issue reproduction)', () => {
-    // This reproduces the exact headers from the issue where no cache analysis is rendered
+  it('returns CdnOrigin when Netlify Edge has a cache miss', () => {
     const headers = {
-      'age': '0',
-      'cache-control': 'public,max-age=0,must-revalidate',
       'cache-status': '"Netlify Edge"; fwd=miss',
-      'content-encoding': 'br',
-      'content-type': 'text/html; charset=UTF-8',
-      'date': 'Sat, 05 Jul 2025 00:18:32 GMT',
-      'debug-x-bb-deploy-id': '6866a5e3ddbff100081b7ff8',
-      'debug-x-bb-gen': '6866a5e3ddbff100081b7ff8:1751557850611',
-      'debug-x-bb-host-id': 'cdn-glo-aws-cmh-57, cdn-glo-aws-cmh-57',
-      'debug-x-nf-cache-info': 'hit=0,fresh=0,swr=0,cacheable=1,mem=0,rww=0,ort=1,owt=1',
-      'debug-x-nf-cache-result': 'miss',
-      'etag': '"92de5e34923e8d6e08269210e3bae88d-ssl-df"',
-      'vary': 'Accept-Encoding',
+      'debug-x-bb-host-id': 'cdn-glo-aws-cmh-57',
     }
     const now = Date.now()
 
-    // This should now work correctly instead of throwing an error
     const result = getCacheAnalysis(headers, now)
 
-    expect(result).toHaveProperty('servedBy')
-    expect(result).toHaveProperty('cacheStatus')
-    expect(result).toHaveProperty('cacheControl')
-    expect(result.servedBy.source).toBe(ServedBySource.CDN)
+    expect(result.servedBy.source).toBe(ServedBySource.CdnOrigin)
     expect(result.servedBy.cdnNodes).toBe('cdn-glo-aws-cmh-57')
     expect(result.cacheStatus).toHaveLength(1)
     expect(result.cacheStatus[0]?.cacheName).toBe('Netlify Edge')

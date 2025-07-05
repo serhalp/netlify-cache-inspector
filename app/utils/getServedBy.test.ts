@@ -1,10 +1,9 @@
 import { describe, it, expect } from 'vitest'
 
-import { getServedBy, ServedBySource } from './getServedBy'
-import type { ParsedCacheStatusEntry } from './getServedBy'
+import { getServedBy, ServedBySource, type ParsedCacheStatusEntry } from './getServedBy'
 
 describe('getServedBy', () => {
-  it('returns CDN when Netlify Edge cache has a hit', () => {
+  it('returns CdnEdge when Netlify Edge cache has a hit', () => {
     const headers = new Headers({
       'Debug-X-BB-Host-Id': 'node1.example.com',
     })
@@ -21,11 +20,11 @@ describe('getServedBy', () => {
 
     const result = getServedBy(headers, cacheStatus)
 
-    expect(result.source).toBe(ServedBySource.CDN)
+    expect(result.source).toBe(ServedBySource.CdnEdge)
     expect(result.cdnNodes).toBe('node1.example.com')
   })
 
-  it('prioritizes CDN hit over durable cache hit when both are present', () => {
+  it('prioritizes CdnEdge hit over durable cache hit when both are present', () => {
     const headers = new Headers({
       'Debug-X-BB-Host-Id': 'node1.example.com',
     })
@@ -50,7 +49,7 @@ describe('getServedBy', () => {
 
     const result = getServedBy(headers, cacheStatus)
 
-    expect(result.source).toBe(ServedBySource.CDN)
+    expect(result.source).toBe(ServedBySource.CdnEdge)
   })
 
   it('returns DurableCache when Netlify Durable cache has a hit', () => {
@@ -148,6 +147,18 @@ describe('getServedBy', () => {
     expect(result.cdnNodes).toBe('unknown CDN node')
   })
 
+  it('returns CdnOrigin when no cache entries but CDN was involved', () => {
+    const headers = new Headers({
+      'Debug-X-BB-Host-Id': 'node1.example.com',
+    })
+    const cacheStatus: ParsedCacheStatusEntry[] = []
+
+    const result = getServedBy(headers, cacheStatus)
+
+    expect(result.source).toBe(ServedBySource.CdnOrigin)
+    expect(result.cdnNodes).toBe('node1.example.com')
+  })
+
   it('throws error when no serving source can be determined', () => {
     const headers = new Headers({})
     const cacheStatus: ParsedCacheStatusEntry[] = []
@@ -157,7 +168,29 @@ describe('getServedBy', () => {
     )
   })
 
-  it('ignores cache entries without hits', () => {
+  it('returns CdnOrigin when Netlify Edge cache has a miss', () => {
+    const headers = new Headers({
+      'Debug-X-BB-Host-Id': 'node1.example.com',
+    })
+    const cacheStatus: ParsedCacheStatusEntry[] = [
+      {
+        cacheName: 'Netlify Edge',
+        parameters: {
+          hit: false,
+          fwd: 'miss',
+          stored: false,
+          collapsed: false,
+        },
+      },
+    ]
+
+    const result = getServedBy(headers, cacheStatus)
+
+    expect(result.source).toBe(ServedBySource.CdnOrigin)
+    expect(result.cdnNodes).toBe('node1.example.com')
+  })
+
+  it('ignores cache entries without hits and picks first with hit', () => {
     const headers = new Headers({
       'Debug-X-BB-Host-Id': 'node1.example.com',
     })
@@ -183,27 +216,5 @@ describe('getServedBy', () => {
     const result = getServedBy(headers, cacheStatus)
 
     expect(result.source).toBe(ServedBySource.DurableCache)
-  })
-
-  it('falls back to CDN when no cache hits and no function headers but CDN host is present', () => {
-    const headers = new Headers({
-      'Debug-X-BB-Host-Id': 'cdn-glo-aws-cmh-57, cdn-glo-aws-cmh-57',
-    })
-    const cacheStatus: ParsedCacheStatusEntry[] = [
-      {
-        cacheName: 'Netlify Edge',
-        parameters: {
-          hit: false,
-          fwd: 'miss',
-          stored: false,
-          collapsed: false,
-        },
-      },
-    ]
-
-    const result = getServedBy(headers, cacheStatus)
-
-    expect(result.source).toBe(ServedBySource.CDN)
-    expect(result.cdnNodes).toBe('cdn-glo-aws-cmh-57')
   })
 })
