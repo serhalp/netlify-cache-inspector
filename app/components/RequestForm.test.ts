@@ -43,4 +43,19 @@ describe('RequestForm', () => {
     await wrapper.find('button').trigger('click')
     expect(wrapper.emitted('submit')).toBeFalsy()
   })
+
+  it('uses default URL when no initialUrl prop is provided', () => {
+    const wrapper = mount(RequestForm)
+    const input = wrapper.find('input')
+    expect(input.element.value).toBe('https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page')
+  })
+
+  it('uses initialUrl prop when provided', () => {
+    const customUrl = 'https://example.com/test-page'
+    const wrapper = mount(RequestForm, {
+      props: { initialUrl: customUrl },
+    })
+    const input = wrapper.find('input')
+    expect(input.element.value).toBe(customUrl)
+  })
 })
