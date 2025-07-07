@@ -1,8 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { resolve } from 'node:path'
 
-export default defineNuxtConfig({
+import netlify from '@netlify/vite-plugin'
 
+export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/test-utils/module'],
   devtools: { enabled: true },
 
@@ -62,6 +63,12 @@ export default defineNuxtConfig({
   },
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-09-13',
+
+  vite: {
+    $client: {
+      plugins: [netlify()],
+    },
+  },
 
   eslint: {
     config: {
