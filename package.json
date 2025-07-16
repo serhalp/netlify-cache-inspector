@@ -19,7 +19,7 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
-    "@netlify/blobs": "^9.0.0",
+    "@netlify/blobs": "^10.0.0",
     "@nuxt/eslint": "^1.4.1",
     "date-fns": "^4.1.0",
     "nuxt": "^4.0.0",
