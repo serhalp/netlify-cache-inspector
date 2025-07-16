@@ -22,7 +22,7 @@
     "@netlify/blobs": "^9.0.0",
     "@nuxt/eslint": "^1.4.1",
     "date-fns": "^4.1.0",
-    "nuxt": "^3.16.0",
+    "nuxt": "^4.0.0",
     "vue": "latest",
     "vue-router": "latest"
   },
