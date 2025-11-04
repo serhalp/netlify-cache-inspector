@@ -32,7 +32,7 @@ export const parseCacheControl = (
     cacheHeaders.get('CDN-Cache-Control'),
   )
   const netlifyCdnCacheControl = parseCacheControlHeader(
-    cacheHeaders.get('Netlify-CDN-Cache-Control'),
+    cacheHeaders.get('Debug-Netlify-CDN-Cache-Control'),
   )
 
   const age
