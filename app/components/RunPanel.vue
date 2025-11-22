@@ -133,7 +133,7 @@ input:checked + .toggle-switch::after {
   background-color: #94a3b8;
 }
 
-input:checked + .toggle-switch:hover {
+.toggle-control:hover input:checked + .toggle-switch {
   background-color: #2563eb;
 }
 
