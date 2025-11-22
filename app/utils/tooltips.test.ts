@@ -11,7 +11,7 @@ describe('tooltip utilities', () => {
 
     it('returns specific tooltip for Netlify Durable', () => {
       const tooltip = getCacheNameTooltip('Netlify Durable')
-      expect(tooltip.text).toContain('opt-in cache layer that persists assets')
+      expect(tooltip.text).toContain('opt-in cache layer that is shared regionally')
       expect(tooltip.url).toBe('https://docs.netlify.com/build/caching/caching-overview/#durable-directive')
     })
 
