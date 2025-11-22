@@ -11,8 +11,8 @@ describe('tooltip utilities', () => {
 
     it('returns specific tooltip for Netlify Durable', () => {
       const tooltip = getCacheNameTooltip('Netlify Durable')
-      expect(tooltip.text).toContain('Netlify\'s persistent cache layer')
-      expect(tooltip.url).toBe('https://docs.netlify.com/platform/caching/')
+      expect(tooltip.text).toContain('opt-in cache layer that persists assets')
+      expect(tooltip.url).toBe('https://docs.netlify.com/build/caching/caching-overview/#durable-directive')
     })
 
     it('returns specific tooltip for Next.js', () => {
@@ -68,8 +68,8 @@ describe('tooltip utilities', () => {
 
     it('returns specific tooltip for netlify-vary with URL', () => {
       const tooltip = getFieldTooltip('netlify-vary')
-      expect(tooltip.text).toContain('Netlify-specific header variations')
-      expect(tooltip.url).toBe('https://docs.netlify.com/platform/caching/#cache-key-variation')
+      expect(tooltip.text).toContain('Netlify-specific header that controls cache key variation')
+      expect(tooltip.url).toBe('https://docs.netlify.com/build/caching/caching-overview/#cache-key-variation')
     })
 
     it('returns generic tooltip for unknown fields', () => {

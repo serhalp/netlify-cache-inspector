@@ -42,8 +42,8 @@ const CACHE_NAME_TOOLTIPS: Record<string, TooltipDefinition> = {
     url: 'https://docs.netlify.com/platform/caching/',
   },
   'Netlify Durable': {
-    text: 'Netlify\'s persistent cache layer that stores content for longer periods, typically used for less frequently accessed resources.',
-    url: 'https://docs.netlify.com/platform/caching/',
+    text: 'An opt-in cache layer that persists assets across builds and deploys. Enabled by adding the "durable" directive to your Cache-Control header (e.g., "public, max-age=0, must-revalidate, durable").',
+    url: 'https://docs.netlify.com/build/caching/caching-overview/#durable-directive',
   },
   'Next.js': {
     text: 'Next.js application-level caching system that caches rendered pages and API responses.',
@@ -84,7 +84,7 @@ export const FIELD_TOOLTIPS: Record<string, TooltipDefinition> = {
     text: 'Additional implementation-specific details about how this cache layer handled the request.',
   },
   'cacheable': {
-    text: 'Whether this response is allowed to be cached based on its headers and HTTP method.',
+    text: 'Whether this response is allowed to be cached based on its headers and HTTP method. Note: This feature is not 100% implemented yet and may not be fully reliable.',
   },
   'age': {
     text: 'How long this response has been cached, in seconds since it was first stored.',
@@ -111,8 +111,8 @@ export const FIELD_TOOLTIPS: Record<string, TooltipDefinition> = {
     text: 'Headers that determine cache variations - responses will be cached separately based on these header values.',
   },
   'netlify-vary': {
-    text: 'Netlify-specific header variations that create separate cache entries based on these values.',
-    url: 'https://docs.netlify.com/platform/caching/#cache-key-variation',
+    text: 'Netlify-specific header that controls cache key variation. Allows you to cache different versions of a response based on query parameters, cookies, headers, or language. Use this to create separate cache entries for different user contexts.',
+    url: 'https://docs.netlify.com/build/caching/caching-overview/#cache-key-variation',
   },
   'revalidation': {
     text: 'Cache revalidation directives that control when and how cached responses should be refreshed.',
