@@ -42,7 +42,7 @@ const CACHE_NAME_TOOLTIPS: Record<string, TooltipDefinition> = {
     url: 'https://docs.netlify.com/platform/caching/',
   },
   'Netlify Durable': {
-    text: 'An opt-in cache layer that persists assets across builds and deploys. Enabled by adding the "durable" directive to your Cache-Control header (e.g., "public, max-age=0, must-revalidate, durable").',
+    text: 'An opt-in cache layer that is shared regionally; checked when the Edge Cache falls through. Enabled by adding the "durable" directive to your Cache-Control header (e.g., "public, max-age=0, must-revalidate, durable").',
     url: 'https://docs.netlify.com/build/caching/caching-overview/#durable-directive',
   },
   'Next.js': {
@@ -84,7 +84,7 @@ export const FIELD_TOOLTIPS: Record<string, TooltipDefinition> = {
     text: 'Additional implementation-specific details about how this cache layer handled the request.',
   },
   'cacheable': {
-    text: 'Whether this response is allowed to be cached based on its headers and HTTP method. Note: This feature is not 100% implemented yet and may not be fully reliable.',
+    text: 'Whether this response is allowed to be cached based on its headers and HTTP method. Note: This field is not 100% implemented yet and may not be fully reliable.',
   },
   'age': {
     text: 'How long this response has been cached, in seconds since it was first stored.',
