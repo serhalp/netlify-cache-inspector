@@ -16,7 +16,7 @@ describe('getCacheAnalysis', () => {
     expect(result).toHaveProperty('servedBy')
     expect(result).toHaveProperty('cacheStatus')
     expect(result).toHaveProperty('cacheControl')
-    expect(result.servedBy.source).toBe(ServedBySource.CDN)
+    expect(result.servedBy.source).toBe(ServedBySource.CdnEdge)
   })
 
   it('integrates Cache-Status parsing correctly', () => {
@@ -65,6 +65,23 @@ describe('getCacheAnalysis', () => {
     const now = Date.now()
 
     expect(() => getCacheAnalysis(headers, now)).toThrow('Could not determine who served the request')
+  })
+
+  it('returns CdnOrigin when Netlify Edge has a cache miss', () => {
+    const headers = {
+      'cache-status': '"Netlify Edge"; fwd=miss',
+      'debug-x-bb-host-id': 'cdn-glo-aws-cmh-57',
+    }
+    const now = Date.now()
+
+    const result = getCacheAnalysis(headers, now)
+
+    expect(result.servedBy.source).toBe(ServedBySource.CdnOrigin)
+    expect(result.servedBy.cdnNodes).toBe('cdn-glo-aws-cmh-57')
+    expect(result.cacheStatus).toHaveLength(1)
+    expect(result.cacheStatus[0]?.cacheName).toBe('Netlify Edge')
+    expect(result.cacheStatus[0]?.parameters.hit).toBe(false)
+    expect(result.cacheStatus[0]?.parameters.fwd).toBe('miss')
   })
 })
 
