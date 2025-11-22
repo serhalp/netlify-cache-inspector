@@ -30,7 +30,6 @@ const mockProps = {
     'etag': '"abc123"',
   },
   enableDiffOnHover: false,
-  showRawHeaders: false,
 }
 
 describe('RunPanel', () => {
@@ -71,9 +70,27 @@ describe('RunPanel', () => {
     expect(permalink.text()).toBe('🔗 Permalink')
   })
 
-  it('hides raw headers when showRawHeaders prop is false', () => {
+  it('renders toggle button', () => {
     const wrapper = mount(RunPanel, {
-      props: { ...mockProps, showRawHeaders: false },
+      props: mockProps,
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ['to'],
+          },
+        },
+      },
+    })
+
+    const toggleButton = wrapper.find('.toggle-button')
+    expect(toggleButton.exists()).toBe(true)
+    expect(toggleButton.text()).toBe('Show raw headers')
+  })
+
+  it('hides raw headers by default', () => {
+    const wrapper = mount(RunPanel, {
+      props: mockProps,
       global: {
         stubs: {
           NuxtLink: {
@@ -87,9 +104,9 @@ describe('RunPanel', () => {
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(false)
   })
 
-  it('shows raw headers when showRawHeaders prop is true', () => {
+  it('toggles raw headers when button is clicked', async () => {
     const wrapper = mount(RunPanel, {
-      props: { ...mockProps, showRawHeaders: true },
+      props: mockProps,
       global: {
         stubs: {
           NuxtLink: {
@@ -100,6 +117,58 @@ describe('RunPanel', () => {
       },
     })
 
+    const toggleButton = wrapper.find('.toggle-button')
+
+    // Initially hidden
+    expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(false)
+    expect(toggleButton.text()).toBe('Show raw headers')
+
+    // Click to show
+    await toggleButton.trigger('click')
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(true)
+    expect(toggleButton.text()).toBe('Hide raw headers')
+
+    // Click to hide
+    await toggleButton.trigger('click')
+    expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(false)
+    expect(toggleButton.text()).toBe('Show raw headers')
+  })
+
+  it('has proper accessibility attributes', () => {
+    const wrapper = mount(RunPanel, {
+      props: mockProps,
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ['to'],
+          },
+        },
+      },
+    })
+
+    const toggleButton = wrapper.find('.toggle-button')
+    expect(toggleButton.attributes('aria-expanded')).toBe('false')
+    expect(toggleButton.attributes('title')).toBe('Show raw headers')
+  })
+
+  it('updates accessibility attributes when toggled', async () => {
+    const wrapper = mount(RunPanel, {
+      props: mockProps,
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ['to'],
+          },
+        },
+      },
+    })
+
+    const toggleButton = wrapper.find('.toggle-button')
+    await toggleButton.trigger('click')
+
+    expect(toggleButton.attributes('aria-expanded')).toBe('true')
+    expect(toggleButton.attributes('title')).toBe('Hide raw headers')
   })
 })

@@ -10,8 +10,8 @@ import type { Run } from '~/types/run'
 vi.mock('./RunPanel.vue', () => ({
   default: {
     name: 'RunPanel',
-    template: '<div class="run-panel-mock">{{ runId }}-{{ showRawHeaders }}</div>',
-    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders', 'enableDiffOnHover', 'showRawHeaders'],
+    template: '<div class="run-panel-mock">{{ runId }}</div>',
+    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders', 'enableDiffOnHover'],
   },
 }))
 
@@ -74,58 +74,8 @@ describe('RunDisplay', () => {
 
     const runPanels = wrapper.findAll('.run-panel-mock')
     expect(runPanels).toHaveLength(2)
-    expect(runPanels[0]?.text()).toBe('test-run-1-false')
-    expect(runPanels[1]?.text()).toBe('test-run-2-false')
-  })
-
-  it('shows raw headers toggle when runs exist', () => {
-    const wrapper = mount(RunDisplay, {
-      props: {
-        runs: mockRuns,
-        error: null,
-        loading: false,
-        onClear: vi.fn(),
-      },
-    })
-
-    const toggleControl = wrapper.find('.toggle-control')
-    expect(toggleControl.exists()).toBe(true)
-    expect(toggleControl.text()).toBe('Show raw headers')
-
-    const checkbox = wrapper.find('input[type="checkbox"]')
-    expect(checkbox.exists()).toBe(true)
-    expect((checkbox.element as HTMLInputElement).checked).toBe(false)
-  })
-
-  it('hides raw headers toggle when no runs exist', () => {
-    const wrapper = mount(RunDisplay, {
-      props: {
-        runs: [],
-        error: null,
-        loading: false,
-        onClear: vi.fn(),
-      },
-    })
-
-    expect(wrapper.find('.toggle-control').exists()).toBe(false)
-  })
-
-  it('passes showRawHeaders prop to run panels when toggled', async () => {
-    const wrapper = mount(RunDisplay, {
-      props: {
-        runs: mockRuns,
-        error: null,
-        loading: false,
-        onClear: vi.fn(),
-      },
-    })
-
-    const checkbox = wrapper.find('input[type="checkbox"]')
-    await checkbox.setValue(true)
-
-    const runPanels = wrapper.findAll('.run-panel-mock')
-    expect(runPanels[0]?.text()).toBe('test-run-1-true')
-    expect(runPanels[1]?.text()).toBe('test-run-2-true')
+    expect(runPanels[0]?.text()).toBe('test-run-1')
+    expect(runPanels[1]?.text()).toBe('test-run-2')
   })
 
   it('shows clear button when runs exist', () => {
@@ -139,7 +89,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    const clearButton = wrapper.find('.clear-button')
+    const clearButton = wrapper.find('button')
     expect(clearButton.exists()).toBe(true)
     expect(clearButton.text()).toBe('Clear')
   })
@@ -154,7 +104,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    expect(wrapper.find('.clear-button').exists()).toBe(false)
+    expect(wrapper.find('button').exists()).toBe(false)
   })
 
   it('calls onClear when clear button is clicked', async () => {
@@ -168,7 +118,7 @@ describe('RunDisplay', () => {
       },
     })
 
-    await wrapper.find('.clear-button').trigger('click')
+    await wrapper.find('button').trigger('click')
     expect(mockOnClear).toHaveBeenCalledOnce()
   })
 })
