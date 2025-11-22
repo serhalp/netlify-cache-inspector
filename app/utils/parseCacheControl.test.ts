@@ -78,7 +78,7 @@ describe('parseCacheControl', () => {
     const headers = new Headers({
       'Cache-Control': 'max-age=1000',
       'CDN-Cache-Control': 's-maxage=2000',
-      'Netlify-CDN-Cache-Control': 'max-age=3000',
+      'Debug-Netlify-CDN-Cache-Control': 'max-age=3000',
       'Age': '100',
     })
     const now = Date.now()
