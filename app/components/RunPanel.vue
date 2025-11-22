@@ -17,25 +17,26 @@ const showRawHeaders = ref(false)
 
     <div class="flex-btwn">
       <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
-      <NuxtLink
-        :to="`/run/${props.runId}`"
-        class="run-permalink"
-        title="Share this run"
-        target="_blank"
-      >
-        🔗 Permalink
-      </NuxtLink>
-    </div>
-
-    <div class="toggle-container">
-      <button
-        class="toggle-button"
-        :aria-expanded="showRawHeaders"
-        :title="showRawHeaders ? 'Hide raw headers' : 'Show raw headers'"
-        @click="showRawHeaders = !showRawHeaders"
-      >
-        {{ showRawHeaders ? 'Hide' : 'Show' }} raw headers
-      </button>
+      <div class="right-controls">
+        <NuxtLink
+          :to="`/run/${props.runId}`"
+          class="run-permalink"
+          title="Share this run"
+          target="_blank"
+        >
+          🔗 Permalink
+        </NuxtLink>
+        <label class="toggle-control">
+          <input
+            v-model="showRawHeaders"
+            type="checkbox"
+            class="sr-only"
+            :aria-label="'Show raw headers for ' + props.url"
+          />
+          <span class="toggle-switch" />
+          <span class="toggle-label">Show raw headers</span>
+        </label>
+      </div>
     </div>
 
     <CacheAnalysis
@@ -65,33 +66,80 @@ const showRawHeaders = ref(false)
 }
 
 .run-permalink {
-  align-self: flex-end;
+  font-size: 0.7em;
+  margin-right: 1rem;
+}
+
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toggle-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
   font-size: 0.7em;
 }
 
-.toggle-container {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.toggle-button {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #3b82f6;
-  background-color: transparent;
-  border: 1px solid #3b82f6;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 2rem;
+  height: 1.125rem;
+  background-color: #cbd5e1;
+  border-radius: 0.5625rem;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
 }
 
-.toggle-button:hover {
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+input:checked + .toggle-switch {
   background-color: #3b82f6;
-  color: white;
 }
 
-.toggle-button:active {
-  transform: scale(0.98);
+input:checked + .toggle-switch::after {
+  transform: translateX(0.875rem);
+}
+
+.toggle-control:hover .toggle-switch {
+  background-color: #94a3b8;
+}
+
+input:checked + .toggle-switch:hover {
+  background-color: #2563eb;
+}
+
+.toggle-label {
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
 }
 </style>

@@ -70,7 +70,7 @@ describe('RunPanel', () => {
     expect(permalink.text()).toBe('🔗 Permalink')
   })
 
-  it('renders toggle button', () => {
+  it('renders toggle control with static label', () => {
     const wrapper = mount(RunPanel, {
       props: mockProps,
       global: {
@@ -83,9 +83,13 @@ describe('RunPanel', () => {
       },
     })
 
-    const toggleButton = wrapper.find('.toggle-button')
-    expect(toggleButton.exists()).toBe(true)
-    expect(toggleButton.text()).toBe('Show raw headers')
+    const toggleControl = wrapper.find('.toggle-control')
+    expect(toggleControl.exists()).toBe(true)
+    expect(toggleControl.text()).toBe('Show raw headers')
+
+    const toggleLabel = wrapper.find('.toggle-label')
+    expect(toggleLabel.exists()).toBe(true)
+    expect(toggleLabel.text()).toBe('Show raw headers')
   })
 
   it('hides raw headers by default', () => {
@@ -102,9 +106,11 @@ describe('RunPanel', () => {
     })
 
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(false)
+    const checkbox = wrapper.find('input[type="checkbox"]')
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false)
   })
 
-  it('toggles raw headers when button is clicked', async () => {
+  it('toggles raw headers when checkbox is toggled', async () => {
     const wrapper = mount(RunPanel, {
       props: mockProps,
       global: {
@@ -117,21 +123,21 @@ describe('RunPanel', () => {
       },
     })
 
-    const toggleButton = wrapper.find('.toggle-button')
+    const checkbox = wrapper.find('input[type="checkbox"]')
 
     // Initially hidden
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(false)
-    expect(toggleButton.text()).toBe('Show raw headers')
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false)
 
-    // Click to show
-    await toggleButton.trigger('click')
+    // Check to show
+    await checkbox.setValue(true)
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(true)
-    expect(toggleButton.text()).toBe('Hide raw headers')
+    expect((checkbox.element as HTMLInputElement).checked).toBe(true)
 
-    // Click to hide
-    await toggleButton.trigger('click')
+    // Uncheck to hide
+    await checkbox.setValue(false)
     expect(wrapper.find('.raw-cache-headers-mock').exists()).toBe(false)
-    expect(toggleButton.text()).toBe('Show raw headers')
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false)
   })
 
   it('has proper accessibility attributes', () => {
@@ -147,12 +153,12 @@ describe('RunPanel', () => {
       },
     })
 
-    const toggleButton = wrapper.find('.toggle-button')
-    expect(toggleButton.attributes('aria-expanded')).toBe('false')
-    expect(toggleButton.attributes('title')).toBe('Show raw headers')
+    const checkbox = wrapper.find('input[type="checkbox"]')
+    expect(checkbox.attributes('aria-label')).toContain('Show raw headers for')
+    expect(checkbox.attributes('aria-label')).toContain('https://example.com')
   })
 
-  it('updates accessibility attributes when toggled', async () => {
+  it('label text remains static regardless of toggle state', async () => {
     const wrapper = mount(RunPanel, {
       props: mockProps,
       global: {
@@ -165,10 +171,14 @@ describe('RunPanel', () => {
       },
     })
 
-    const toggleButton = wrapper.find('.toggle-button')
-    await toggleButton.trigger('click')
+    const toggleLabel = wrapper.find('.toggle-label')
+    expect(toggleLabel.text()).toBe('Show raw headers')
 
-    expect(toggleButton.attributes('aria-expanded')).toBe('true')
-    expect(toggleButton.attributes('title')).toBe('Hide raw headers')
+    // Toggle the checkbox
+    const checkbox = wrapper.find('input[type="checkbox"]')
+    await checkbox.setValue(true)
+
+    // Label should remain the same
+    expect(toggleLabel.text()).toBe('Show raw headers')
   })
 })
