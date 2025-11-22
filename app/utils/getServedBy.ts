@@ -61,18 +61,15 @@ const getServedBySource = (
   if (cacheHeaders.has('Debug-X-NF-Edge-Functions'))
     return ServedBySource.EdgeFunction
 
-  // Check for the specific case of Netlify Edge miss with no subsequent cache hits - this handles 
-  // the weird Netlify Cache-Status behavior where a miss on the CDN edge means the request was
-  // forwarded to CDN origin. According to Netlify's cache behavior, when there's a miss
-  // on "Netlify Edge" and no hits in subsequent caches, the request gets served by the CDN origin.
-  const netlifyEdgeMiss = cacheStatus.find(
-    entry => entry.cacheName === 'Netlify Edge' && !entry.parameters.hit
-  )
-  const hasSubsequentCacheHits = cacheStatus.some(
-    entry => entry.cacheName !== 'Netlify Edge' && entry.parameters.hit
-  )
-  
-  if (netlifyEdgeMiss && !hasSubsequentCacheHits) {
+  // Check for the specific case of ONLY a Netlify Edge miss with no other cache entries - this handles
+  // the weird Netlify Cache-Status behavior where a miss on the CDN edge (with no other caches consulted)
+  // means the request was forwarded directly to the CDN origin. This can only be detected when there's
+  // a single cache status entry for Netlify Edge that is a miss, with no entries at all for subsequent caches.
+  // If there were other cache entries (e.g., Netlify Durable), those caches were consulted, and we'd be in
+  // a different scenario where it's unclear whether the CDN origin or actual origin served the request.
+  if (cacheStatus.length === 1
+    && cacheStatus[0]?.cacheName === 'Netlify Edge'
+    && !cacheStatus[0]?.parameters.hit) {
     return ServedBySource.CdnOrigin
   }
 

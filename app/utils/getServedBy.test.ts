@@ -244,37 +244,6 @@ describe('getServedBy', () => {
     expect(result.cdnNodes).toBe('node1.example.com')
   })
 
-  it('returns CdnOrigin when Netlify Edge miss and Netlify Durable miss (no cache hits)', () => {
-    const headers = new Headers({
-      'Debug-X-BB-Host-Id': 'node1.example.com',
-    })
-    const cacheStatus: ParsedCacheStatusEntry[] = [
-      {
-        cacheName: 'Netlify Edge',
-        parameters: {
-          hit: false,
-          fwd: 'miss',
-          stored: false,
-          collapsed: false,
-        },
-      },
-      {
-        cacheName: 'Netlify Durable',
-        parameters: {
-          hit: false,
-          fwd: 'miss',
-          stored: false,
-          collapsed: false,
-        },
-      },
-    ]
-
-    const result = getServedBy(headers, cacheStatus)
-
-    expect(result.source).toBe(ServedBySource.CdnOrigin)
-    expect(result.cdnNodes).toBe('node1.example.com')
-  })
-
   it('ignores cache entries without hits and picks first with hit', () => {
     const headers = new Headers({
       'Debug-X-BB-Host-Id': 'node1.example.com',
