@@ -17,26 +17,27 @@ const showRawHeaders = ref(false)
 
     <div class="flex-btwn">
       <small>HTTP {{ props.status }} ({{ props.durationInMs }} ms)</small>
-      <div class="right-controls">
-        <NuxtLink
-          :to="`/run/${props.runId}`"
-          class="run-permalink"
-          title="Share this run"
-          target="_blank"
-        >
-          🔗 Permalink
-        </NuxtLink>
-        <label class="toggle-control">
-          <input
-            v-model="showRawHeaders"
-            type="checkbox"
-            class="sr-only"
-            :aria-label="'Show raw headers for ' + props.url"
-          />
-          <span class="toggle-switch" />
-          <span class="toggle-label">Show raw headers</span>
-        </label>
-      </div>
+      <NuxtLink
+        :to="`/run/${props.runId}`"
+        class="run-permalink"
+        title="Share this run"
+        target="_blank"
+      >
+        🔗 Permalink
+      </NuxtLink>
+    </div>
+
+    <div class="toggle-container">
+      <label class="toggle-control">
+        <input
+          v-model="showRawHeaders"
+          type="checkbox"
+          class="sr-only"
+          :aria-label="'Show raw headers for ' + props.url"
+        />
+        <span class="toggle-switch" />
+        <span class="toggle-label">Show raw headers</span>
+      </label>
     </div>
 
     <CacheAnalysis
@@ -67,13 +68,13 @@ const showRawHeaders = ref(false)
 
 .run-permalink {
   font-size: 0.7em;
-  margin-right: 1rem;
 }
 
-.right-controls {
+.toggle-container {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .toggle-control {
