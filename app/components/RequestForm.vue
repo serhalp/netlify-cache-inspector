@@ -23,10 +23,15 @@ const handleSubmit = () => {
 
 <template>
   <div class="form">
-    <label class="url-input">
+    <label
+      for="url-input"
+      class="url-input"
+    >
       <strong>URL:</strong>
       <input
+        id="url-input"
         v-model.trim="inputUrl"
+        type="url"
         @keyup.enter="handleSubmit()"
       />
     </label>

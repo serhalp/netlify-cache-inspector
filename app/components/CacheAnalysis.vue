@@ -46,6 +46,14 @@ const handleDataKeyLeave = () => {
   clearHover()
 }
 
+const handleKeyDown = (event: KeyboardEvent, dataKey: string, rawValue: boolean | number | string | Date | null | undefined) => {
+  // Handle Enter and Space keys for keyboard accessibility
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    handleDataKeyHover(dataKey, rawValue)
+  }
+}
+
 let timerId: NodeJS.Timeout | null = null
 
 onMounted(() => {
@@ -64,17 +72,21 @@ onUnmounted(() => {
     <div>
       <span
         class="tooltip-trigger"
+        role="button"
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('served-by'))"
         :aria-label="`Served by: ${getFieldTooltip('served-by').text}`"
+        @keydown="(event) => { if (event.key === 'Enter' || event.key === ' ') event.preventDefault(); }"
       >Served by:</span> <strong>{{ cacheAnalysis.servedBy.source }}</strong>
     </div>
     <div>
       <span
         class="tooltip-trigger"
+        role="button"
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('cdn-nodes'))"
         :aria-label="`CDN nodes: ${getFieldTooltip('cdn-nodes').text}`"
+        @keydown="(event) => { if (event.key === 'Enter' || event.key === ' ') event.preventDefault(); }"
       >CDN node(s):</span> <code>{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
@@ -83,9 +95,9 @@ onUnmounted(() => {
     <dl>
       <dt class="cache-heading">
         <h4>
-          🎬 Request from client
+          <span aria-hidden="true">🎬</span><span class="sr-only">Start:</span> Request from client
           <br />
-          ↓
+          <span aria-hidden="true">↓</span>
         </h4>
       </dt>
       <dd />
@@ -101,8 +113,11 @@ onUnmounted(() => {
         <dt class="cache-heading">
           <h4
             tabindex="0"
+            role="button"
             class="cache-name-heading"
             :title="formatTooltip(getCacheNameTooltip(cacheName))"
+            :aria-label="`${cacheName} cache: ${getCacheNameTooltip(cacheName).text}`"
+            @keydown="(event) => { if (event.key === 'Enter' || event.key === ' ') event.preventDefault(); }"
           >
             ↳ <em>{{ cacheName }}</em> cache
           </h4>
@@ -111,13 +126,16 @@ onUnmounted(() => {
 
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
           :title="formatTooltip(getFieldTooltip('hit'))"
+          :aria-label="`Hit: ${getFieldTooltip('hit').text}`"
           @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, `Hit-${cacheIndex}`, parameters.hit)"
         >
           Hit
         </dt>
@@ -129,19 +147,23 @@ onUnmounted(() => {
             'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(parameters.hit),
           }"
         >
-          {{ parameters.hit ? "✅" : "❌" }}
+          <span aria-hidden="true">{{ parameters.hit ? "✅" : "❌" }}</span>
+          <span class="sr-only">{{ parameters.hit ? "Yes" : "No" }}</span>
         </dd>
 
         <template v-if="parameters.fwd">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('forwarded-because'))"
+            :aria-label="`Forwarded because: ${getFieldTooltip('forwarded-because').text}`"
             @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `Forwarded because-${cacheIndex}`, parameters.fwd)"
           >
             Forwarded because
           </dt>
@@ -161,13 +183,16 @@ onUnmounted(() => {
         <template v-if="parameters['fwd-status']">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('forwarded-status'))"
+            :aria-label="`Forwarded status: ${getFieldTooltip('forwarded-status').text}`"
             @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
           >
             Forwarded status
           </dt>
@@ -186,13 +211,16 @@ onUnmounted(() => {
         <template v-if="parameters.ttl">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('ttl'))"
+            :aria-label="`TTL: ${getFieldTooltip('ttl').text}`"
             @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `TTL-${cacheIndex}`, parameters.ttl)"
           >
             TTL
           </dt>
@@ -218,13 +246,16 @@ onUnmounted(() => {
         <template v-if="parameters.stored">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('stored-response'))"
+            :aria-label="`Stored the response: ${getFieldTooltip('stored-response').text}`"
             @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `Stored the response-${cacheIndex}`, parameters.stored)"
           >
             Stored the response
           </dt>
@@ -236,20 +267,24 @@ onUnmounted(() => {
               'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(parameters.stored),
             }"
           >
-            {{ parameters.stored ? "✅" : "❌" }}
+            <span aria-hidden="true">{{ parameters.stored ? "✅" : "❌" }}</span>
+            <span class="sr-only">{{ parameters.stored ? "Yes" : "No" }}</span>
           </dd>
         </template>
 
         <template v-if="parameters.collapsed">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('collapsed-requests'))"
+            :aria-label="`Collapsed with other requests: ${getFieldTooltip('collapsed-requests').text}`"
             @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
           >
             Collapsed w/ other reqs
           </dt>
@@ -261,20 +296,24 @@ onUnmounted(() => {
               'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(parameters.collapsed),
             }"
           >
-            {{ parameters.collapsed ? "✅" : "❌" }}
+            <span aria-hidden="true">{{ parameters.collapsed ? "✅" : "❌" }}</span>
+            <span class="sr-only">{{ parameters.collapsed ? "Yes" : "No" }}</span>
           </dd>
         </template>
 
         <template v-if="parameters.key">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('cache-key'))"
+            :aria-label="`Cache key: ${getFieldTooltip('cache-key').text}`"
             @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `Cache key-${cacheIndex}`, parameters.key)"
           >
             Cache key
           </dt>
@@ -293,13 +332,16 @@ onUnmounted(() => {
         <template v-if="parameters.detail">
           <dt
             class="data-key"
+            role="button"
             tabindex="0"
             :class="{ 'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`) }"
             :title="formatTooltip(getFieldTooltip('extra-details'))"
+            :aria-label="`Extra details: ${getFieldTooltip('extra-details').text}`"
             @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
             @mouseleave="handleDataKeyLeave"
             @focus="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
             @blur="handleDataKeyLeave"
+            @keydown="handleKeyDown($event, `Extra details-${cacheIndex}`, parameters.detail)"
           >
             Extra details
           </dt>
@@ -318,22 +360,25 @@ onUnmounted(() => {
 
       <dt class="cache-heading">
         <h4>
-          ↓
+          <span aria-hidden="true">↓</span>
           <br />
-          🏁 Response to client
+          <span aria-hidden="true">🏁</span><span class="sr-only">End:</span> Response to client
         </h4>
       </dt>
       <dd />
 
       <dt
         class="data-key"
+        role="button"
         tabindex="0"
         :class="{ 'key-highlighted': isKeyHovered('Cacheable') }"
         :title="formatTooltip(getFieldTooltip('cacheable'))"
+        :aria-label="`Cacheable: ${getFieldTooltip('cacheable').text}`"
         @mouseenter="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
         @mouseleave="handleDataKeyLeave"
         @focus="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
         @blur="handleDataKeyLeave"
+        @keydown="handleKeyDown($event, 'Cacheable', cacheAnalysis.cacheControl.isCacheable)"
       >
         Cacheable
       </dt>
@@ -345,19 +390,23 @@ onUnmounted(() => {
           'value-different': isKeyHovered('Cacheable') && !isValueMatching(cacheAnalysis.cacheControl.isCacheable),
         }"
       >
-        {{ cacheAnalysis.cacheControl.isCacheable ? "✅" : "❌" }}
+        <span aria-hidden="true">{{ cacheAnalysis.cacheControl.isCacheable ? "✅" : "❌" }}</span>
+        <span class="sr-only">{{ cacheAnalysis.cacheControl.isCacheable ? "Yes" : "No" }}</span>
       </dd>
 
       <template v-if="cacheAnalysis.cacheControl.age">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('Age') }"
           :title="formatTooltip(getFieldTooltip('age'))"
+          :aria-label="`Age: ${getFieldTooltip('age').text}`"
           @mouseenter="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'Age', cacheAnalysis.cacheControl.age)"
         >
           Age
         </dt>
@@ -383,13 +432,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.date">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('Date') }"
           :title="formatTooltip(getFieldTooltip('date'))"
+          :aria-label="`Date: ${getFieldTooltip('date').text}`"
           @mouseenter="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'Date', cacheAnalysis.cacheControl.date)"
         >
           Date
         </dt>
@@ -414,13 +466,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.etag">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('ETag') }"
           :title="formatTooltip(getFieldTooltip('etag'))"
+          :aria-label="`ETag: ${getFieldTooltip('etag').text}`"
           @mouseenter="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'ETag', cacheAnalysis.cacheControl.etag)"
         >
           ETag
         </dt>
@@ -439,13 +494,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.expiresAt">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('Expires at') }"
           :title="formatTooltip(getFieldTooltip('expires-at'))"
+          :aria-label="`Expires at: ${getFieldTooltip('expires-at').text}`"
           @mouseenter="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'Expires at', cacheAnalysis.cacheControl.expiresAt)"
         >
           Expires at
         </dt>
@@ -470,13 +528,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.ttl">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('TTL (browser)') }"
           :title="formatTooltip(getFieldTooltip('ttl-browser'))"
+          :aria-label="`TTL (browser): ${getFieldTooltip('ttl-browser').text}`"
           @mouseenter="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'TTL (browser)', cacheAnalysis.cacheControl.ttl)"
         >
           TTL{{
             cacheAnalysis.cacheControl.netlifyCdnTtl
@@ -507,13 +568,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.cdnTtl">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('TTL (CDN)') }"
           :title="formatTooltip(getFieldTooltip('ttl-cdn'))"
+          :aria-label="`TTL (CDN): ${getFieldTooltip('ttl-cdn').text}`"
           @mouseenter="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
         >
           TTL ({{
             cacheAnalysis.cacheControl.netlifyCdnTtl
@@ -543,13 +607,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.netlifyCdnTtl">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
           :title="formatTooltip(getFieldTooltip('ttl-netlify-cdn'))"
+          :aria-label="`TTL (Netlify CDN): ${getFieldTooltip('ttl-netlify-cdn').text}`"
           @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
         >
           TTL (Netlify CDN)
         </dt>
@@ -575,13 +642,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.vary">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('Vary') }"
           :title="formatTooltip(getFieldTooltip('vary'))"
+          :aria-label="`Vary: ${getFieldTooltip('vary').text}`"
           @mouseenter="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'Vary', cacheAnalysis.cacheControl.vary)"
         >
           Vary
         </dt>
@@ -600,13 +670,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.netlifyVary">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('Netlify-Vary') }"
           :title="formatTooltip(getFieldTooltip('netlify-vary'))"
+          :aria-label="`Netlify-Vary: ${getFieldTooltip('netlify-vary').text}`"
           @mouseenter="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
         >
           Netlify-Vary
         </dt>
@@ -625,13 +698,16 @@ onUnmounted(() => {
       <template v-if="cacheAnalysis.cacheControl.revalidate">
         <dt
           class="data-key"
+          role="button"
           tabindex="0"
           :class="{ 'key-highlighted': isKeyHovered('Revalidation') }"
           :title="formatTooltip(getFieldTooltip('revalidation'))"
+          :aria-label="`Revalidation: ${getFieldTooltip('revalidation').text}`"
           @mouseenter="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
           @mouseleave="handleDataKeyLeave"
           @focus="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
           @blur="handleDataKeyLeave"
+          @keydown="handleKeyDown($event, 'Revalidation', cacheAnalysis.cacheControl.revalidate)"
         >
           Revalidation
         </dt>
@@ -653,6 +729,18 @@ onUnmounted(() => {
 <style scoped>
 .container {
   font-size: 0.9em;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 hr {

@@ -67,7 +67,9 @@ describe('RunPanel', () => {
     const permalink = wrapper.find('.run-permalink')
     expect(permalink.exists()).toBe(true)
     expect(permalink.attributes('href')).toBe('/run/test-run-id')
-    expect(permalink.text()).toBe('🔗 Permalink')
+    // Check for visible text (including accessibility text)
+    expect(permalink.text()).toContain('Permalink')
+    expect(permalink.text()).toContain('(opens in new tab)')
   })
 
   it('renders toggle control with static label', () => {
