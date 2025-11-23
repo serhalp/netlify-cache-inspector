@@ -1,7 +1,10 @@
 // @ts-check
 import withNuxt from './.nuxt/eslint.config.mjs'
+import vueA11y from 'eslint-plugin-vuejs-accessibility'
 
-export default withNuxt().override('nuxt/vue/rules', {
+export default withNuxt(
+  vueA11y.configs['flat/recommended'],
+).override('nuxt/vue/rules', {
   rules: {
     'vue/html-self-closing': [
       'error',

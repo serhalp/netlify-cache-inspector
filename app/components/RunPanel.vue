@@ -20,16 +20,21 @@ const showRawHeaders = ref(false)
       <NuxtLink
         :to="`/run/${props.runId}`"
         class="run-permalink"
-        title="Share this run"
+        title="Share this run (opens in new tab)"
         target="_blank"
+        rel="noopener noreferrer"
       >
-        🔗 Permalink
+        <span aria-hidden="true">🔗</span> Permalink<span class="sr-only"> (opens in new tab)</span>
       </NuxtLink>
     </div>
 
     <div class="toggle-container">
-      <label class="toggle-control">
+      <label
+        for="show-raw-headers"
+        class="toggle-control"
+      >
         <input
+          id="show-raw-headers"
           v-model="showRawHeaders"
           type="checkbox"
           class="sr-only"

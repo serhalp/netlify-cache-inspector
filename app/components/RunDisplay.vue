@@ -14,13 +14,17 @@ defineProps<{
     <div
       v-if="loading"
       class="loading-indicator"
+      role="status"
+      aria-live="polite"
     >
-      ⏳ Inspecting URL...
+      <span aria-hidden="true">⏳</span> Inspecting URL...
     </div>
 
     <div
       v-if="error"
       class="error"
+      role="alert"
+      aria-live="assertive"
     >
       {{ error }}
     </div>
