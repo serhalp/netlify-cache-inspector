@@ -21,7 +21,7 @@ describe('RequestForm - Accessibility', () => {
 
     // Check that label has 'for' attribute
     expect(label.attributes('for')).toBe('url-input')
-    
+
     // Check that input has matching 'id' attribute
     expect(input.attributes('id')).toBe('url-input')
   })
@@ -93,10 +93,10 @@ describe('RequestForm - Accessibility', () => {
     })
 
     const input = wrapper.find('input')
-    
+
     // Simulate Enter key
     await input.trigger('keyup.enter')
-    
+
     // Should emit submit event
     expect(wrapper.emitted('submit')).toBeTruthy()
   })

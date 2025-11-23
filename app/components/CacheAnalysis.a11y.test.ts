@@ -54,10 +54,10 @@ describe('CacheAnalysis - Accessibility', () => {
 
     // Find all spans with aria-hidden="true"
     const hiddenElements = wrapper.findAll('[aria-hidden="true"]')
-    
+
     // Should have at least the emoji decorations (arrows, emojis in headings, etc.)
     expect(hiddenElements.length).toBeGreaterThan(0)
-    
+
     // Check that checkmarks and X marks are hidden - they're inside dd elements
     const booleanValues = wrapper.findAll('dd span[aria-hidden="true"]')
     expect(booleanValues.length).toBeGreaterThan(0)
@@ -70,7 +70,7 @@ describe('CacheAnalysis - Accessibility', () => {
 
     // Find screen reader only text for boolean values
     const srOnlyTexts = wrapper.findAll('.sr-only')
-    
+
     // Should have at least some screen reader text
     expect(srOnlyTexts.length).toBeGreaterThan(0)
   })
@@ -115,7 +115,7 @@ describe('CacheAnalysis - Accessibility', () => {
 
     const dts = wrapper.findAll('dt')
     const dds = wrapper.findAll('dd')
-    
+
     expect(dts.length).toBeGreaterThan(0)
     expect(dds.length).toBeGreaterThan(0)
   })
