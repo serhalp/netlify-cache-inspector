@@ -76,6 +76,7 @@ onUnmounted(() => {
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('served-by'))"
         :aria-label="`Served by: ${getFieldTooltip('served-by').text}`"
+        @keydown="(event) => { if (event.key === 'Enter' || event.key === ' ') event.preventDefault(); }"
       >Served by:</span> <strong>{{ cacheAnalysis.servedBy.source }}</strong>
     </div>
     <div>
@@ -85,6 +86,7 @@ onUnmounted(() => {
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('cdn-nodes'))"
         :aria-label="`CDN nodes: ${getFieldTooltip('cdn-nodes').text}`"
+        @keydown="(event) => { if (event.key === 'Enter' || event.key === ' ') event.preventDefault(); }"
       >CDN node(s):</span> <code>{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
@@ -115,6 +117,7 @@ onUnmounted(() => {
             class="cache-name-heading"
             :title="formatTooltip(getCacheNameTooltip(cacheName))"
             :aria-label="`${cacheName} cache: ${getCacheNameTooltip(cacheName).text}`"
+            @keydown="(event) => { if (event.key === 'Enter' || event.key === ' ') event.preventDefault(); }"
           >
             ↳ <em>{{ cacheName }}</em> cache
           </h4>
