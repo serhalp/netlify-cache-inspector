@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { runs, error, loading, handleRequestFormSubmit, handleClickClear } = useRunManager()
+const { runs, error, loading, handleRequestFormSubmit, handleClickClear, currentReportId } = useRunManager()
 </script>
 
 <template>
@@ -14,6 +14,7 @@ const { runs, error, loading, handleRequestFormSubmit, handleClickClear } = useR
       :error="error"
       :loading="loading"
       :on-clear="handleClickClear"
+      :current-report-id="currentReportId"
     />
   </main>
 </template>
