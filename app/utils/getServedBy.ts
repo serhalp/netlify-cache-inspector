@@ -1,5 +1,6 @@
 export enum ServedBySource {
-  CDN = 'CDN',
+  CdnEdge = 'CDN edge',
+  CdnOrigin = 'CDN origin',
   DurableCache = 'Durable Cache',
   Function = 'Function',
   EdgeFunction = 'Edge Function',
@@ -40,13 +41,15 @@ const getServedBySource = (
   // So, the first cache hit (starting from the user) is the one that served the request.
   // But we don't quite want to return exactly the same concept of "caches" as in `Cache-Status`, so
   // we need a bit of extra logic to map to other sources.
+
+  // First, check for cache hits
   for (const {
     cacheName,
     parameters: { hit },
   } of cacheStatus) {
     if (!hit) continue
 
-    if (cacheName === 'Netlify Edge') return ServedBySource.CDN
+    if (cacheName === 'Netlify Edge') return ServedBySource.CdnEdge
     if (cacheName === 'Netlify Durable') return ServedBySource.DurableCache
   }
 
@@ -57,6 +60,18 @@ const getServedBySource = (
 
   if (cacheHeaders.has('Debug-X-NF-Edge-Functions'))
     return ServedBySource.EdgeFunction
+
+  // Check for the specific case of ONLY a Netlify Edge miss with no other cache entries - this handles
+  // the weird Netlify Cache-Status behavior where a miss on the CDN edge (with no other caches consulted)
+  // means the request was forwarded directly to the CDN origin. This can only be detected when there's
+  // a single cache status entry for Netlify Edge that is a miss, with no entries at all for subsequent caches.
+  // If there were other cache entries (e.g., Netlify Durable), those caches were consulted, and we'd be in
+  // a different scenario where it's unclear whether the CDN origin or actual origin served the request.
+  if (cacheStatus.length === 1
+    && cacheStatus[0]?.cacheName === 'Netlify Edge'
+    && !cacheStatus[0]?.parameters.hit) {
+    return ServedBySource.CdnOrigin
+  }
 
   throw new Error(
     `Could not determine who served the request. Cache status: ${cacheStatus}`,

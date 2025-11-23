@@ -3,7 +3,7 @@ const { runs, error, loading, handleRequestFormSubmit, handleClickClear, getRunF
 
 const route = useRoute()
 
-const { data: initialRuns, pending: _pending, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async () => {
+const { data: initialRuns, pending: initialLoading, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async () => {
   const { runId } = route.params
   if (typeof runId === 'string') {
     const responseBody = await $fetch(`/api/runs/${runId}`)
@@ -20,14 +20,30 @@ if (initialRuns.value) {
   // When viewing a single run, clear any existing report ID so new runs start fresh
   setCurrentReportId(null)
 }
+
+// Get the URL from the loaded run - we know it exists since we successfully loaded the run
+const runUrl = computed(() => {
+  return initialRuns.value?.[0]?.url
+})
 </script>
 
 <template>
   <main>
+    <!-- Only render RequestForm when we have loaded the initial run -->
     <RequestForm
+      v-if="!initialLoading"
       :loading="loading"
+      :initial-url="runUrl"
       @submit="handleRequestFormSubmit"
     />
+
+    <!-- Show loading state while initial run is loading -->
+    <div
+      v-else-if="initialLoading"
+      class="loading-state"
+    >
+      Loading run...
+    </div>
 
     <RunDisplay
       :runs="runs"
@@ -40,4 +56,9 @@ if (initialRuns.value) {
 </template>
 
 <style scoped>
+.loading-state {
+  padding: 1em;
+  text-align: center;
+  color: #666;
+}
 </style>

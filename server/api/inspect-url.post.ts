@@ -47,9 +47,7 @@ export default defineEventHandler(async (event) => {
   })
   const durationInMs = Date.now() - startTime
 
-  // TODO(serhalp) What about sites with an extra proxy on top? Maybe check for a debug response
-  // header instead?
-  if (headers.get('Server') !== 'Netlify') {
+  if (!headers.has('X-NF-Request-Id')) {
     throw createError({
       statusCode: 400,
       message: 'This tool can only be used with Netlify sites',
