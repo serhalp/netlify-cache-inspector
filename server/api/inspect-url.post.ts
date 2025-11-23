@@ -69,31 +69,18 @@ export default defineEventHandler(async (event) => {
   const timestamp = Date.now()
 
   if (currentReportId) {
-    try {
-      // Get existing report and create a new one with the additional run
-      const existingReport = await getReport(currentReportId)
-      const newRunIds = [...existingReport.runIds, run.runId]
-      newReportId = generateReportId(newRunIds, timestamp)
+    // Get existing report and create a new one with the additional run
+    const existingReport = await getReport(currentReportId)
+    const newRunIds = [...existingReport.runIds, run.runId]
+    newReportId = generateReportId(newRunIds, timestamp)
 
-      const newReport = {
-        reportId: newReportId,
-        runIds: newRunIds,
-        createdAt: timestamp,
-      }
-
-      await saveReport(newReport)
+    const newReport = {
+      reportId: newReportId,
+      runIds: newRunIds,
+      createdAt: timestamp,
     }
-    catch {
-      // If existing report not found, create a new one with just this run
-      newReportId = generateReportId([run.runId], timestamp)
-      const newReport = {
-        reportId: newReportId,
-        runIds: [run.runId],
-        createdAt: timestamp,
-      }
 
-      await saveReport(newReport)
-    }
+    await saveReport(newReport)
   }
   else {
     // Create a new report with just this run

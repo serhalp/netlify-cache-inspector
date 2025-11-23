@@ -56,7 +56,7 @@ const copyToClipboard = async (text: string) => {
         v-if="currentReportId && runs.length > 0"
         class="report-permalink"
       >
-        <label>Report Permalink:</label>
+        <label>Share this report:</label>
         <div class="permalink-container">
           <input
             :value="generateReportPermalink(currentReportId)"
@@ -127,8 +127,8 @@ const copyToClipboard = async (text: string) => {
 .permalink-container {
   display: flex;
   gap: 0.5em;
-  align-items: center;
-  max-width: 600px;
+  align-items: stretch;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -143,16 +143,19 @@ const copyToClipboard = async (text: string) => {
 }
 
 .copy-button {
-  padding: 0.5em;
-  background-color: var(--blue-500, #3b82f6);
-  color: white;
-  border: none;
+  padding: 0.5em 1em;
+  background-color: white;
+  color: var(--blue-600, #2563eb);
+  border: 2px solid var(--blue-600, #2563eb);
   border-radius: 0.25em;
   cursor: pointer;
   font-size: 0.875em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .copy-button:hover {
-  background-color: var(--blue-600, #2563eb);
+  background-color: var(--blue-50, #eff6ff);
 }
 </style>

@@ -10,10 +10,14 @@ vi.mock('~/utils/getCacheHeaders', () => ({
   default: vi.fn((headers: Record<string, string>) => headers),
 }))
 
+// Mock navigateTo composable
+vi.mock('#app/composables/router', () => ({
+  navigateTo: vi.fn(async () => {}),
+}))
+
 // Mock fetch and $fetch
 global.fetch = vi.fn()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-global.$fetch = vi.fn() as any
+vi.stubGlobal('$fetch', vi.fn())
 
 describe('useRunManager - Report Functionality', () => {
   beforeEach(() => {
@@ -42,8 +46,7 @@ describe('useRunManager - Report Functionality', () => {
       reportId: 'new-report-456',
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = $fetch as unknown as ReturnType<typeof vi.fn>
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { handleRequestFormSubmit, setCurrentReportId, currentReportId } = useRunManager()
@@ -74,8 +77,7 @@ describe('useRunManager - Report Functionality', () => {
       reportId: 'new-report-789',
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = $fetch as unknown as ReturnType<typeof vi.fn>
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { handleRequestFormSubmit, currentReportId } = useRunManager()
@@ -87,13 +89,13 @@ describe('useRunManager - Report Functionality', () => {
     expect(currentReportId.value).toBe('new-report-789')
   })
 
-  it('clears currentReportId when clearing runs', () => {
+  it('clears currentReportId when clearing runs', async () => {
     const { handleClickClear, setCurrentReportId, currentReportId } = useRunManager()
 
     setCurrentReportId('test-report-123')
     expect(currentReportId.value).toBe('test-report-123')
 
-    handleClickClear()
+    await handleClickClear()
 
     expect(currentReportId.value).toBe(null)
   })
@@ -108,8 +110,7 @@ describe('useRunManager - Report Functionality', () => {
       // No reportId in response
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = $fetch as unknown as ReturnType<typeof vi.fn>
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { handleRequestFormSubmit, currentReportId, setCurrentReportId } = useRunManager()

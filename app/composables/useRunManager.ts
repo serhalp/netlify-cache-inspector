@@ -7,7 +7,7 @@ export const useRunManager = () => {
   const currentReportId = ref<string | null>(null)
 
   const getRunFromApiRun = (apiRun: ApiRun): Run => {
-    const { headers, reportId, ...run } = apiRun
+    const { headers, ...run } = apiRun
     return { ...run, cacheHeaders: getCacheHeaders(headers) }
   }
 
@@ -31,6 +31,8 @@ export const useRunManager = () => {
       // Update current report ID with the new one returned from the API
       if (responseBody.reportId) {
         currentReportId.value = responseBody.reportId
+        // Navigate to the report URL to make it the source of truth
+        await navigateTo(`/report/${responseBody.reportId}`)
       }
 
       error.value = null
@@ -48,9 +50,11 @@ export const useRunManager = () => {
     }
   }
 
-  const handleClickClear = (): void => {
+  const handleClickClear = async (): Promise<void> => {
     runs.value = []
     currentReportId.value = null
+    // Navigate back to home
+    await navigateTo('/')
   }
 
   const addRun = (run: Run): void => {
