@@ -4,6 +4,9 @@ export interface Run {
   status: number
   cacheHeaders: Record<string, string>
   durationInMs: number
+  reportId?: string
 }
 
-export type ApiRun = Omit<Run, 'cacheHeaders'> & { headers: Record<string, string> }
+export type ApiRun = Omit<Run, 'cacheHeaders'> & {
+  headers: Record<string, string>
+}

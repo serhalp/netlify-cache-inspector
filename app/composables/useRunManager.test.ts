@@ -10,10 +10,14 @@ vi.mock('~/utils/getCacheHeaders', () => ({
   default: vi.fn((headers: Record<string, string>) => headers),
 }))
 
+// Mock navigateTo composable
+vi.mock('#app/composables/router', () => ({
+  navigateTo: vi.fn(async () => {}),
+}))
+
 // Mock fetch and $fetch
 global.fetch = vi.fn()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-global.$fetch = vi.fn() as any
+vi.stubGlobal('$fetch', vi.fn())
 
 describe('useRunManager', () => {
   beforeEach(() => {
@@ -37,6 +41,7 @@ describe('useRunManager', () => {
       status: 200,
       durationInMs: 100,
       headers: { 'cache-control': 'max-age=3600' },
+      reportId: 'test-report',
     }
 
     const run = getRunFromApiRun(apiRun)
@@ -47,6 +52,7 @@ describe('useRunManager', () => {
       status: 200,
       durationInMs: 100,
       cacheHeaders: { 'cache-control': 'max-age=3600' },
+      reportId: 'test-report',
     })
   })
 
@@ -57,10 +63,10 @@ describe('useRunManager', () => {
       status: 200,
       durationInMs: 100,
       headers: { 'cache-control': 'max-age=3600' },
+      reportId: 'test-report',
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = $fetch as unknown as ReturnType<typeof vi.fn>
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()
@@ -73,13 +79,15 @@ describe('useRunManager', () => {
     expect(runs.value[0]?.url).toBe('https://example.com')
     expect(mockFetch).toHaveBeenCalledWith('/api/inspect-url', {
       method: 'POST',
-      body: { url: 'https://example.com' },
+      body: {
+        url: 'https://example.com',
+        currentReportId: null,
+      },
     })
   })
 
   it('handles API request error', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = $fetch as unknown as ReturnType<typeof vi.fn>
     mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()
