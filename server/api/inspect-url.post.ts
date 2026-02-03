@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import { saveRun } from '~server/db'
+import { saveRun, saveReport, getReport } from '~server/db'
 
 const generateRunId = (url: string, timestamp: number): string =>
   createHash('sha256')
@@ -7,8 +7,14 @@ const generateRunId = (url: string, timestamp: number): string =>
     .digest('hex')
     .slice(0, 8)
 
+const generateReportId = (runIds: string[], timestamp: number): string =>
+  createHash('sha256')
+    .update(`${runIds.join(',')}-${timestamp}`)
+    .digest('hex')
+    .slice(0, 8)
+
 export default defineEventHandler(async (event) => {
-  const { url } = await readBody(event)
+  const { url, currentReportId } = await readBody(event)
 
   if (!url) {
     throw createError({
@@ -58,5 +64,38 @@ export default defineEventHandler(async (event) => {
 
   await saveRun(run)
 
-  return run
+  // Handle report creation/updating
+  let newReportId: string
+  const timestamp = Date.now()
+
+  if (currentReportId) {
+    // Get existing report and create a new one with the additional run
+    const existingReport = await getReport(currentReportId)
+    const newRunIds = [...existingReport.runIds, run.runId]
+    newReportId = generateReportId(newRunIds, timestamp)
+
+    const newReport = {
+      reportId: newReportId,
+      runIds: newRunIds,
+      createdAt: timestamp,
+    }
+
+    await saveReport(newReport)
+  }
+  else {
+    // Create a new report with just this run
+    newReportId = generateReportId([run.runId], timestamp)
+    const newReport = {
+      reportId: newReportId,
+      runIds: [run.runId],
+      createdAt: timestamp,
+    }
+
+    await saveReport(newReport)
+  }
+
+  return {
+    ...run,
+    reportId: newReportId,
+  }
 })
