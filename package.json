@@ -14,7 +14,7 @@
     "lint:fix": "eslint . --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "test:unit": "vitest",
+    "test:unit": "vitest run",
     "test": "pnpm run typecheck && pnpm run lint && pnpm run test:unit",
     "typecheck": "nuxi typecheck"
   },
