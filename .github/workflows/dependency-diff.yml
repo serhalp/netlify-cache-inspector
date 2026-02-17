@@ -1,0 +1,23 @@
+name: Dependency Diff
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-diff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: e18e/action-dependency-diff@v1
+        with:
+          # Too noisy. Will enable if it ever supports reporting *changes* in duplicates.
+          duplicate-threshold: "999"
+          # Always report size diff.
+          size-threshold: "-1"
