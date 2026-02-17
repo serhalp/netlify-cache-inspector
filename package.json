@@ -19,7 +19,7 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
-    "@netlify/blobs": "^9.0.0",
+    "@netlify/blobs": "^10.7.0",
     "@nuxt/eslint": "^1.15.1",
     "date-fns": "^4.1.0",
     "nuxt": "^4.3.1",
@@ -27,7 +27,7 @@
     "vue-router": "^5.0.2"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^3.14.2",
+    "@nuxt/test-utils": "^4.0.0",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^27.0.0",
     "typescript": "^5.6.2",
