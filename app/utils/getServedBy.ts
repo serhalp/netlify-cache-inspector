@@ -84,7 +84,7 @@ const getServedBySource = (
  * than once in the handling of a given request, but we can't distinguish those from dupes. So just dedupe.
  */
 const fixDuplicatedCdnNodes = (unfixedCdnNodes: string): string => {
-  return Array.from(new Set(unfixedCdnNodes.split(', '))).join(', ')
+  return [...new Set(unfixedCdnNodes.split(', '))].join(', ')
 }
 
 export const getServedBy = (
