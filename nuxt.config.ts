@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
 
-  modules: ['@nuxt/eslint', '@nuxt/test-utils/module'],
+  modules: ['@nuxt/eslint', '@nuxt/test-utils/module', '@netlify/nuxt'],
   devtools: { enabled: true },
 
   app: {

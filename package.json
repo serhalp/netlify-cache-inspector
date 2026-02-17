@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.0",
+    "@netlify/nuxt": "0.2.24",
     "@nuxt/eslint": "^1.15.1",
     "date-fns": "^4.1.0",
     "nuxt": "^4.3.1",
