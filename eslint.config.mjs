@@ -1,7 +1,8 @@
 // @ts-check
+import e18e from '@e18e/eslint-plugin'
 import withNuxt from './.nuxt/eslint.config.mjs'
 
-export default withNuxt().override('nuxt/vue/rules', {
+export default withNuxt().append(e18e.configs.recommended).override('nuxt/vue/rules', {
   rules: {
     'vue/html-self-closing': [
       'error',
