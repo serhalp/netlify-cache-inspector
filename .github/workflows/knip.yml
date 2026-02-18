@@ -1,0 +1,25 @@
+name: Knip
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  knip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+      - name: Set up PNPM
+        run: corepack enable
+      - run: pnpm install
+
+      - run: pnpm run knip
