@@ -143,7 +143,8 @@ onUnmounted(() => {
                   @focus="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
                   @blur="handleDataKeyLeave"
                 >
-                  Forwarded because
+                  <span class="label-full">Forwarded because</span>
+                  <span class="label-short">Fwd because</span>
                 </dt>
                 <dd
                   class="data-value"
@@ -172,7 +173,8 @@ onUnmounted(() => {
                   @focus="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
                   @blur="handleDataKeyLeave"
                 >
-                  Forwarded status
+                  <span class="label-full">Forwarded status</span>
+                  <span class="label-short">Fwd status</span>
                 </dt>
                 <dd
                   class="data-value"
@@ -817,6 +819,19 @@ onUnmounted(() => {
 
 .cache-children .data-key {
   min-width: 10rem;
+}
+
+.label-short {
+  display: none;
+}
+
+@container (max-width: 400px) {
+  .label-full {
+    display: none;
+  }
+  .label-short {
+    display: inline;
+  }
 }
 
 :is(.dark) .data-key {
