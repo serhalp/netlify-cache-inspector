@@ -3,43 +3,16 @@ import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
 
-  modules: ['@nuxt/eslint', '@nuxt/test-utils/module', '@netlify/nuxt'],
+  modules: ['@unocss/nuxt', '@nuxt/eslint', '@nuxt/test-utils/module', '@netlify/nuxt'],
   devtools: { enabled: true },
 
   app: {
     head: {
       title: 'Netlify Cache Inspector',
-      link: [
-        // See https://example-styles.netlify.app/.
-        {
-          rel: 'preload',
-          href: 'https://example-styles.netlify.app/fonts/PacaembuVar-latin.woff2',
-          as: 'font',
-          type: 'font/woff2',
-          crossorigin: '',
-        },
-        {
-          rel: 'preload',
-          href: 'https://example-styles.netlify.app/fonts/MulishVar-latin.woff2',
-          as: 'font',
-          type: 'font/woff2',
-          crossorigin: '',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://example-styles.netlify.app/styles.css',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/default.min.css',
-        },
-      ],
       script: [
         {
-          src: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js',
-        },
-        {
-          onload: `hljs.highlightAll()`,
+          // Prevent FOUC: apply dark class before first paint
+          innerHTML: `(function(){try{var m=localStorage.getItem('color-mode');if(m==='dark'||(m!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()`,
         },
       ],
     },

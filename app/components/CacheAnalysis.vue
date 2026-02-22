@@ -60,705 +60,846 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <div>
+  <div class="text-sm">
+    <div class="mb-1">
       <span
         class="tooltip-trigger"
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('served-by'))"
         :aria-label="`Served by: ${getFieldTooltip('served-by').text}`"
-      >Served by:</span> <strong>{{ cacheAnalysis.servedBy.source }}</strong>
+      >Served by:</span> <strong class="text-neutral-800 dark:text-neutral-100">{{ cacheAnalysis.servedBy.source }}</strong>
     </div>
-    <div>
+    <div class="mb-3">
       <span
         class="tooltip-trigger"
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('cdn-nodes'))"
         :aria-label="`CDN nodes: ${getFieldTooltip('cdn-nodes').text}`"
-      >CDN node(s):</span> <code>{{ cacheAnalysis.servedBy.cdnNodes }}</code>
+      >CDN node(s):</span> <code class="inline-code">{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
-    <hr />
+    <hr class="separator" />
 
-    <dl>
-      <dt class="cache-heading">
-        <h4>
-          🎬 Request from client
-          <br />
-          ↓
-        </h4>
-      </dt>
-      <dd />
+    <dl class="space-y-0">
+      <div class="lifecycle-step">
+        <span class="lifecycle-icon">&#x25B6;</span>
+        <span class="mono-label">Request from client</span>
+      </div>
 
-      <template
-        v-for="(
-          { cacheName, parameters }, cacheIndex
-        ) in cacheAnalysis.cacheStatus"
-        :key="cacheIndex"
-      >
-        <!-- This is a bit of a hack to use the pretty <dt> styling but with sections. -->
-        <!-- I should probably just do something custom instead. -->
-        <dt class="cache-heading">
+      <div class="lifecycle-flow">
+        <template
+          v-for="(
+            { cacheName, parameters }, cacheIndex
+          ) in cacheAnalysis.cacheStatus"
+          :key="cacheIndex"
+        >
           <h4
             tabindex="0"
-            class="cache-name-heading"
+            class="cache-heading"
             :title="formatTooltip(getCacheNameTooltip(cacheName))"
           >
-            ↳ <em>{{ cacheName }}</em> cache
+            <span class="step-number">{{ cacheIndex + 1 }}</span>
+            {{ cacheName }} cache
           </h4>
-        </dt>
-        <dd />
 
+          <div class="cache-children">
+            <div
+              class="data-row"
+              :class="{ 'row-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
+            >
+              <dt
+                class="data-key"
+                tabindex="0"
+                :title="formatTooltip(getFieldTooltip('hit'))"
+                @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
+                @mouseleave="handleDataKeyLeave"
+                @focus="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
+                @blur="handleDataKeyLeave"
+              >
+                Hit
+              </dt>
+              <dd
+                class="data-value"
+                :class="{
+                  'value-matching': isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(parameters.hit),
+                  'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(parameters.hit),
+                }"
+              >
+                <span :class="parameters.hit ? 'text-green-400' : 'text-red-500'">{{ parameters.hit ? "Yes" : "No" }}</span>
+              </dd>
+            </div>
+
+            <template v-if="parameters.fwd">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('forwarded-because'))"
+                  @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
+                  @blur="handleDataKeyLeave"
+                >
+                  Forwarded because
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(parameters.fwd),
+                    'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(parameters.fwd),
+                  }"
+                  :title="formatTooltip(getForwardReasonTooltip(parameters.fwd))"
+                >
+                  {{ parameters.fwd }}
+                </dd>
+              </div>
+            </template>
+
+            <template v-if="parameters['fwd-status']">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('forwarded-status'))"
+                  @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
+                  @blur="handleDataKeyLeave"
+                >
+                  Forwarded status
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`Forwarded status-${cacheIndex}`) && isValueMatching(parameters['fwd-status']),
+                    'value-different': isKeyHovered(`Forwarded status-${cacheIndex}`) && !isValueMatching(parameters['fwd-status']),
+                  }"
+                >
+                  {{ parameters["fwd-status"] }}
+                </dd>
+              </div>
+            </template>
+
+            <template v-if="parameters.ttl">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('ttl'))"
+                  @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
+                  @blur="handleDataKeyLeave"
+                >
+                  TTL
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(parameters.ttl),
+                    'value-different': isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl),
+                  }"
+                  :title="formatHumanSeconds(parameters.ttl)"
+                >
+                  {{ formatSeconds(parameters.ttl) }}
+                  <span
+                    v-if="isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl) && getDelta(parameters.ttl)"
+                    class="delta"
+                  >
+                    ({{ getDelta(parameters.ttl) }})
+                  </span>
+                </dd>
+              </div>
+            </template>
+
+            <template v-if="parameters.stored">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('stored-response'))"
+                  @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
+                  @blur="handleDataKeyLeave"
+                >
+                  Stored the response
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`Stored the response-${cacheIndex}`) && isValueMatching(parameters.stored),
+                    'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(parameters.stored),
+                  }"
+                >
+                  <span :class="parameters.stored ? 'text-green-400' : 'text-red-500'">{{ parameters.stored ? "Yes" : "No" }}</span>
+                </dd>
+              </div>
+            </template>
+
+            <template v-if="parameters.collapsed">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('collapsed-requests'))"
+                  @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
+                  @blur="handleDataKeyLeave"
+                >
+                  Collapsed w/ other reqs
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && isValueMatching(parameters.collapsed),
+                    'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(parameters.collapsed),
+                  }"
+                >
+                  <span :class="parameters.collapsed ? 'text-green-400' : 'text-red-500'">{{ parameters.collapsed ? "Yes" : "No" }}</span>
+                </dd>
+              </div>
+            </template>
+
+            <template v-if="parameters.key">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`Cache key-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('cache-key'))"
+                  @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
+                  @blur="handleDataKeyLeave"
+                >
+                  Cache key
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(parameters.key),
+                    'value-different': isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(parameters.key),
+                  }"
+                >
+                  {{ parameters.key }}
+                </dd>
+              </div>
+            </template>
+
+            <template v-if="parameters.detail">
+              <div
+                class="data-row"
+                :class="{ 'row-highlighted': isKeyHovered(`Extra details-${cacheIndex}`) }"
+              >
+                <dt
+                  class="data-key"
+                  tabindex="0"
+                  :title="formatTooltip(getFieldTooltip('extra-details'))"
+                  @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
+                  @mouseleave="handleDataKeyLeave"
+                  @focus="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
+                  @blur="handleDataKeyLeave"
+                >
+                  Extra details
+                </dt>
+                <dd
+                  class="data-value"
+                  :class="{
+                    'value-matching': isKeyHovered(`Extra details-${cacheIndex}`) && isValueMatching(parameters.detail),
+                    'value-different': isKeyHovered(`Extra details-${cacheIndex}`) && !isValueMatching(parameters.detail),
+                  }"
+                >
+                  {{ parameters.detail }}
+                </dd>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+
+      <div class="lifecycle-step">
+        <span class="lifecycle-icon">&#x2691;</span>
+        <span class="mono-label">Response to client</span>
+      </div>
+
+      <div
+        class="data-row"
+        :class="{ 'row-highlighted': isKeyHovered('Cacheable') }"
+      >
         <dt
           class="data-key"
           tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
-          :title="formatTooltip(getFieldTooltip('hit'))"
-          @mouseenter="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
+          :title="formatTooltip(getFieldTooltip('cacheable'))"
+          @mouseenter="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
           @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover(`Hit-${cacheIndex}`, parameters.hit)"
+          @focus="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
           @blur="handleDataKeyLeave"
         >
-          Hit
+          Cacheable
         </dt>
         <dd
           class="data-value"
           :class="{
-            'key-highlighted': isKeyHovered(`Hit-${cacheIndex}`),
-            'value-matching': isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(parameters.hit),
-            'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(parameters.hit),
+            'value-matching': isKeyHovered('Cacheable') && isValueMatching(cacheAnalysis.cacheControl.isCacheable),
+            'value-different': isKeyHovered('Cacheable') && !isValueMatching(cacheAnalysis.cacheControl.isCacheable),
           }"
         >
-          {{ parameters.hit ? "✅" : "❌" }}
+          <span :class="cacheAnalysis.cacheControl.isCacheable ? 'text-green-400' : 'text-red-500'">{{ cacheAnalysis.cacheControl.isCacheable ? "Yes" : "No" }}</span>
         </dd>
-
-        <template v-if="parameters.fwd">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('forwarded-because'))"
-            @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
-            @blur="handleDataKeyLeave"
-          >
-            Forwarded because
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`Forwarded because-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(parameters.fwd),
-              'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(parameters.fwd),
-            }"
-            :title="formatTooltip(getForwardReasonTooltip(parameters.fwd))"
-          >
-            {{ parameters.fwd }}
-          </dd>
-        </template>
-
-        <template v-if="parameters['fwd-status']">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('forwarded-status'))"
-            @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
-            @blur="handleDataKeyLeave"
-          >
-            Forwarded status
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`Forwarded status-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Forwarded status-${cacheIndex}`) && isValueMatching(parameters['fwd-status']),
-              'value-different': isKeyHovered(`Forwarded status-${cacheIndex}`) && !isValueMatching(parameters['fwd-status']),
-            }"
-          >
-            {{ parameters["fwd-status"] }}
-          </dd>
-        </template>
-
-        <template v-if="parameters.ttl">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('ttl'))"
-            @mouseenter="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`TTL-${cacheIndex}`, parameters.ttl)"
-            @blur="handleDataKeyLeave"
-          >
-            TTL
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`TTL-${cacheIndex}`),
-              'value-matching': isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(parameters.ttl),
-              'value-different': isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl),
-            }"
-            :title="formatHumanSeconds(parameters.ttl)"
-          >
-            {{ formatSeconds(parameters.ttl) }}
-            <span
-              v-if="isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl) && getDelta(parameters.ttl)"
-              class="delta"
-            >
-              ({{ getDelta(parameters.ttl) }})
-            </span>
-          </dd>
-        </template>
-
-        <template v-if="parameters.stored">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('stored-response'))"
-            @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
-            @blur="handleDataKeyLeave"
-          >
-            Stored the response
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`Stored the response-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Stored the response-${cacheIndex}`) && isValueMatching(parameters.stored),
-              'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(parameters.stored),
-            }"
-          >
-            {{ parameters.stored ? "✅" : "❌" }}
-          </dd>
-        </template>
-
-        <template v-if="parameters.collapsed">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('collapsed-requests'))"
-            @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
-            @blur="handleDataKeyLeave"
-          >
-            Collapsed w/ other reqs
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && isValueMatching(parameters.collapsed),
-              'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(parameters.collapsed),
-            }"
-          >
-            {{ parameters.collapsed ? "✅" : "❌" }}
-          </dd>
-        </template>
-
-        <template v-if="parameters.key">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('cache-key'))"
-            @mouseenter="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`Cache key-${cacheIndex}`, parameters.key)"
-            @blur="handleDataKeyLeave"
-          >
-            Cache key
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`Cache key-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(parameters.key),
-              'value-different': isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(parameters.key),
-            }"
-          >
-            {{ parameters.key }}
-          </dd>
-        </template>
-
-        <template v-if="parameters.detail">
-          <dt
-            class="data-key"
-            tabindex="0"
-            :class="{ 'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`) }"
-            :title="formatTooltip(getFieldTooltip('extra-details'))"
-            @mouseenter="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
-            @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover(`Extra details-${cacheIndex}`, parameters.detail)"
-            @blur="handleDataKeyLeave"
-          >
-            Extra details
-          </dt>
-          <dd
-            class="data-value"
-            :class="{
-              'key-highlighted': isKeyHovered(`Extra details-${cacheIndex}`),
-              'value-matching': isKeyHovered(`Extra details-${cacheIndex}`) && isValueMatching(parameters.detail),
-              'value-different': isKeyHovered(`Extra details-${cacheIndex}`) && !isValueMatching(parameters.detail),
-            }"
-          >
-            {{ parameters.detail }}
-          </dd>
-        </template>
-      </template>
-
-      <dt class="cache-heading">
-        <h4>
-          ↓
-          <br />
-          🏁 Response to client
-        </h4>
-      </dt>
-      <dd />
-
-      <dt
-        class="data-key"
-        tabindex="0"
-        :class="{ 'key-highlighted': isKeyHovered('Cacheable') }"
-        :title="formatTooltip(getFieldTooltip('cacheable'))"
-        @mouseenter="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
-        @mouseleave="handleDataKeyLeave"
-        @focus="handleDataKeyHover('Cacheable', cacheAnalysis.cacheControl.isCacheable)"
-        @blur="handleDataKeyLeave"
-      >
-        Cacheable
-      </dt>
-      <dd
-        class="data-value"
-        :class="{
-          'key-highlighted': isKeyHovered('Cacheable'),
-          'value-matching': isKeyHovered('Cacheable') && isValueMatching(cacheAnalysis.cacheControl.isCacheable),
-          'value-different': isKeyHovered('Cacheable') && !isValueMatching(cacheAnalysis.cacheControl.isCacheable),
-        }"
-      >
-        {{ cacheAnalysis.cacheControl.isCacheable ? "✅" : "❌" }}
-      </dd>
+      </div>
 
       <template v-if="cacheAnalysis.cacheControl.age">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('Age') }"
-          :title="formatTooltip(getFieldTooltip('age'))"
-          @mouseenter="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('Age') }"
         >
-          Age
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('Age'),
-            'value-matching': isKeyHovered('Age') && isValueMatching(cacheAnalysis.cacheControl.age),
-            'value-different': isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age),
-          }"
-          :title="formatHumanSeconds(cacheAnalysis.cacheControl.age)"
-        >
-          {{ formatSeconds(cacheAnalysis.cacheControl.age) }}
-          <span
-            v-if="isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age) && getDelta(cacheAnalysis.cacheControl.age)"
-            class="delta"
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('age'))"
+            @mouseenter="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('Age', cacheAnalysis.cacheControl.age)"
+            @blur="handleDataKeyLeave"
           >
-            ({{ getDelta(cacheAnalysis.cacheControl.age) }})
-          </span>
-        </dd>
+            Age
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('Age') && isValueMatching(cacheAnalysis.cacheControl.age),
+              'value-different': isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.age)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.age) }}
+            <span
+              v-if="isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age) && getDelta(cacheAnalysis.cacheControl.age)"
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.age) }})
+            </span>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.date">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('Date') }"
-          :title="formatTooltip(getFieldTooltip('date'))"
-          @mouseenter="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('Date') }"
         >
-          Date
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('Date'),
-            'value-matching': isKeyHovered('Date') && isValueMatching(cacheAnalysis.cacheControl.date),
-            'value-different': isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date),
-          }"
-        >
-          {{ formatDate(cacheAnalysis.cacheControl.date) }}
-          <span
-            v-if="isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date) && getDelta(cacheAnalysis.cacheControl.date)"
-            class="delta"
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('date'))"
+            @mouseenter="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('Date', cacheAnalysis.cacheControl.date)"
+            @blur="handleDataKeyLeave"
           >
-            ({{ getDelta(cacheAnalysis.cacheControl.date) }})
-          </span>
-        </dd>
+            Date
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('Date') && isValueMatching(cacheAnalysis.cacheControl.date),
+              'value-different': isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date),
+            }"
+          >
+            {{ formatDate(cacheAnalysis.cacheControl.date) }}
+            <span
+              v-if="isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date) && getDelta(cacheAnalysis.cacheControl.date)"
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.date) }})
+            </span>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.etag">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('ETag') }"
-          :title="formatTooltip(getFieldTooltip('etag'))"
-          @mouseenter="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('ETag') }"
         >
-          ETag
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('ETag'),
-            'value-matching': isKeyHovered('ETag') && isValueMatching(cacheAnalysis.cacheControl.etag),
-            'value-different': isKeyHovered('ETag') && !isValueMatching(cacheAnalysis.cacheControl.etag),
-          }"
-        >
-          <code>{{ cacheAnalysis.cacheControl.etag }}</code>
-        </dd>
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('etag'))"
+            @mouseenter="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('ETag', cacheAnalysis.cacheControl.etag)"
+            @blur="handleDataKeyLeave"
+          >
+            ETag
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('ETag') && isValueMatching(cacheAnalysis.cacheControl.etag),
+              'value-different': isKeyHovered('ETag') && !isValueMatching(cacheAnalysis.cacheControl.etag),
+            }"
+          >
+            <code class="inline-code">{{ cacheAnalysis.cacheControl.etag }}</code>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.expiresAt">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('Expires at') }"
-          :title="formatTooltip(getFieldTooltip('expires-at'))"
-          @mouseenter="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('Expires at') }"
         >
-          Expires at
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('Expires at'),
-            'value-matching': isKeyHovered('Expires at') && isValueMatching(cacheAnalysis.cacheControl.expiresAt),
-            'value-different': isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt),
-          }"
-        >
-          {{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}
-          <span
-            v-if="isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt) && getDelta(cacheAnalysis.cacheControl.expiresAt)"
-            class="delta"
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('expires-at'))"
+            @mouseenter="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('Expires at', cacheAnalysis.cacheControl.expiresAt)"
+            @blur="handleDataKeyLeave"
           >
-            ({{ getDelta(cacheAnalysis.cacheControl.expiresAt) }})
-          </span>
-        </dd>
+            Expires at
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('Expires at') && isValueMatching(cacheAnalysis.cacheControl.expiresAt),
+              'value-different': isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt),
+            }"
+          >
+            {{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}
+            <span
+              v-if="isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt) && getDelta(cacheAnalysis.cacheControl.expiresAt)"
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.expiresAt) }})
+            </span>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.ttl">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('TTL (browser)') }"
-          :title="formatTooltip(getFieldTooltip('ttl-browser'))"
-          @mouseenter="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('TTL (browser)') }"
         >
-          TTL{{
-            cacheAnalysis.cacheControl.netlifyCdnTtl
-              || cacheAnalysis.cacheControl.cdnTtl
-              ? " (browser)"
-              : ""
-          }}
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('TTL (browser)'),
-            'value-matching': isKeyHovered('TTL (browser)') && isValueMatching(cacheAnalysis.cacheControl.ttl),
-            'value-different': isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl),
-          }"
-          :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
-        >
-          {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
-          <span
-            v-if="isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl) && getDelta(cacheAnalysis.cacheControl.ttl)"
-            class="delta"
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('ttl-browser'))"
+            @mouseenter="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('TTL (browser)', cacheAnalysis.cacheControl.ttl)"
+            @blur="handleDataKeyLeave"
           >
-            ({{ getDelta(cacheAnalysis.cacheControl.ttl) }})
-          </span>
-        </dd>
+            TTL{{
+              cacheAnalysis.cacheControl.netlifyCdnTtl
+                || cacheAnalysis.cacheControl.cdnTtl
+                ? " (browser)"
+                : ""
+            }}
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('TTL (browser)') && isValueMatching(cacheAnalysis.cacheControl.ttl),
+              'value-different': isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
+            <span
+              v-if="isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl) && getDelta(cacheAnalysis.cacheControl.ttl)"
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.ttl) }})
+            </span>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.cdnTtl">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('TTL (CDN)') }"
-          :title="formatTooltip(getFieldTooltip('ttl-cdn'))"
-          @mouseenter="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('TTL (CDN)') }"
         >
-          TTL ({{
-            cacheAnalysis.cacheControl.netlifyCdnTtl
-              ? "other CDNs"
-              : "Netlify CDN"
-          }})
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('TTL (CDN)'),
-            'value-matching': isKeyHovered('TTL (CDN)') && isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
-            'value-different': isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
-          }"
-          :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)"
-        >
-          {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
-          <span
-            v-if="isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl) && getDelta(cacheAnalysis.cacheControl.cdnTtl)"
-            class="delta"
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('ttl-cdn'))"
+            @mouseenter="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
+            @blur="handleDataKeyLeave"
           >
-            ({{ getDelta(cacheAnalysis.cacheControl.cdnTtl) }})
-          </span>
-        </dd>
+            TTL ({{
+              cacheAnalysis.cacheControl.netlifyCdnTtl
+                ? "other CDNs"
+                : "Netlify CDN"
+            }})
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('TTL (CDN)') && isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
+              'value-different': isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
+            <span
+              v-if="isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl) && getDelta(cacheAnalysis.cacheControl.cdnTtl)"
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.cdnTtl) }})
+            </span>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.netlifyCdnTtl">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
-          :title="formatTooltip(getFieldTooltip('ttl-netlify-cdn'))"
-          @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
         >
-          TTL (Netlify CDN)
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('TTL (Netlify CDN)'),
-            'value-matching': isKeyHovered('TTL (Netlify CDN)') && isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
-            'value-different': isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
-          }"
-          :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)"
-        >
-          {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
-          <span
-            v-if="isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl) && getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)"
-            class="delta"
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('ttl-netlify-cdn'))"
+            @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
+            @blur="handleDataKeyLeave"
           >
-            ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl) }})
-          </span>
-        </dd>
+            TTL (Netlify CDN)
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('TTL (Netlify CDN)') && isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
+              'value-different': isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
+            <span
+              v-if="isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl) && getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)"
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl) }})
+            </span>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.vary">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('Vary') }"
-          :title="formatTooltip(getFieldTooltip('vary'))"
-          @mouseenter="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('Vary') }"
         >
-          Vary
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('Vary'),
-            'value-matching': isKeyHovered('Vary') && isValueMatching(cacheAnalysis.cacheControl.vary),
-            'value-different': isKeyHovered('Vary') && !isValueMatching(cacheAnalysis.cacheControl.vary),
-          }"
-        >
-          <code>{{ cacheAnalysis.cacheControl.vary }}</code>
-        </dd>
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('vary'))"
+            @mouseenter="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('Vary', cacheAnalysis.cacheControl.vary)"
+            @blur="handleDataKeyLeave"
+          >
+            Vary
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('Vary') && isValueMatching(cacheAnalysis.cacheControl.vary),
+              'value-different': isKeyHovered('Vary') && !isValueMatching(cacheAnalysis.cacheControl.vary),
+            }"
+          >
+            <code class="inline-code">{{ cacheAnalysis.cacheControl.vary }}</code>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.netlifyVary">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('Netlify-Vary') }"
-          :title="formatTooltip(getFieldTooltip('netlify-vary'))"
-          @mouseenter="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('Netlify-Vary') }"
         >
-          Netlify-Vary
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('Netlify-Vary'),
-            'value-matching': isKeyHovered('Netlify-Vary') && isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
-            'value-different': isKeyHovered('Netlify-Vary') && !isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
-          }"
-        >
-          <code>{{ cacheAnalysis.cacheControl.netlifyVary }}</code>
-        </dd>
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('netlify-vary'))"
+            @mouseenter="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('Netlify-Vary', cacheAnalysis.cacheControl.netlifyVary)"
+            @blur="handleDataKeyLeave"
+          >
+            Netlify-Vary
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('Netlify-Vary') && isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
+              'value-different': isKeyHovered('Netlify-Vary') && !isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
+            }"
+          >
+            <code class="inline-code">{{ cacheAnalysis.cacheControl.netlifyVary }}</code>
+          </dd>
+        </div>
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.revalidate">
-        <dt
-          class="data-key"
-          tabindex="0"
-          :class="{ 'key-highlighted': isKeyHovered('Revalidation') }"
-          :title="formatTooltip(getFieldTooltip('revalidation'))"
-          @mouseenter="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
-          @mouseleave="handleDataKeyLeave"
-          @focus="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
-          @blur="handleDataKeyLeave"
+        <div
+          class="data-row"
+          :class="{ 'row-highlighted': isKeyHovered('Revalidation') }"
         >
-          Revalidation
-        </dt>
-        <dd
-          class="data-value"
-          :class="{
-            'key-highlighted': isKeyHovered('Revalidation'),
-            'value-matching': isKeyHovered('Revalidation') && isValueMatching(cacheAnalysis.cacheControl.revalidate),
-            'value-different': isKeyHovered('Revalidation') && !isValueMatching(cacheAnalysis.cacheControl.revalidate),
-          }"
-        >
-          <code>{{ cacheAnalysis.cacheControl.revalidate }}</code>
-        </dd>
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('revalidation'))"
+            @mouseenter="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
+            @mouseleave="handleDataKeyLeave"
+            @focus="handleDataKeyHover('Revalidation', cacheAnalysis.cacheControl.revalidate)"
+            @blur="handleDataKeyLeave"
+          >
+            Revalidation
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching': isKeyHovered('Revalidation') && isValueMatching(cacheAnalysis.cacheControl.revalidate),
+              'value-different': isKeyHovered('Revalidation') && !isValueMatching(cacheAnalysis.cacheControl.revalidate),
+            }"
+          >
+            <code class="inline-code">{{ cacheAnalysis.cacheControl.revalidate }}</code>
+          </dd>
+        </div>
       </template>
     </dl>
   </div>
 </template>
 
 <style scoped>
-.container {
-  font-size: 0.9em;
+.separator {
+  border: none;
+  height: 1px;
+  background: #E9EBED;
+  margin: 0.75rem 0;
 }
 
-hr {
-  margin-top: 0.5em;
+:is(.dark) .separator {
+  background: rgba(208, 255, 254, 0.08);
 }
 
-dt {
-  margin-left: 1em;
+.lifecycle-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
-dt.cache-heading {
-  margin-left: 1em;
+.lifecycle-icon {
+  color: #05bdba;
+  font-size: 0.7rem;
 }
 
-dt.cache-heading h4 {
-  padding: 0;
-  /* I'm sorry */
-  margin-left: -0.5em;
-
-  font-size: 1.1em;
-}
-
-dt.cache-heading h4.cache-name-heading {
+.cache-heading {
+  font-family: 'Pacaembu', 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #016968;
   cursor: help;
-  display: inline-block;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
 }
 
-dt.cache-heading h4.cache-name-heading:focus {
-  outline: 2px solid rgb(59, 130, 246);
+:is(.dark) .cache-heading {
+  color: #14d8d4;
+}
+
+.cache-heading:focus-visible {
+  outline: 2px solid #05bdba;
   outline-offset: 2px;
-  border-radius: 4px;
-  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 0.25rem;
 }
 
-/* Default Netlify Examples styles add ": " */
-.cache-heading::after {
-  content: none;
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: #05bdba;
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-left: -1.625rem;
 }
 
-dd code {
-  font-size: 0.8em;
+:is(.dark) .step-number {
+  background: #14d8d4;
+  color: #0d1818;
+}
+
+.cache-children {
+  margin-top: 0.125rem;
+}
+
+.lifecycle-flow {
+  border-left: 2px dashed #D1D5DA;
+  margin-left: 0.45rem;
+  padding-left: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+:is(.dark) .lifecycle-flow {
+  border-color: rgba(208, 255, 254, 0.15);
+}
+
+.inline-code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  background-color: #F6F6F7;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
   overflow-wrap: anywhere;
 }
 
-/* Hover highlighting styles */
+:is(.dark) .inline-code {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.data-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.15s ease;
+}
+
 .data-key {
+  color: #545A61;
+  font-weight: 500;
+  min-width: 7rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  white-space: nowrap;
 }
 
-.data-key:hover {
-  background-color: rgba(59, 130, 246, 0.1);
+.cache-children .data-key {
+  min-width: 10rem;
 }
 
-.data-key:focus {
-  outline: 2px solid rgb(59, 130, 246);
+:is(.dark) .data-key {
+  color: #D1D5DA;
+}
+
+.data-key:focus-visible {
+  outline: 2px solid #05bdba;
   outline-offset: 2px;
-  background-color: rgba(59, 130, 246, 0.15);
+  border-radius: 0.25rem;
 }
 
-.data-key.key-highlighted {
-  background-color: rgba(59, 130, 246, 0.2);
-  font-weight: 600;
+.data-value {
+  color: #181A1C;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease;
+  overflow-wrap: anywhere;
 }
 
-.data-value.key-highlighted {
-  transition: background-color 0.2s ease;
+:is(.dark) .data-value {
+  color: #E9EBED;
 }
 
-.data-value.value-matching {
-  background-color: rgba(34, 197, 94, 0.2);
-  border-left: 3px solid rgb(34, 197, 94);
-  padding-left: 0.5em;
+.row-highlighted {
+  background-color: rgba(5, 189, 186, 0.06);
 }
 
-.data-value.value-different {
-  background-color: rgba(239, 68, 68, 0.1);
-  border-left: 3px solid rgb(239, 68, 68);
-  padding-left: 0.5em;
+:is(.dark) .row-highlighted {
+  background-color: rgba(5, 189, 186, 0.1);
 }
 
-/* Delta display styles */
+.row-highlighted .data-key {
+  font-weight: 700;
+  color: #05bdba;
+}
+
+.value-matching {
+  background-color: rgba(58, 195, 100, 0.12);
+  border-left: 3px solid #3ac364;
+  padding-left: 0.5rem;
+}
+
+.value-different {
+  background-color: rgba(254, 78, 92, 0.08);
+  border-left: 3px solid #fe4e5c;
+  padding-left: 0.5rem;
+}
+
 .delta {
   font-size: 0.8em;
   font-weight: 500;
-  color: rgb(107, 114, 128);
+  color: #545A61;
   margin-left: 0.25em;
 }
 
-/* Tooltip trigger accessibility styles */
+:is(.dark) .delta {
+  color: #9DA7B2;
+}
+
 .tooltip-trigger {
   cursor: help;
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: rgba(107, 114, 128, 0.5);
+  text-decoration-color: rgba(84, 90, 97, 0.6);
   text-underline-offset: 2px;
 }
 
-.tooltip-trigger:focus {
-  outline: 2px solid rgb(59, 130, 246);
+.tooltip-trigger:focus-visible {
+  outline: 2px solid #05bdba;
   outline-offset: 2px;
   border-radius: 2px;
-  background-color: rgba(59, 130, 246, 0.1);
 }
 
 .tooltip-trigger:hover {
-  text-decoration-color: rgba(107, 114, 128, 0.8);
+  text-decoration-color: rgba(84, 90, 97, 0.9);
+}
+
+:is(.dark) .tooltip-trigger {
+  text-decoration-color: rgba(157, 167, 178, 0.5);
+}
+
+:is(.dark) .tooltip-trigger:hover {
+  text-decoration-color: rgba(157, 167, 178, 0.8);
 }
 </style>

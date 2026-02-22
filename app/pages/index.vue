@@ -1,10 +1,12 @@
 <script setup lang="ts">
 const { runs, error, loading, handleRequestFormSubmit, handleClickClear } = useRunManager()
+const inputUrl = ref('https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page')
 </script>
 
 <template>
-  <main>
+  <div>
     <RequestForm
+      v-model:input-url="inputUrl"
       :loading="loading"
       @submit="handleRequestFormSubmit"
     />
@@ -13,10 +15,8 @@ const { runs, error, loading, handleRequestFormSubmit, handleClickClear } = useR
       :runs="runs"
       :error="error"
       :loading="loading"
+      :input-url="inputUrl"
       :on-clear="handleClickClear"
     />
-  </main>
+  </div>
 </template>
-
-<style scoped>
-</style>
