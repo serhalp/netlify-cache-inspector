@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+See also: [ARCHITECTURE.md](./ARCHITECTURE.md) for project structure and data flow, [CONTRIBUTING.md](./CONTRIBUTING.md) for development workflow and conventions.
+
 ## Project Overview
 
 Netlify Cache Inspector is a Nuxt 4 web app for inspecting and comparing HTTP cache headers on Netlify sites. Users submit a URL, the server fetches it with Netlify debug headers (`x-nf-debug-logging: 1`), and the frontend displays structured cache analysis. Multiple runs can be compared side-by-side with hover-based diffing.
