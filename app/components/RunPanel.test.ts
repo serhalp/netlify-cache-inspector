@@ -30,6 +30,7 @@ const mockProps = {
     'etag': '"abc123"',
   },
   enableDiffOnHover: false,
+  showUrl: true,
 }
 
 describe('RunPanel', () => {
@@ -47,7 +48,7 @@ describe('RunPanel', () => {
     })
 
     expect(wrapper.text()).toContain('https://example.com')
-    expect(wrapper.text()).toContain('HTTP 200 (150 ms)')
+    expect(wrapper.text()).toContain('HTTP 200')
     expect(wrapper.find('.cache-analysis-mock').exists()).toBe(true)
   })
 
@@ -64,10 +65,26 @@ describe('RunPanel', () => {
       },
     })
 
-    const permalink = wrapper.find('.run-permalink')
+    const permalink = wrapper.find('a[href="/run/test-run-id"]')
     expect(permalink.exists()).toBe(true)
-    expect(permalink.attributes('href')).toBe('/run/test-run-id')
-    expect(permalink.text()).toBe('🔗 Permalink')
+    expect(permalink.text()).toContain('Permalink')
+  })
+
+  it('displays status and duration', () => {
+    const wrapper = mount(RunPanel, {
+      props: mockProps,
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ['to'],
+          },
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('HTTP 200')
+    expect(wrapper.text()).toContain('150ms')
   })
 
   it('renders toggle control with static label', () => {
@@ -83,13 +100,9 @@ describe('RunPanel', () => {
       },
     })
 
-    const toggleControl = wrapper.find('.toggle-control')
-    expect(toggleControl.exists()).toBe(true)
-    expect(toggleControl.text()).toBe('Show raw headers')
-
-    const toggleLabel = wrapper.find('.toggle-label')
+    const toggleLabel = wrapper.find('label')
     expect(toggleLabel.exists()).toBe(true)
-    expect(toggleLabel.text()).toBe('Show raw headers')
+    expect(toggleLabel.text()).toContain('Show raw headers')
   })
 
   it('hides raw headers by default', () => {
@@ -158,6 +171,22 @@ describe('RunPanel', () => {
     expect(checkbox.attributes('aria-label')).toContain('https://example.com')
   })
 
+  it('hides URL when showUrl is false', () => {
+    const wrapper = mount(RunPanel, {
+      props: { ...mockProps, showUrl: false },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ['to'],
+          },
+        },
+      },
+    })
+
+    expect(wrapper.find('h3').exists()).toBe(false)
+  })
+
   it('label text remains static regardless of toggle state', async () => {
     const wrapper = mount(RunPanel, {
       props: mockProps,
@@ -171,14 +200,14 @@ describe('RunPanel', () => {
       },
     })
 
-    const toggleLabel = wrapper.find('.toggle-label')
-    expect(toggleLabel.text()).toBe('Show raw headers')
+    const label = wrapper.find('label')
+    expect(label.text()).toContain('Show raw headers')
 
     // Toggle the checkbox
     const checkbox = wrapper.find('input[type="checkbox"]')
     await checkbox.setValue(true)
 
     // Label should remain the same
-    expect(toggleLabel.text()).toBe('Show raw headers')
+    expect(label.text()).toContain('Show raw headers')
   })
 })

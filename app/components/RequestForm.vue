@@ -1,12 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{
   loading?: boolean
-  initialUrl?: string
 }>()
 
-const inputUrl = ref(
-  props.initialUrl ?? 'https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page',
-)
+const inputUrl = defineModel<string>('inputUrl', {
+  default: 'https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page',
+})
 
 const emit = defineEmits(['submit'])
 
@@ -22,15 +21,18 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="form">
-    <label class="url-input">
-      <strong>URL:</strong>
+  <div class="grid gap-3 w-full sm:grid-cols-[1fr_auto] sm:items-end">
+    <label class="block min-w-0">
+      <span class="mono-label mb-2 block">Target URL</span>
       <input
         v-model.trim="inputUrl"
+        class="url-input block w-full"
+        placeholder="https://your-site.netlify.app"
         @keyup.enter="handleSubmit()"
       />
     </label>
     <button
+      class="btn-primary whitespace-nowrap self-end"
       :disabled="props.loading"
       @click="handleSubmit()"
     >
@@ -40,26 +42,39 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
-.form {
-  display: flex;
-  gap: 1em;
-  align-content: center;
-  align-items: center;
-}
-
-label {
-  display: flex;
-  gap: 1em;
-  align-content: center;
-  align-items: center;
-
-  >* {
-    /* Override default from Netlify Examples style to vertically center easily */
-    margin-bottom: 0;
-  }
-}
-
 .url-input {
-  flex: 1;
+  padding: 0.625rem 1rem;
+  background: white;
+  border: 1px solid #D1D5DA;
+  border-radius: 9999px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.875rem;
+  color: #181A1C;
+  transition: all 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: #05bdba;
+  box-shadow: 0 0 0 3px rgba(5, 189, 186, 0.15);
+}
+
+.url-input::placeholder {
+  color: #778089;
+}
+
+:is(.dark) .url-input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(208, 255, 254, 0.15);
+  color: #E9EBED;
+}
+
+:is(.dark) .url-input:focus {
+  border-color: #05bdba;
+  box-shadow: 0 0 0 3px rgba(5, 189, 186, 0.2);
+}
+
+:is(.dark) .url-input::placeholder {
+  color: #778089;
 }
 </style>

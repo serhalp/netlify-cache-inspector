@@ -22,6 +22,7 @@ export default {
     ],
     config: ['nuxt.config.ts'],
   },
+  ignoreFiles: ['uno.config.ts'],
   ignoreDependencies: [
     'vue',
     'vue-router',

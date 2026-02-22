@@ -19,26 +19,23 @@ if (initialRuns.value) {
   setRuns(initialRuns.value)
 }
 
-// Get the URL from the loaded run - we know it exists since we successfully loaded the run
-const runUrl = computed(() => {
-  return initialRuns.value?.[0]?.url
-})
+const inputUrl = ref(initialRuns.value?.[0]?.url ?? '')
 </script>
 
 <template>
-  <main>
+  <div>
     <!-- Only render RequestForm when we have loaded the initial run -->
     <RequestForm
       v-if="!initialLoading"
+      v-model:input-url="inputUrl"
       :loading="loading"
-      :initial-url="runUrl"
       @submit="handleRequestFormSubmit"
     />
 
     <!-- Show loading state while initial run is loading -->
     <div
       v-else-if="initialLoading"
-      class="loading-state"
+      class="py-6 text-center text-neutral-600 dark:text-neutral-300"
     >
       Loading run...
     </div>
@@ -47,15 +44,8 @@ const runUrl = computed(() => {
       :runs="runs"
       :error="error"
       :loading="loading"
+      :input-url="inputUrl"
       :on-clear="handleClickClear"
     />
-  </main>
+  </div>
 </template>
-
-<style scoped>
-.loading-state {
-  padding: 1em;
-  text-align: center;
-  color: #666;
-}
-</style>

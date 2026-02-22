@@ -50,10 +50,10 @@ describe('RequestForm', () => {
     expect(input.element.value).toBe('https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page')
   })
 
-  it('uses initialUrl prop when provided', () => {
+  it('uses inputUrl model value when provided', () => {
     const customUrl = 'https://example.com/test-page'
     const wrapper = mount(RequestForm, {
-      props: { initialUrl: customUrl },
+      props: { inputUrl: customUrl },
     })
     const input = wrapper.find('input')
     expect(input.element.value).toBe(customUrl)

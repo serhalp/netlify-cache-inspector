@@ -11,7 +11,7 @@ vi.mock('./RunPanel.vue', () => ({
   default: {
     name: 'RunPanel',
     template: '<div class="run-panel-mock">{{ runId }}</div>',
-    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders', 'enableDiffOnHover'],
+    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders', 'enableDiffOnHover', 'showUrl'],
   },
 }))
 
@@ -39,12 +39,14 @@ describe('RunDisplay', () => {
         runs: [],
         error: null,
         loading: true,
+        inputUrl: '',
         onClear: vi.fn(),
       },
     })
 
-    expect(wrapper.find('.loading-indicator').exists()).toBe(true)
-    expect(wrapper.find('.loading-indicator').text()).toBe('⏳ Inspecting URL...')
+    const loading = wrapper.find('[data-testid="loading-indicator"]')
+    expect(loading.exists()).toBe(true)
+    expect(loading.text()).toBe('Inspecting URL...')
   })
 
   it('shows error message when error exists', () => {
@@ -54,12 +56,14 @@ describe('RunDisplay', () => {
         runs: [],
         error: errorMessage,
         loading: false,
+        inputUrl: '',
         onClear: vi.fn(),
       },
     })
 
-    expect(wrapper.find('.error').exists()).toBe(true)
-    expect(wrapper.find('.error').text()).toBe(errorMessage)
+    const error = wrapper.find('[data-testid="error"]')
+    expect(error.exists()).toBe(true)
+    expect(error.text()).toBe(errorMessage)
   })
 
   it('renders run panels for each run', () => {
@@ -68,6 +72,7 @@ describe('RunDisplay', () => {
         runs: mockRuns,
         error: null,
         loading: false,
+        inputUrl: '',
         onClear: vi.fn(),
       },
     })
@@ -85,13 +90,14 @@ describe('RunDisplay', () => {
         runs: mockRuns,
         error: null,
         loading: false,
+        inputUrl: '',
         onClear: mockOnClear,
       },
     })
 
     const clearButton = wrapper.find('button')
     expect(clearButton.exists()).toBe(true)
-    expect(clearButton.text()).toBe('Clear')
+    expect(clearButton.text()).toBe('Clear runs')
   })
 
   it('hides clear button when no runs exist', () => {
@@ -100,6 +106,7 @@ describe('RunDisplay', () => {
         runs: [],
         error: null,
         loading: false,
+        inputUrl: '',
         onClear: vi.fn(),
       },
     })
@@ -114,6 +121,7 @@ describe('RunDisplay', () => {
         runs: mockRuns,
         error: null,
         loading: false,
+        inputUrl: '',
         onClear: mockOnClear,
       },
     })

@@ -2,44 +2,38 @@
 import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
-
-  modules: ['@nuxt/eslint', '@nuxt/test-utils/module', '@netlify/nuxt'],
+  modules: [
+    '@unocss/nuxt',
+    '@nuxt/eslint',
+    '@nuxt/test-utils/module',
+    '@netlify/nuxt',
+  ],
   devtools: { enabled: true },
 
   app: {
     head: {
       title: 'Netlify Cache Inspector',
       link: [
-        // See https://example-styles.netlify.app/.
         {
-          rel: 'preload',
-          href: 'https://example-styles.netlify.app/fonts/PacaembuVar-latin.woff2',
-          as: 'font',
-          type: 'font/woff2',
-          crossorigin: '',
+          rel: 'icon',
+          type: 'image/png',
+          href: '/favicon-96x96.png',
+          sizes: '96x96',
         },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'shortcut icon', href: '/favicon.ico' },
         {
-          rel: 'preload',
-          href: 'https://example-styles.netlify.app/fonts/MulishVar-latin.woff2',
-          as: 'font',
-          type: 'font/woff2',
-          crossorigin: '',
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/apple-touch-icon.png',
         },
-        {
-          rel: 'stylesheet',
-          href: 'https://example-styles.netlify.app/styles.css',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/default.min.css',
-        },
+        { rel: 'manifest', href: '/site.webmanifest' },
       ],
+      meta: [{ name: 'apple-mobile-web-app-title', content: 'ntlcache' }],
       script: [
         {
-          src: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js',
-        },
-        {
-          onload: `hljs.highlightAll()`,
+          // Prevent FOUC: apply dark class before first paint
+          innerHTML: `(function(){try{var m=localStorage.getItem('color-mode');if(m==='dark'||(m!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()`,
         },
       ],
     },
