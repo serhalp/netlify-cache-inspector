@@ -12,8 +12,8 @@ importers:
         specifier: ^10.7.0
         version: 10.7.0
       '@netlify/nuxt':
-        specifier: 0.2.24
-        version: 0.2.24(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)
+        specifier: 0.2.25
+        version: 0.2.25(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)
       '@nuxt/eslint':
         specifier: ^1.15.1
         version: 1.15.1(@typescript-eslint/utils@8.56.0(eslint@9.14.0(jiti@2.6.1))(typescript@5.9.3))(@vue/compiler-sfc@3.5.29)(eslint-import-resolver-node@0.3.9)(eslint@9.14.0(jiti@2.6.1))(magicast@0.5.2)(typescript@5.9.3)(vite@7.3.1(@types/node@24.0.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))
@@ -956,8 +956,8 @@ packages:
     resolution: {integrity: sha512-wuiaKRbRLG/L049yR+7/p7xSKa4jx6JRBnweRYwP6mMYn9D+x/wccPgsxEMtKqthmow6frs7ZSrNYTt9U3yUdQ==}
     engines: {node: ^14.16.0 || >=16.0.0}
 
-  '@netlify/cache@3.3.5':
-    resolution: {integrity: sha512-u4wx2se/wRvLsU/sQlT5ruofEwMjo5kg6ybEdQLuIswH6+6+9BCFF8VX4ByBP3MZJl3/pxExmcPiFqo0TBP3tg==}
+  '@netlify/cache@3.4.0':
+    resolution: {integrity: sha512-yOHqRfwtLhtL5DaTjjLtwnBu+25TfcfSU6XQ7zDZ3YX+JPYvY6Qs3l9uKn6cm+ty3ER2ODhGS6fsNjptnHRDPg==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/config@24.4.0':
@@ -969,8 +969,8 @@ packages:
     resolution: {integrity: sha512-qziF8R9kf7mRNgSpmUH96O0aV1ZiwK4c9ZecFQbDSQuYhgy9GY1WTjiQF0oQnohjTjWNtXhrU39LAeXWNLaBJg==}
     engines: {node: ^18.14.0 || >=20}
 
-  '@netlify/dev@4.11.2':
-    resolution: {integrity: sha512-quIKbuG7xD3yiWExuZA1Xl/b3Wc+/V3QjrNT4XX5m+dA/D54J61dABf1IGwQYNZHKiF5rVL7D3AwHNAojVQzuw==}
+  '@netlify/dev@4.11.3':
+    resolution: {integrity: sha512-U/zvV8yiX5EyFwuG+j6JqiqK/vWJpjEMUraGqNVc7pW9rO2pRJU6MxPbbuHSoNlK9+XPYDOZbtRxEwdckPSWUw==}
     engines: {node: '>=20.6.1'}
     peerDependencies:
       '@netlify/db-dev': 0.2.0
@@ -1013,8 +1013,8 @@ packages:
     resolution: {integrity: sha512-1X3fUmacCLMlPIqyeV5tdo6Wbf9aBSWobgr4DyRvg9zDV9jbKqgdN3BNbcUXmVaqfN+0iiv0k9p02mcRV3OyOw==}
     engines: {node: '>=20.6.1'}
 
-  '@netlify/nuxt@0.2.24':
-    resolution: {integrity: sha512-6WIhQZGS3rEO8DtKW7qRaBc/fL1KCK3EhshgSksAc7+UFzTlQibk6b9+dIa9aqJGDMikdA7+9togEEtFGbtTmA==}
+  '@netlify/nuxt@0.2.25':
+    resolution: {integrity: sha512-qMr6TZK3vt5Opevzf3fdmQ4P3X4H59R5KAAXZjK1bRdcyQR7H/cEMEZ+q90UzphUXrFI7hVlGbhUcq+U8NfgEQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@netlify/open-api@2.49.0':
@@ -1037,8 +1037,8 @@ packages:
     resolution: {integrity: sha512-cW8weDvsKV7zfia2m5EcBy6KILGoPD+eYZ3qWNGnIo05DGF28goPES0xKSDkNYgAF/2rRSIhie2qcBhbGVgSRg==}
     engines: {node: ^18.14.0 || >=20}
 
-  '@netlify/runtime@4.1.15':
-    resolution: {integrity: sha512-drX5NYNnqAMKnYsStRT8Q1ruNqd68QdMGdakdMtMb/aTaAtPCIug66BPP98YSWvgv9r7O5eO4NX/Ma7UkMVwvQ==}
+  '@netlify/runtime@4.1.16':
+    resolution: {integrity: sha512-GOXhRRSVndiDDTmmI19AWZjBwY9bPM3re8XP5F2ZOowzGWzVD3aOBH2lycwmA+iqSGVHWFcyaf0Ea0vLw8NA6g==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/serverless-functions-api@2.9.0':
@@ -7455,7 +7455,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@netlify/cache@3.3.5':
+  '@netlify/cache@3.4.0':
     dependencies:
       '@netlify/runtime-utils': 2.3.0
 
@@ -7505,7 +7505,7 @@ snapshots:
       uuid: 13.0.0
       write-file-atomic: 5.0.1
 
-  '@netlify/dev@4.11.2(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)':
+  '@netlify/dev@4.11.3(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)':
     dependencies:
       '@netlify/ai': 0.3.8
       '@netlify/blobs': 10.7.0
@@ -7516,7 +7516,7 @@ snapshots:
       '@netlify/headers': 2.1.3
       '@netlify/images': 1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.9.3)
       '@netlify/redirects': 3.1.5
-      '@netlify/runtime': 4.1.15
+      '@netlify/runtime': 4.1.16
       '@netlify/static': 3.1.3
       ulid: 3.0.2
     transitivePeerDependencies:
@@ -7648,9 +7648,9 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@netlify/nuxt@0.2.24(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)':
+  '@netlify/nuxt@0.2.25(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)':
     dependencies:
-      '@netlify/dev': 4.11.2(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)
+      '@netlify/dev': 4.11.3(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)
       '@netlify/dev-utils': 4.3.3
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       h3: 1.15.5
@@ -7710,10 +7710,10 @@ snapshots:
 
   '@netlify/runtime-utils@2.3.0': {}
 
-  '@netlify/runtime@4.1.15':
+  '@netlify/runtime@4.1.16':
     dependencies:
       '@netlify/blobs': 10.7.0
-      '@netlify/cache': 3.3.5
+      '@netlify/cache': 3.4.0
       '@netlify/runtime-utils': 2.3.0
       '@netlify/types': 2.3.0
     transitivePeerDependencies:
