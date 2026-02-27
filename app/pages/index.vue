@@ -38,7 +38,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
             <p class="font-body font-700 text-lg text-neutral-700 dark:text-neutral-200 mb-0.5">
               Deep inspection
             </p>
-            <p class="text-base text-neutral-500 dark:text-neutral-400 leading-snug">
+            <p class="text-base text-neutral-600 dark:text-neutral-400 leading-snug">
               Fetches with Netlify debug headers to reveal the full cache lifecycle
             </p>
           </div>
@@ -61,7 +61,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
             <p class="font-body font-700 text-lg text-neutral-700 dark:text-neutral-200 mb-0.5">
               Side-by-side comparison
             </p>
-            <p class="text-base text-neutral-500 dark:text-neutral-400 leading-snug">
+            <p class="text-base text-neutral-600 dark:text-neutral-400 leading-snug">
               Run multiple inspections and hover to compare field by field
             </p>
           </div>
@@ -84,7 +84,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
             <p class="font-body font-700 text-lg text-neutral-700 dark:text-neutral-200 mb-0.5">
               Shareable permalinks
             </p>
-            <p class="text-base text-neutral-500 dark:text-neutral-400 leading-snug">
+            <p class="text-base text-neutral-600 dark:text-neutral-400 leading-snug">
               Every run gets a unique link you can send to teammates
             </p>
           </div>

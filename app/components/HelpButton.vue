@@ -70,7 +70,7 @@ onUnmounted(() => {
           <li>See a structured breakdown of cache behavior: which layers hit or missed, TTLs, and more</li>
           <li>Run it again to <strong>compare</strong> side by side. Hover any field to diff values across runs</li>
         </ol>
-        <p class="text-base text-neutral-500 dark:text-neutral-400 mt-3 mb-0">
+        <p class="text-base text-neutral-600 dark:text-neutral-400 mt-3 mb-0">
           Each run is saved with a permalink you can share.
         </p>
       </div>
