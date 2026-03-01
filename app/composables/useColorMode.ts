@@ -32,8 +32,7 @@ export function useColorMode() {
 
     if (mode === 'system') {
       applyMode(resolveSystemMode())
-    }
-    else {
+    } else {
       applyMode(mode)
     }
   }
@@ -47,8 +46,7 @@ export function useColorMode() {
 
       if (colorMode.value === 'system') {
         applyMode(resolveSystemMode())
-      }
-      else {
+      } else {
         applyMode(colorMode.value)
       }
 

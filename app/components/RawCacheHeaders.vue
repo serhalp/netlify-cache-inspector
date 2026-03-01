@@ -36,8 +36,8 @@ onUpdated(highlightJson)
   padding-bottom: 0;
   border-radius: 0.5rem;
   overflow: hidden;
-  background: #F6F6F7;
-  border: 1px solid #E9EBED;
+  background: #f6f6f7;
+  border: 1px solid #e9ebed;
 }
 
 :is(.dark) .raw-pre {
@@ -47,7 +47,7 @@ onUpdated(highlightJson)
 
 :is(.dark) .raw-pre :deep(.hljs) {
   background: transparent;
-  color: #D1D5DA;
+  color: #d1d5da;
 }
 
 :is(.dark) .raw-pre :deep(.hljs-attr) {

@@ -64,7 +64,9 @@ describe('getCacheAnalysis', () => {
     const headers = {}
     const now = Date.now()
 
-    expect(() => getCacheAnalysis(headers, now)).toThrow('Could not determine who served the request')
+    expect(() => getCacheAnalysis(headers, now)).toThrow(
+      'Could not determine who served the request',
+    )
   })
 
   it('returns CdnOrigin when Netlify Edge has a cache miss', () => {
@@ -95,21 +97,22 @@ describe('parseCacheStatus', () => {
       {
         cacheName: 'Netlify Edge',
         parameters: {
-          'hit': true,
-          'fwd': undefined,
+          hit: true,
+          fwd: undefined,
           'fwd-status': undefined,
-          'ttl': undefined,
-          'stored': false,
-          'collapsed': false,
-          'key': undefined,
-          'detail': undefined,
+          ttl: undefined,
+          stored: false,
+          collapsed: false,
+          key: undefined,
+          detail: undefined,
         },
       },
     ])
   })
 
   it('parses multiple cache status entries with different parameters', () => {
-    const cacheStatus = '"Next.js"; hit, "Netlify Durable"; fwd=miss; stored, "Netlify Edge"; fwd=miss'
+    const cacheStatus =
+      '"Next.js"; hit, "Netlify Durable"; fwd=miss; stored, "Netlify Edge"; fwd=miss'
 
     const result = parseCacheStatus(cacheStatus)
 

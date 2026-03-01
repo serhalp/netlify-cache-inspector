@@ -1,11 +1,7 @@
 import { getServedBy, type ServedBy } from './getServedBy'
 import { parseCacheControl, type ParsedCacheControl } from './parseCacheControl'
 
-const CACHE_NAMES_SORTED_BY_RFC_9211 = [
-  'Next.js',
-  'Netlify Durable',
-  'Netlify Edge',
-]
+const CACHE_NAMES_SORTED_BY_RFC_9211 = ['Next.js', 'Netlify Durable', 'Netlify Edge']
 
 /**
  * Per the spec, these should be sorted from "the cache closest to the origin server" to "the cache
@@ -19,8 +15,8 @@ const fixNonconformingUnsortedEntries = (
     // If either or both of these is not in the array (i.e. index is -1), we wouldn't be able to
     // know where it should "go" so don't even bother explicitly handling it.
     return (
-      CACHE_NAMES_SORTED_BY_RFC_9211.indexOf(a.cacheName)
-      - CACHE_NAMES_SORTED_BY_RFC_9211.indexOf(b.cacheName)
+      CACHE_NAMES_SORTED_BY_RFC_9211.indexOf(a.cacheName) -
+      CACHE_NAMES_SORTED_BY_RFC_9211.indexOf(b.cacheName)
     )
   })
 }
@@ -55,16 +51,16 @@ export const parseCacheStatus = (
       return {
         cacheName: cacheName.slice(1, -1), // "Netlify Edge" -> Netlify Edge
         parameters: {
-          'hit': parametersByKey.has('hit'),
-          'fwd': parametersByKey.get(
-            'fwd',
-          ) as ParsedCacheStatusEntry['parameters']['fwd'],
-          'fwd-status': parametersByKey.has('fwd-status') ? Number(parametersByKey.get('fwd-status')) : undefined,
-          'ttl': parametersByKey.has('ttl') ? Number(parametersByKey.get('ttl')) : undefined,
-          'stored': parametersByKey.has('stored'),
-          'collapsed': parametersByKey.has('collapsed'),
-          'key': parametersByKey.get('key'),
-          'detail': parametersByKey.get('detail'),
+          hit: parametersByKey.has('hit'),
+          fwd: parametersByKey.get('fwd') as ParsedCacheStatusEntry['parameters']['fwd'],
+          'fwd-status': parametersByKey.has('fwd-status')
+            ? Number(parametersByKey.get('fwd-status'))
+            : undefined,
+          ttl: parametersByKey.has('ttl') ? Number(parametersByKey.get('ttl')) : undefined,
+          stored: parametersByKey.has('stored'),
+          collapsed: parametersByKey.has('collapsed'),
+          key: parametersByKey.get('key'),
+          detail: parametersByKey.get('detail'),
         },
       }
     })

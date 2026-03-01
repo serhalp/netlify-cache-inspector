@@ -5,6 +5,7 @@ This file provides comprehensive project-specific guidance for GitHub Copilot, A
 ## Tech Stack & Architecture
 
 This is a **Nuxt 3** application with the following key technologies:
+
 - **Frontend**: Vue 3 with Composition API, TypeScript
 - **Backend**: Nuxt server API routes
 - **Testing**: Vitest with Vue Test Utils, jsdom environment
@@ -13,6 +14,7 @@ This is a **Nuxt 3** application with the following key technologies:
 - **Node.js**: Requires >= 20.0.0
 
 ### Project Structure
+
 ```
 app/                 # Vue components, pages, utils (client-side)
   components/        # Vue components
@@ -40,6 +42,7 @@ server/             # Server-side code
 ## Development Workflow
 
 ### Essential Commands
+
 - `pnpm run dev` - Start development server on http://localhost:3000
 - `pnpm run build` - Build for production
 - `pnpm run test` - Run full test suite (typecheck + lint + unit tests)
@@ -49,42 +52,47 @@ server/             # Server-side code
 - `pnpm run typecheck` - Run TypeScript type checking
 
 ### Before Submitting Code
+
 Always run the complete test suite: `pnpm run test`
 This includes type checking, linting, and unit tests.
 
 ## Code Style & Conventions
 
 ### TypeScript
+
 - All files should use TypeScript (`.ts`, `.vue` with `<script setup lang="ts">`)
 - Leverage Nuxt's auto-imports - avoid explicit imports for Nuxt/Vue composables
 - Use explicit imports for external libraries and local utilities
 
 ### Vue Components
+
 - Use **Composition API** with `<script setup lang="ts">`
 - Define props with `defineProps<{}>()` for type safety
 - Use `defineEmits` for event handling
 - Example component structure:
+
   ```vue
   <script setup lang="ts">
   const props = defineProps<{
     loading?: boolean
   }>()
-  
+
   const emit = defineEmits(['submit'])
-  
+
   // Component logic here
   </script>
-  
+
   <template>
     <!-- Template here -->
   </template>
-  
+
   <style scoped>
   /* Scoped styles here */
   </style>
   ```
 
 ### ESLint Configuration
+
 - Uses @nuxt/eslint with stylistic rules enabled
 - Custom rule: Vue self-closing tags should always be self-closing for void HTML elements
 - Run `pnpm run lint:fix` to auto-fix issues
@@ -92,16 +100,19 @@ This includes type checking, linting, and unit tests.
 ## Testing
 
 ### Framework
+
 - **Vitest** for unit testing
 - **Vue Test Utils** for component testing
 - **jsdom** environment for DOM testing
 
 ### Test File Patterns
-- Test files should be named `*.test.ts` 
+
+- Test files should be named `*.test.ts`
 - Place component tests next to components: `components/ComponentName.test.ts`
 - Place utility tests next to utilities: `utils/utilName.test.ts`
 
 ### Test Structure
+
 ```typescript
 /**
  * @vitest-environment jsdom
@@ -121,6 +132,7 @@ describe('ComponentName', () => {
 ## API Development
 
 ### Server Routes
+
 - Place API routes in `server/api/`
 - Use `.post.ts`, `.get.ts`, etc. for HTTP method-specific handlers
 - Use Nuxt's `defineEventHandler` for route handlers
@@ -134,12 +146,14 @@ describe('ComponentName', () => {
   ```
 
 ### Error Handling
+
 - Use `createError()` for API errors with proper status codes
 - Validate inputs and provide clear error messages
 
 ## File Organization
 
 ### Where to Put Things
+
 - **Vue Components**: `app/components/ComponentName.vue`
 - **Pages**: `app/pages/page-name.vue` (uses file-based routing)
 - **Client Utilities**: `app/utils/utilityName.ts`
@@ -148,6 +162,7 @@ describe('ComponentName', () => {
 - **Tests**: Next to the file being tested with `.test.ts` suffix
 
 ### Naming Conventions
+
 - **Components**: PascalCase (`RequestForm.vue`)
 - **Pages**: kebab-case (`cache-analysis.vue`)
 - **Utilities**: camelCase (`getCacheAnalysis.ts`)
@@ -156,12 +171,14 @@ describe('ComponentName', () => {
 ## Deployment & CI/CD
 
 ### Netlify Configuration
+
 - Builds with `pnpm run build`
 - Publishes `dist/` directory
 - Uses Netlify Functions for server-side functionality
 - Configuration in `netlify.toml`
 
 ### GitHub Actions
+
 - Runs on every push and PR
 - Executes: lint → typecheck → unit tests → build
 - Uses Node.js 22.x and pnpm via corepack
@@ -169,21 +186,25 @@ describe('ComponentName', () => {
 ## Common Gotchas
 
 ### Dependencies
+
 - Use corepack to enable pnpm: `corepack enable`
 - Always check `package.json` engines field for Node.js version requirements
 
 ### Nuxt Specifics
+
 - Leverage auto-imports for Vue, Nuxt, and project composables
 - Use `~server` alias for server-side imports in server code
 - Server and client code are separate - be mindful of where code runs
 
 ### TypeScript
+
 - Currently using TypeScript 5.8.3 which triggers ESLint warnings (safe to ignore)
 - Nuxt generates types automatically in `.nuxt/` directory
 
 ## Commit & PR Conventions
 
 ### Conventional Commits
+
 - **All commits** must follow [Conventional Commits](https://www.conventionalcommits.org/) specification
 - **PR titles** must also follow Conventional Commits format
 - Common types: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`, `style:`, `ci:`
@@ -196,6 +217,7 @@ describe('ComponentName', () => {
   ```
 
 ### Scope Guidelines
+
 - Use specific scopes when helpful: `feat(api):`, `fix(ui):`, `chore(deps):`
 - Breaking changes: Add `!` after type/scope: `feat!:` or `feat(api)!:`
 - Add `BREAKING CHANGE:` in commit body for major changes
@@ -203,11 +225,13 @@ describe('ComponentName', () => {
 ## AI Agent Guidelines
 
 ### Automated Detection
+
 - Detect `pnpm-lock.yaml` → automatically use pnpm
 - Detect `nuxt.config.ts` → recognize as Nuxt 3 project
 - Detect `vitest.config.ts` → use Vitest for testing
 
 ### Best Practices for AI
+
 - Always run tests after making changes
 - Respect existing code patterns and file organization
 - Use TypeScript strictly - no `any` types without justification

@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Format
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  unit-test:
+  format:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,4 +22,4 @@ jobs:
         run: corepack enable
       - run: pnpm install
 
-      - run: pnpm run test:unit
+      - run: pnpm run format:check

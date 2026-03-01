@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { formatDuration, intervalToDuration } from 'date-fns'
-import { getFieldTooltip, getCacheNameTooltip, getForwardReasonTooltip, formatTooltip } from '~/utils/tooltips'
+import {
+  getFieldTooltip,
+  getCacheNameTooltip,
+  getForwardReasonTooltip,
+  formatTooltip,
+} from '~/utils/tooltips'
 
 const props = defineProps<{
   cacheHeaders: Record<string, string>
@@ -32,11 +37,12 @@ const formatDate = (date: Date): string =>
 
 const now = ref(Date.now())
 
-const cacheAnalysis = computed(() =>
-  getCacheAnalysis(props.cacheHeaders, now.value),
-)
+const cacheAnalysis = computed(() => getCacheAnalysis(props.cacheHeaders, now.value))
 
-const handleDataKeyHover = (dataKey: string, rawValue: boolean | number | string | Date | null | undefined) => {
+const handleDataKeyHover = (
+  dataKey: string,
+  rawValue: boolean | number | string | Date | null | undefined,
+) => {
   if (props.enableDiffOnHover) {
     setHover(dataKey, rawValue)
   }
@@ -67,7 +73,11 @@ onUnmounted(() => {
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('served-by'))"
         :aria-label="`Served by: ${getFieldTooltip('served-by').text}`"
-      >Served by:</span> <strong class="text-neutral-800 dark:text-neutral-100">{{ cacheAnalysis.servedBy.source }}</strong>
+        >Served by:</span
+      >
+      <strong class="text-neutral-800 dark:text-neutral-100">{{
+        cacheAnalysis.servedBy.source
+      }}</strong>
     </div>
     <div class="mb-3">
       <span
@@ -75,7 +85,9 @@ onUnmounted(() => {
         tabindex="0"
         :title="formatTooltip(getFieldTooltip('cdn-nodes'))"
         :aria-label="`CDN nodes: ${getFieldTooltip('cdn-nodes').text}`"
-      >CDN node(s):</span> <code class="inline-code">{{ cacheAnalysis.servedBy.cdnNodes }}</code>
+        >CDN node(s):</span
+      >
+      <code class="inline-code">{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
     <hr class="separator" />
@@ -88,9 +100,7 @@ onUnmounted(() => {
 
       <div class="lifecycle-flow">
         <template
-          v-for="(
-            { cacheName, parameters }, cacheIndex
-          ) in cacheAnalysis.cacheStatus"
+          v-for="({ cacheName, parameters }, cacheIndex) in cacheAnalysis.cacheStatus"
           :key="cacheIndex"
         >
           <h4
@@ -103,10 +113,7 @@ onUnmounted(() => {
           </h4>
 
           <div class="cache-children">
-            <div
-              class="data-row"
-              :class="{ 'row-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }"
-            >
+            <div class="data-row" :class="{ 'row-highlighted': isKeyHovered(`Hit-${cacheIndex}`) }">
               <dt
                 class="data-key"
                 tabindex="0"
@@ -121,11 +128,15 @@ onUnmounted(() => {
               <dd
                 class="data-value"
                 :class="{
-                  'value-matching': isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(parameters.hit),
-                  'value-different': isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(parameters.hit),
+                  'value-matching':
+                    isKeyHovered(`Hit-${cacheIndex}`) && isValueMatching(parameters.hit),
+                  'value-different':
+                    isKeyHovered(`Hit-${cacheIndex}`) && !isValueMatching(parameters.hit),
                 }"
               >
-                <span :class="parameters.hit ? 'text-green-400' : 'text-red-500'">{{ parameters.hit ? "Yes" : "No" }}</span>
+                <span :class="parameters.hit ? 'text-green-400' : 'text-red-500'">{{
+                  parameters.hit ? 'Yes' : 'No'
+                }}</span>
               </dd>
             </div>
 
@@ -138,7 +149,9 @@ onUnmounted(() => {
                   class="data-key"
                   tabindex="0"
                   :title="formatTooltip(getFieldTooltip('forwarded-because'))"
-                  @mouseenter="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
+                  @mouseenter="
+                    handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)
+                  "
                   @mouseleave="handleDataKeyLeave"
                   @focus="handleDataKeyHover(`Forwarded because-${cacheIndex}`, parameters.fwd)"
                   @blur="handleDataKeyLeave"
@@ -149,8 +162,12 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`Forwarded because-${cacheIndex}`) && isValueMatching(parameters.fwd),
-                    'value-different': isKeyHovered(`Forwarded because-${cacheIndex}`) && !isValueMatching(parameters.fwd),
+                    'value-matching':
+                      isKeyHovered(`Forwarded because-${cacheIndex}`) &&
+                      isValueMatching(parameters.fwd),
+                    'value-different':
+                      isKeyHovered(`Forwarded because-${cacheIndex}`) &&
+                      !isValueMatching(parameters.fwd),
                   }"
                   :title="formatTooltip(getForwardReasonTooltip(parameters.fwd))"
                 >
@@ -168,9 +185,13 @@ onUnmounted(() => {
                   class="data-key"
                   tabindex="0"
                   :title="formatTooltip(getFieldTooltip('forwarded-status'))"
-                  @mouseenter="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
+                  @mouseenter="
+                    handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])
+                  "
                   @mouseleave="handleDataKeyLeave"
-                  @focus="handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])"
+                  @focus="
+                    handleDataKeyHover(`Forwarded status-${cacheIndex}`, parameters['fwd-status'])
+                  "
                   @blur="handleDataKeyLeave"
                 >
                   <span class="label-full">Forwarded status</span>
@@ -179,11 +200,15 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`Forwarded status-${cacheIndex}`) && isValueMatching(parameters['fwd-status']),
-                    'value-different': isKeyHovered(`Forwarded status-${cacheIndex}`) && !isValueMatching(parameters['fwd-status']),
+                    'value-matching':
+                      isKeyHovered(`Forwarded status-${cacheIndex}`) &&
+                      isValueMatching(parameters['fwd-status']),
+                    'value-different':
+                      isKeyHovered(`Forwarded status-${cacheIndex}`) &&
+                      !isValueMatching(parameters['fwd-status']),
                   }"
                 >
-                  {{ parameters["fwd-status"] }}
+                  {{ parameters['fwd-status'] }}
                 </dd>
               </div>
             </template>
@@ -207,14 +232,20 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(parameters.ttl),
-                    'value-different': isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl),
+                    'value-matching':
+                      isKeyHovered(`TTL-${cacheIndex}`) && isValueMatching(parameters.ttl),
+                    'value-different':
+                      isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl),
                   }"
                   :title="formatHumanSeconds(parameters.ttl)"
                 >
                   {{ formatSeconds(parameters.ttl) }}
                   <span
-                    v-if="isKeyHovered(`TTL-${cacheIndex}`) && !isValueMatching(parameters.ttl) && getDelta(parameters.ttl)"
+                    v-if="
+                      isKeyHovered(`TTL-${cacheIndex}`) &&
+                      !isValueMatching(parameters.ttl) &&
+                      getDelta(parameters.ttl)
+                    "
                     class="delta"
                   >
                     ({{ getDelta(parameters.ttl) }})
@@ -232,9 +263,13 @@ onUnmounted(() => {
                   class="data-key"
                   tabindex="0"
                   :title="formatTooltip(getFieldTooltip('stored-response'))"
-                  @mouseenter="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
+                  @mouseenter="
+                    handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)
+                  "
                   @mouseleave="handleDataKeyLeave"
-                  @focus="handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)"
+                  @focus="
+                    handleDataKeyHover(`Stored the response-${cacheIndex}`, parameters.stored)
+                  "
                   @blur="handleDataKeyLeave"
                 >
                   Stored the response
@@ -242,11 +277,17 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`Stored the response-${cacheIndex}`) && isValueMatching(parameters.stored),
-                    'value-different': isKeyHovered(`Stored the response-${cacheIndex}`) && !isValueMatching(parameters.stored),
+                    'value-matching':
+                      isKeyHovered(`Stored the response-${cacheIndex}`) &&
+                      isValueMatching(parameters.stored),
+                    'value-different':
+                      isKeyHovered(`Stored the response-${cacheIndex}`) &&
+                      !isValueMatching(parameters.stored),
                   }"
                 >
-                  <span :class="parameters.stored ? 'text-green-400' : 'text-red-500'">{{ parameters.stored ? "Yes" : "No" }}</span>
+                  <span :class="parameters.stored ? 'text-green-400' : 'text-red-500'">{{
+                    parameters.stored ? 'Yes' : 'No'
+                  }}</span>
                 </dd>
               </div>
             </template>
@@ -254,15 +295,27 @@ onUnmounted(() => {
             <template v-if="parameters.collapsed">
               <div
                 class="data-row"
-                :class="{ 'row-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) }"
+                :class="{
+                  'row-highlighted': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`),
+                }"
               >
                 <dt
                   class="data-key"
                   tabindex="0"
                   :title="formatTooltip(getFieldTooltip('collapsed-requests'))"
-                  @mouseenter="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
+                  @mouseenter="
+                    handleDataKeyHover(
+                      `Collapsed w/ other reqs-${cacheIndex}`,
+                      parameters.collapsed,
+                    )
+                  "
                   @mouseleave="handleDataKeyLeave"
-                  @focus="handleDataKeyHover(`Collapsed w/ other reqs-${cacheIndex}`, parameters.collapsed)"
+                  @focus="
+                    handleDataKeyHover(
+                      `Collapsed w/ other reqs-${cacheIndex}`,
+                      parameters.collapsed,
+                    )
+                  "
                   @blur="handleDataKeyLeave"
                 >
                   Collapsed w/ other reqs
@@ -270,11 +323,17 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && isValueMatching(parameters.collapsed),
-                    'value-different': isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) && !isValueMatching(parameters.collapsed),
+                    'value-matching':
+                      isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) &&
+                      isValueMatching(parameters.collapsed),
+                    'value-different':
+                      isKeyHovered(`Collapsed w/ other reqs-${cacheIndex}`) &&
+                      !isValueMatching(parameters.collapsed),
                   }"
                 >
-                  <span :class="parameters.collapsed ? 'text-green-400' : 'text-red-500'">{{ parameters.collapsed ? "Yes" : "No" }}</span>
+                  <span :class="parameters.collapsed ? 'text-green-400' : 'text-red-500'">{{
+                    parameters.collapsed ? 'Yes' : 'No'
+                  }}</span>
                 </dd>
               </div>
             </template>
@@ -298,8 +357,10 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(parameters.key),
-                    'value-different': isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(parameters.key),
+                    'value-matching':
+                      isKeyHovered(`Cache key-${cacheIndex}`) && isValueMatching(parameters.key),
+                    'value-different':
+                      isKeyHovered(`Cache key-${cacheIndex}`) && !isValueMatching(parameters.key),
                   }"
                 >
                   {{ parameters.key }}
@@ -326,8 +387,12 @@ onUnmounted(() => {
                 <dd
                   class="data-value"
                   :class="{
-                    'value-matching': isKeyHovered(`Extra details-${cacheIndex}`) && isValueMatching(parameters.detail),
-                    'value-different': isKeyHovered(`Extra details-${cacheIndex}`) && !isValueMatching(parameters.detail),
+                    'value-matching':
+                      isKeyHovered(`Extra details-${cacheIndex}`) &&
+                      isValueMatching(parameters.detail),
+                    'value-different':
+                      isKeyHovered(`Extra details-${cacheIndex}`) &&
+                      !isValueMatching(parameters.detail),
                   }"
                 >
                   {{ parameters.detail }}
@@ -343,10 +408,7 @@ onUnmounted(() => {
         <span class="mono-label">Response to client</span>
       </div>
 
-      <div
-        class="data-row"
-        :class="{ 'row-highlighted': isKeyHovered('Cacheable') }"
-      >
+      <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Cacheable') }">
         <dt
           class="data-key"
           tabindex="0"
@@ -361,19 +423,21 @@ onUnmounted(() => {
         <dd
           class="data-value"
           :class="{
-            'value-matching': isKeyHovered('Cacheable') && isValueMatching(cacheAnalysis.cacheControl.isCacheable),
-            'value-different': isKeyHovered('Cacheable') && !isValueMatching(cacheAnalysis.cacheControl.isCacheable),
+            'value-matching':
+              isKeyHovered('Cacheable') && isValueMatching(cacheAnalysis.cacheControl.isCacheable),
+            'value-different':
+              isKeyHovered('Cacheable') && !isValueMatching(cacheAnalysis.cacheControl.isCacheable),
           }"
         >
-          <span :class="cacheAnalysis.cacheControl.isCacheable ? 'text-green-400' : 'text-red-500'">{{ cacheAnalysis.cacheControl.isCacheable ? "Yes" : "No" }}</span>
+          <span
+            :class="cacheAnalysis.cacheControl.isCacheable ? 'text-green-400' : 'text-red-500'"
+            >{{ cacheAnalysis.cacheControl.isCacheable ? 'Yes' : 'No' }}</span
+          >
         </dd>
       </div>
 
       <template v-if="cacheAnalysis.cacheControl.age">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('Age') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Age') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -388,14 +452,20 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('Age') && isValueMatching(cacheAnalysis.cacheControl.age),
-              'value-different': isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age),
+              'value-matching':
+                isKeyHovered('Age') && isValueMatching(cacheAnalysis.cacheControl.age),
+              'value-different':
+                isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age),
             }"
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.age)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.age) }}
             <span
-              v-if="isKeyHovered('Age') && !isValueMatching(cacheAnalysis.cacheControl.age) && getDelta(cacheAnalysis.cacheControl.age)"
+              v-if="
+                isKeyHovered('Age') &&
+                !isValueMatching(cacheAnalysis.cacheControl.age) &&
+                getDelta(cacheAnalysis.cacheControl.age)
+              "
               class="delta"
             >
               ({{ getDelta(cacheAnalysis.cacheControl.age) }})
@@ -405,10 +475,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.date">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('Date') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Date') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -423,13 +490,19 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('Date') && isValueMatching(cacheAnalysis.cacheControl.date),
-              'value-different': isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date),
+              'value-matching':
+                isKeyHovered('Date') && isValueMatching(cacheAnalysis.cacheControl.date),
+              'value-different':
+                isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date),
             }"
           >
             {{ formatDate(cacheAnalysis.cacheControl.date) }}
             <span
-              v-if="isKeyHovered('Date') && !isValueMatching(cacheAnalysis.cacheControl.date) && getDelta(cacheAnalysis.cacheControl.date)"
+              v-if="
+                isKeyHovered('Date') &&
+                !isValueMatching(cacheAnalysis.cacheControl.date) &&
+                getDelta(cacheAnalysis.cacheControl.date)
+              "
               class="delta"
             >
               ({{ getDelta(cacheAnalysis.cacheControl.date) }})
@@ -439,10 +512,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.etag">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('ETag') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('ETag') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -457,8 +527,10 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('ETag') && isValueMatching(cacheAnalysis.cacheControl.etag),
-              'value-different': isKeyHovered('ETag') && !isValueMatching(cacheAnalysis.cacheControl.etag),
+              'value-matching':
+                isKeyHovered('ETag') && isValueMatching(cacheAnalysis.cacheControl.etag),
+              'value-different':
+                isKeyHovered('ETag') && !isValueMatching(cacheAnalysis.cacheControl.etag),
             }"
           >
             <code class="inline-code">{{ cacheAnalysis.cacheControl.etag }}</code>
@@ -467,10 +539,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.expiresAt">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('Expires at') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Expires at') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -485,13 +554,20 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('Expires at') && isValueMatching(cacheAnalysis.cacheControl.expiresAt),
-              'value-different': isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt),
+              'value-matching':
+                isKeyHovered('Expires at') && isValueMatching(cacheAnalysis.cacheControl.expiresAt),
+              'value-different':
+                isKeyHovered('Expires at') &&
+                !isValueMatching(cacheAnalysis.cacheControl.expiresAt),
             }"
           >
             {{ formatDate(cacheAnalysis.cacheControl.expiresAt) }}
             <span
-              v-if="isKeyHovered('Expires at') && !isValueMatching(cacheAnalysis.cacheControl.expiresAt) && getDelta(cacheAnalysis.cacheControl.expiresAt)"
+              v-if="
+                isKeyHovered('Expires at') &&
+                !isValueMatching(cacheAnalysis.cacheControl.expiresAt) &&
+                getDelta(cacheAnalysis.cacheControl.expiresAt)
+              "
               class="delta"
             >
               ({{ getDelta(cacheAnalysis.cacheControl.expiresAt) }})
@@ -501,10 +577,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.ttl">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('TTL (browser)') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('TTL (browser)') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -515,23 +588,28 @@ onUnmounted(() => {
             @blur="handleDataKeyLeave"
           >
             TTL{{
-              cacheAnalysis.cacheControl.netlifyCdnTtl
-                || cacheAnalysis.cacheControl.cdnTtl
-                ? " (browser)"
-                : ""
+              cacheAnalysis.cacheControl.netlifyCdnTtl || cacheAnalysis.cacheControl.cdnTtl
+                ? ' (browser)'
+                : ''
             }}
           </dt>
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('TTL (browser)') && isValueMatching(cacheAnalysis.cacheControl.ttl),
-              'value-different': isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl),
+              'value-matching':
+                isKeyHovered('TTL (browser)') && isValueMatching(cacheAnalysis.cacheControl.ttl),
+              'value-different':
+                isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl),
             }"
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
             <span
-              v-if="isKeyHovered('TTL (browser)') && !isValueMatching(cacheAnalysis.cacheControl.ttl) && getDelta(cacheAnalysis.cacheControl.ttl)"
+              v-if="
+                isKeyHovered('TTL (browser)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.ttl) &&
+                getDelta(cacheAnalysis.cacheControl.ttl)
+              "
               class="delta"
             >
               ({{ getDelta(cacheAnalysis.cacheControl.ttl) }})
@@ -541,10 +619,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.cdnTtl">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('TTL (CDN)') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('TTL (CDN)') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -554,23 +629,25 @@ onUnmounted(() => {
             @focus="handleDataKeyHover('TTL (CDN)', cacheAnalysis.cacheControl.cdnTtl)"
             @blur="handleDataKeyLeave"
           >
-            TTL ({{
-              cacheAnalysis.cacheControl.netlifyCdnTtl
-                ? "other CDNs"
-                : "Netlify CDN"
-            }})
+            TTL ({{ cacheAnalysis.cacheControl.netlifyCdnTtl ? 'other CDNs' : 'Netlify CDN' }})
           </dt>
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('TTL (CDN)') && isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
-              'value-different': isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
+              'value-matching':
+                isKeyHovered('TTL (CDN)') && isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
+              'value-different':
+                isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl),
             }"
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
             <span
-              v-if="isKeyHovered('TTL (CDN)') && !isValueMatching(cacheAnalysis.cacheControl.cdnTtl) && getDelta(cacheAnalysis.cacheControl.cdnTtl)"
+              v-if="
+                isKeyHovered('TTL (CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.cdnTtl) &&
+                getDelta(cacheAnalysis.cacheControl.cdnTtl)
+              "
               class="delta"
             >
               ({{ getDelta(cacheAnalysis.cacheControl.cdnTtl) }})
@@ -580,17 +657,18 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.netlifyCdnTtl">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('TTL (Netlify CDN)') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('TTL (Netlify CDN)') }">
           <dt
             class="data-key"
             tabindex="0"
             :title="formatTooltip(getFieldTooltip('ttl-netlify-cdn'))"
-            @mouseenter="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
+            @mouseenter="
+              handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)
+            "
             @mouseleave="handleDataKeyLeave"
-            @focus="handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)"
+            @focus="
+              handleDataKeyHover('TTL (Netlify CDN)', cacheAnalysis.cacheControl.netlifyCdnTtl)
+            "
             @blur="handleDataKeyLeave"
           >
             TTL (Netlify CDN)
@@ -598,14 +676,22 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('TTL (Netlify CDN)') && isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
-              'value-different': isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
+              'value-matching':
+                isKeyHovered('TTL (Netlify CDN)') &&
+                isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
+              'value-different':
+                isKeyHovered('TTL (Netlify CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl),
             }"
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
             <span
-              v-if="isKeyHovered('TTL (Netlify CDN)') && !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl) && getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)"
+              v-if="
+                isKeyHovered('TTL (Netlify CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl) &&
+                getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl)
+              "
               class="delta"
             >
               ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl) }})
@@ -615,10 +701,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.vary">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('Vary') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Vary') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -633,8 +716,10 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('Vary') && isValueMatching(cacheAnalysis.cacheControl.vary),
-              'value-different': isKeyHovered('Vary') && !isValueMatching(cacheAnalysis.cacheControl.vary),
+              'value-matching':
+                isKeyHovered('Vary') && isValueMatching(cacheAnalysis.cacheControl.vary),
+              'value-different':
+                isKeyHovered('Vary') && !isValueMatching(cacheAnalysis.cacheControl.vary),
             }"
           >
             <code class="inline-code">{{ cacheAnalysis.cacheControl.vary }}</code>
@@ -643,10 +728,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.netlifyVary">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('Netlify-Vary') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Netlify-Vary') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -661,8 +743,12 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('Netlify-Vary') && isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
-              'value-different': isKeyHovered('Netlify-Vary') && !isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
+              'value-matching':
+                isKeyHovered('Netlify-Vary') &&
+                isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
+              'value-different':
+                isKeyHovered('Netlify-Vary') &&
+                !isValueMatching(cacheAnalysis.cacheControl.netlifyVary),
             }"
           >
             <code class="inline-code">{{ cacheAnalysis.cacheControl.netlifyVary }}</code>
@@ -671,10 +757,7 @@ onUnmounted(() => {
       </template>
 
       <template v-if="cacheAnalysis.cacheControl.revalidate">
-        <div
-          class="data-row"
-          :class="{ 'row-highlighted': isKeyHovered('Revalidation') }"
-        >
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('Revalidation') }">
           <dt
             class="data-key"
             tabindex="0"
@@ -689,8 +772,12 @@ onUnmounted(() => {
           <dd
             class="data-value"
             :class="{
-              'value-matching': isKeyHovered('Revalidation') && isValueMatching(cacheAnalysis.cacheControl.revalidate),
-              'value-different': isKeyHovered('Revalidation') && !isValueMatching(cacheAnalysis.cacheControl.revalidate),
+              'value-matching':
+                isKeyHovered('Revalidation') &&
+                isValueMatching(cacheAnalysis.cacheControl.revalidate),
+              'value-different':
+                isKeyHovered('Revalidation') &&
+                !isValueMatching(cacheAnalysis.cacheControl.revalidate),
             }"
           >
             <code class="inline-code">{{ cacheAnalysis.cacheControl.revalidate }}</code>
@@ -705,7 +792,7 @@ onUnmounted(() => {
 .separator {
   border: none;
   height: 1px;
-  background: #E9EBED;
+  background: #e9ebed;
   margin: 0.75rem 0;
 }
 
@@ -776,7 +863,7 @@ onUnmounted(() => {
 }
 
 .lifecycle-flow {
-  border-left: 2px dashed #D1D5DA;
+  border-left: 2px dashed #d1d5da;
   margin-left: 0.45rem;
   padding-left: 1rem;
   padding-top: 0.25rem;
@@ -790,7 +877,7 @@ onUnmounted(() => {
 .inline-code {
   font-family: 'Roboto Mono', monospace;
   font-size: 0.75rem;
-  background-color: #F6F6F7;
+  background-color: #f6f6f7;
   padding: 0.125rem 0.375rem;
   border-radius: 0.25rem;
   overflow-wrap: anywhere;
@@ -810,7 +897,7 @@ onUnmounted(() => {
 }
 
 .data-key {
-  color: #545A61;
+  color: #545a61;
   font-weight: 500;
   min-width: 7rem;
   cursor: pointer;
@@ -835,7 +922,7 @@ onUnmounted(() => {
 }
 
 :is(.dark) .data-key {
-  color: #D1D5DA;
+  color: #d1d5da;
 }
 
 .data-key:focus-visible {
@@ -845,7 +932,7 @@ onUnmounted(() => {
 }
 
 .data-value {
-  color: #181A1C;
+  color: #181a1c;
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   transition: all 0.15s ease;
@@ -853,7 +940,7 @@ onUnmounted(() => {
 }
 
 :is(.dark) .data-value {
-  color: #E9EBED;
+  color: #e9ebed;
 }
 
 .row-highlighted {
@@ -884,12 +971,12 @@ onUnmounted(() => {
 .delta {
   font-size: 0.8em;
   font-weight: 500;
-  color: #545A61;
+  color: #545a61;
   margin-left: 0.25em;
 }
 
 :is(.dark) .delta {
-  color: #9DA7B2;
+  color: #9da7b2;
 }
 
 .tooltip-trigger {

@@ -70,9 +70,7 @@ export const useDataHover = () => {
         if (absMs < 1000) {
           return `${sign}${absMs}ms`
         }
-        else {
-          return `${sign}${Math.round(absMs / 1000)}s`
-        }
+        return `${sign}${Math.round(absMs / 1000)}s`
       }
 
       return `${sign}${humanDuration}`

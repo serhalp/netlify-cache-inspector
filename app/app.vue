@@ -8,16 +8,15 @@ const { resolvedMode } = useColorMode()
   <div class="app-shell font-body text-neutral-800 dark:text-neutral-200">
     <header class="header-bar">
       <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-        <NuxtLink
-          to="/"
-          class="flex items-center gap-3 no-underline group"
-        >
+        <NuxtLink to="/" class="flex items-center gap-3 no-underline group">
           <img
             :src="resolvedMode === 'dark' ? '/logo-dark.png' : '/logo-light.png'"
             alt="Netlify Cache Inspector"
             class="h-7 flex-shrink-0"
           />
-          <span class="font-heading font-bold text-lg tracking-tight text-neutral-800 dark:text-neutral-50 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors">
+          <span
+            class="font-heading font-bold text-lg tracking-tight text-neutral-800 dark:text-neutral-50 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors"
+          >
             Netlify Cache Inspector
           </span>
         </NuxtLink>
@@ -34,28 +33,34 @@ const { resolvedMode } = useColorMode()
     </main>
 
     <footer class="footer-bar">
-      <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-sm">
+      <div
+        class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 text-sm"
+      >
         <nav class="flex items-center gap-5">
           <a
             href="https://www.netlify.com"
             target="_blank"
             rel="noopener noreferrer"
             class="footer-link"
-          >Netlify</a>
+            >Netlify</a
+          >
           <a
             href="https://docs.netlify.com/platform/caching/"
             target="_blank"
             rel="noopener noreferrer"
             class="footer-link"
-          >Caching docs</a>
+            >Caching docs</a
+          >
         </nav>
         <span class="text-neutral-600 dark:text-neutral-400">
-          Made by <a
+          Made by
+          <a
             href="https://philippeserhal.com"
             target="_blank"
             rel="noopener noreferrer"
             class="footer-link"
-          >Philippe Serhal</a>
+            >Philippe Serhal</a
+          >
         </span>
       </div>
     </footer>
@@ -82,7 +87,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #F6F6F7;
+  background: #f6f6f7;
   transition: background-color 0.3s ease;
 }
 
@@ -96,7 +101,7 @@ body {
 }
 
 .header-bar {
-  border-bottom: 1px solid #E9EBED;
+  border-bottom: 1px solid #e9ebed;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   position: sticky;
@@ -110,7 +115,7 @@ body {
 }
 
 .footer-bar {
-  border-top: 1px solid #E9EBED;
+  border-top: 1px solid #e9ebed;
   margin-top: auto;
 }
 

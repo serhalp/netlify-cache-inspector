@@ -51,7 +51,7 @@ describe('parseCacheControl', () => {
     const headers = new Headers({
       'Cache-Control': 'max-age=1000',
       'CDN-Cache-Control': 's-maxage=2000, max-age=1500',
-      'Age': '100',
+      Age: '100',
     })
     const now = Date.now()
 
@@ -65,7 +65,7 @@ describe('parseCacheControl', () => {
     const headers = new Headers({
       'Cache-Control': 'max-age=1000',
       'CDN-Cache-Control': 'max-age=1500',
-      'Age': '100',
+      Age: '100',
     })
     const now = Date.now()
 
@@ -79,7 +79,7 @@ describe('parseCacheControl', () => {
       'Cache-Control': 'max-age=1000',
       'CDN-Cache-Control': 's-maxage=2000',
       'Debug-Netlify-CDN-Cache-Control': 'max-age=3000',
-      'Age': '100',
+      Age: '100',
     })
     const now = Date.now()
 

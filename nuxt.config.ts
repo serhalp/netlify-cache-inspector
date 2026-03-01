@@ -2,12 +2,7 @@
 import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
-  modules: [
-    '@unocss/nuxt',
-    '@nuxt/eslint',
-    '@nuxt/test-utils/module',
-    '@netlify/nuxt',
-  ],
+  modules: ['@unocss/nuxt', '@nuxt/test-utils/module', '@netlify/nuxt'],
   devtools: { enabled: true },
 
   app: {
@@ -31,7 +26,11 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: '/site.webmanifest' },
       ],
       meta: [
-        { name: 'description', content: 'Inspect and compare HTTP cache headers on Netlify sites. Analyze cache status, CDN behavior, and cache-control directives.' },
+        {
+          name: 'description',
+          content:
+            'Inspect and compare HTTP cache headers on Netlify sites. Analyze cache status, CDN behavior, and cache-control directives.',
+        },
         { name: 'apple-mobile-web-app-title', content: 'ntlcache' },
       ],
       script: [
@@ -60,10 +59,4 @@ export default defineNuxtConfig({
   },
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-09-13',
-
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
 })

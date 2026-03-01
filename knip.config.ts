@@ -1,7 +1,7 @@
 import type { KnipConfig } from 'knip'
 
 export default {
-  entry: ['eslint.config.mjs'],
+  entry: ['oxlint.config.ts'],
   // knip's Nuxt plugin doesn't support the Nuxt 4 app/ directory convention yet.
   // Note: custom entry replaces (not merges with) the plugin defaults.
   nuxt: {
@@ -23,11 +23,6 @@ export default {
     config: ['nuxt.config.ts'],
   },
   ignoreFiles: ['uno.config.ts'],
-  ignoreDependencies: [
-    'vue',
-    'vue-router',
-    'vue-tsc',
-    'vitest-environment-nuxt',
-  ],
-  ignoreBinaries: ['eslint'],
+  ignoreDependencies: ['vue', 'vue-router', 'vue-tsc', 'vitest-environment-nuxt'],
+  ignoreBinaries: [],
 } satisfies KnipConfig

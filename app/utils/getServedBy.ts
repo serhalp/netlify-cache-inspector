@@ -9,22 +9,14 @@ export enum ServedBySource {
 export interface ParsedCacheStatusEntry {
   cacheName: string
   parameters: {
-    'hit': boolean
-    'fwd'?:
-      | 'bypass'
-      | 'method'
-      | 'uri-miss'
-      | 'vary-miss'
-      | 'miss'
-      | 'request'
-      | 'stale'
-      | 'partial'
+    hit: boolean
+    fwd?: 'bypass' | 'method' | 'uri-miss' | 'vary-miss' | 'miss' | 'request' | 'stale' | 'partial'
     'fwd-status'?: number
-    'ttl'?: number
-    'stored'?: boolean
-    'collapsed'?: boolean
-    'key'?: string
-    'detail'?: string
+    ttl?: number
+    stored?: boolean
+    collapsed?: boolean
+    key?: string
+    detail?: string
   }
 }
 
@@ -55,11 +47,9 @@ const getServedBySource = (
 
   // NOTE: the order is important here, since a response can be served by a Function even
   // though one or more Edge Functions are also invoked (as middleware).
-  if (cacheHeaders.has('Debug-X-NF-Function-Type'))
-    return ServedBySource.Function
+  if (cacheHeaders.has('Debug-X-NF-Function-Type')) return ServedBySource.Function
 
-  if (cacheHeaders.has('Debug-X-NF-Edge-Functions'))
-    return ServedBySource.EdgeFunction
+  if (cacheHeaders.has('Debug-X-NF-Edge-Functions')) return ServedBySource.EdgeFunction
 
   // Check for the specific case of ONLY a Netlify Edge miss with no other cache entries - this handles
   // the weird Netlify Cache-Status behavior where a miss on the CDN edge (with no other caches consulted)
@@ -67,15 +57,15 @@ const getServedBySource = (
   // a single cache status entry for Netlify Edge that is a miss, with no entries at all for subsequent caches.
   // If there were other cache entries (e.g., Netlify Durable), those caches were consulted, and we'd be in
   // a different scenario where it's unclear whether the CDN origin or actual origin served the request.
-  if (cacheStatus.length === 1
-    && cacheStatus[0]?.cacheName === 'Netlify Edge'
-    && !cacheStatus[0]?.parameters.hit) {
+  if (
+    cacheStatus.length === 1 &&
+    cacheStatus[0]?.cacheName === 'Netlify Edge' &&
+    !cacheStatus[0]?.parameters.hit
+  ) {
     return ServedBySource.CdnOrigin
   }
 
-  throw new Error(
-    `Could not determine who served the request. Cache status: ${cacheStatus}`,
-  )
+  throw new Error(`Could not determine who served the request. Cache status: ${cacheStatus}`)
 }
 
 /**
@@ -92,8 +82,7 @@ export const getServedBy = (
   cacheStatus: ParsedCacheStatusEntry[],
 ): ServedBy => {
   const source = getServedBySource(cacheHeaders, cacheStatus)
-  const unfixedCdnNodes
-    = cacheHeaders.get('Debug-X-BB-Host-Id') ?? 'unknown CDN node'
+  const unfixedCdnNodes = cacheHeaders.get('Debug-X-BB-Host-Id') ?? 'unknown CDN node'
   return {
     source,
     cdnNodes: fixDuplicatedCdnNodes(unfixedCdnNodes),

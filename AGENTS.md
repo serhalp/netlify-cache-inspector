@@ -10,16 +10,18 @@ Netlify Cache Inspector is a Nuxt 4 web app for inspecting and comparing HTTP ca
 
 ## Commands
 
-| Command              | Purpose                                       |
-| -------------------- | --------------------------------------------- |
-| `pnpm run dev`       | Dev server on http://localhost:3000           |
-| `pnpm run build`     | Production build                              |
-| `pnpm run test`      | **Full suite**: typecheck + lint + unit tests |
-| `pnpm run test:unit` | Unit tests only (vitest)                      |
-| `pnpm run typecheck` | TypeScript type checking                      |
-| `pnpm run lint`      | ESLint check                                  |
-| `pnpm run lint:fix`  | ESLint auto-fix                               |
-| `pnpm run knip`      | Check for unused exports/dependencies         |
+| Command                 | Purpose                                                |
+| ----------------------- | ------------------------------------------------------ |
+| `pnpm run dev`          | Dev server on http://localhost:3000                    |
+| `pnpm run build`        | Production build                                       |
+| `pnpm run test`         | **Full suite**: typecheck + lint + format + unit tests |
+| `pnpm run test:unit`    | Unit tests only (vitest)                               |
+| `pnpm run typecheck`    | TypeScript type checking                               |
+| `pnpm run lint`         | Oxlint check                                           |
+| `pnpm run lint:fix`     | Oxlint auto-fix                                        |
+| `pnpm run format`       | Format with oxfmt                                      |
+| `pnpm run format:check` | Check formatting                                       |
+| `pnpm run knip`         | Check for unused exports/dependencies                  |
 
 Run a single test file: `pnpm vitest run app/utils/getCacheAnalysis.test.ts`
 
@@ -71,7 +73,6 @@ Runs are persisted in Netlify Blobs. `/run/[runId]` page loads a run via `GET /a
 ## Code Conventions
 
 - Vue Composition API with `<script setup lang="ts">`
-- ESLint with `@nuxt/eslint` stylistic rules (no Prettier)
+- **Oxlint** for linting (`oxlint.config.ts`), **oxfmt** for formatting (`.oxfmtrc.json`)
 - Conventional Commits required for all commits and PR titles (`feat:`, `fix:`, `chore:`, etc.)
 - No `any` without justification
-- `vue/html-self-closing` set to `void: 'always'`

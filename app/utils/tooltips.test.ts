@@ -1,18 +1,25 @@
 import { describe, it, expect } from 'vitest'
-import { getCacheNameTooltip, getForwardReasonTooltip, getFieldTooltip, formatTooltip } from '~/utils/tooltips'
+import {
+  getCacheNameTooltip,
+  getForwardReasonTooltip,
+  getFieldTooltip,
+  formatTooltip,
+} from '~/utils/tooltips'
 
 describe('tooltip utilities', () => {
   describe('getCacheNameTooltip', () => {
     it('returns specific tooltip for Netlify Edge', () => {
       const tooltip = getCacheNameTooltip('Netlify Edge')
-      expect(tooltip.text).toContain('Netlify\'s global edge cache layer')
+      expect(tooltip.text).toContain("Netlify's global edge cache layer")
       expect(tooltip.url).toBe('https://docs.netlify.com/platform/caching/')
     })
 
     it('returns specific tooltip for Netlify Durable', () => {
       const tooltip = getCacheNameTooltip('Netlify Durable')
       expect(tooltip.text).toContain('opt-in cache layer that is shared regionally')
-      expect(tooltip.url).toBe('https://docs.netlify.com/build/caching/caching-overview/#durable-directive')
+      expect(tooltip.url).toBe(
+        'https://docs.netlify.com/build/caching/caching-overview/#durable-directive',
+      )
     })
 
     it('returns specific tooltip for Next.js', () => {
@@ -41,7 +48,9 @@ describe('tooltip utilities', () => {
 
     it('returns specific tooltip for uri-miss', () => {
       const tooltip = getForwardReasonTooltip('uri-miss')
-      expect(tooltip.text).toContain('The cache did not have a stored response for this request URI')
+      expect(tooltip.text).toContain(
+        'The cache did not have a stored response for this request URI',
+      )
     })
 
     it('returns specific tooltip for vary-miss', () => {
@@ -69,7 +78,9 @@ describe('tooltip utilities', () => {
     it('returns specific tooltip for netlify-vary with URL', () => {
       const tooltip = getFieldTooltip('netlify-vary')
       expect(tooltip.text).toContain('Netlify-specific header that controls cache key variation')
-      expect(tooltip.url).toBe('https://docs.netlify.com/build/caching/caching-overview/#cache-key-variation')
+      expect(tooltip.url).toBe(
+        'https://docs.netlify.com/build/caching/caching-overview/#cache-key-variation',
+      )
     })
 
     it('returns generic tooltip for unknown fields', () => {

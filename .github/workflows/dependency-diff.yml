@@ -18,6 +18,6 @@ jobs:
       - uses: e18e/action-dependency-diff@v1
         with:
           # Too noisy. Will enable if it ever supports reporting *changes* in duplicates.
-          duplicate-threshold: "999"
+          duplicate-threshold: '999'
           # Always report size diff.
-          size-threshold: "-1"
+          size-threshold: '-1'

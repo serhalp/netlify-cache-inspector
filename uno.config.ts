@@ -8,12 +8,8 @@ export default defineConfig({
     presetWebFonts({
       provider: 'google',
       fonts: {
-        mulish: [
-          { name: 'Mulish', weights: [400, 500, 700, 800] },
-        ],
-        mono: [
-          { name: 'Roboto Mono', weights: [400, 500] },
-        ],
+        mulish: [{ name: 'Mulish', weights: [400, 500, 700, 800] }],
+        mono: [{ name: 'Roboto Mono', weights: [400, 500] }],
       },
     }),
   ],
@@ -66,10 +62,12 @@ export default defineConfig({
     },
   },
   shortcuts: {
-    'btn': 'inline-flex items-center justify-center px-6 py-2.5 font-body font-700 text-sm rounded-full border-none transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:translate-y-px focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:ring-offset-2',
+    btn: 'inline-flex items-center justify-center px-6 py-2.5 font-body font-700 text-sm rounded-full border-none transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:translate-y-px focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:ring-offset-2',
     'btn-primary': 'btn bg-teal-400 text-teal-900 hover:bg-teal-300',
-    'btn-secondary': 'btn bg-transparent text-neutral-600 ring-1 ring-neutral-300 hover:ring-neutral-400 hover:text-neutral-800 dark:text-neutral-300 dark:ring-neutral-600 dark:hover:ring-neutral-400 dark:hover:text-neutral-200',
-    'mono-label': 'font-mono text-xs uppercase tracking-widest text-neutral-600 dark:text-neutral-400 font-500',
+    'btn-secondary':
+      'btn bg-transparent text-neutral-600 ring-1 ring-neutral-300 hover:ring-neutral-400 hover:text-neutral-800 dark:text-neutral-300 dark:ring-neutral-600 dark:hover:ring-neutral-400 dark:hover:text-neutral-200',
+    'mono-label':
+      'font-mono text-xs uppercase tracking-widest text-neutral-600 dark:text-neutral-400 font-500',
   },
   preflights: [
     {

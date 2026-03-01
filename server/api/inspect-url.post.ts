@@ -2,10 +2,7 @@ import { createHash } from 'crypto'
 import { saveRun } from '~server/db'
 
 const generateRunId = (url: string, timestamp: number): string =>
-  createHash('sha256')
-    .update(`${url}-${timestamp}`)
-    .digest('hex')
-    .slice(0, 8)
+  createHash('sha256').update(`${url}-${timestamp}`).digest('hex').slice(0, 8)
 
 export default defineEventHandler(async (event) => {
   const { url } = await readBody(event)
@@ -22,8 +19,7 @@ export default defineEventHandler(async (event) => {
   try {
     const parsedUrl = new URL(url)
     normalizedUrl = parsedUrl.href // This ensures proper URL encoding
-  }
-  catch {
+  } catch {
     throw createError({
       statusCode: 400,
       message: `Invalid URL provided: ${url}`,
