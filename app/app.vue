@@ -49,7 +49,7 @@ const { resolvedMode } = useColorMode()
             class="footer-link"
           >Caching docs</a>
         </nav>
-        <span class="text-neutral-500 dark:text-neutral-400">
+        <span class="text-neutral-600 dark:text-neutral-400">
           Made by <a
             href="https://philippeserhal.com"
             target="_blank"
@@ -119,16 +119,16 @@ body {
 }
 
 .footer-link {
-  color: #05bdba;
+  color: #016968;
   text-decoration: underline;
-  text-decoration-color: rgba(5, 189, 186, 0.4);
+  text-decoration-color: rgba(1, 105, 104, 0.4);
   text-underline-offset: 2px;
   transition: all 0.15s ease;
 }
 
 .footer-link:hover {
-  color: #04a29f;
-  text-decoration-color: #04a29f;
+  color: #014847;
+  text-decoration-color: #014847;
 }
 
 :is(.dark) .footer-link {

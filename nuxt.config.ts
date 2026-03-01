@@ -12,6 +12,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: { lang: 'en' },
       title: 'Netlify Cache Inspector',
       link: [
         {
@@ -29,7 +30,10 @@ export default defineNuxtConfig({
         },
         { rel: 'manifest', href: '/site.webmanifest' },
       ],
-      meta: [{ name: 'apple-mobile-web-app-title', content: 'ntlcache' }],
+      meta: [
+        { name: 'description', content: 'Inspect and compare HTTP cache headers on Netlify sites. Analyze cache status, CDN behavior, and cache-control directives.' },
+        { name: 'apple-mobile-web-app-title', content: 'ntlcache' },
+      ],
       script: [
         {
           // Prevent FOUC: apply dark class before first paint
