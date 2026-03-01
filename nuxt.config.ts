@@ -2,12 +2,7 @@
 import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
-  modules: [
-    '@unocss/nuxt',
-    '@nuxt/eslint',
-    '@nuxt/test-utils/module',
-    '@netlify/nuxt',
-  ],
+  modules: ['@unocss/nuxt', '@nuxt/test-utils/module', '@netlify/nuxt'],
   devtools: { enabled: true },
 
   app: {
@@ -56,10 +51,4 @@ export default defineNuxtConfig({
   },
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-09-13',
-
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
 })

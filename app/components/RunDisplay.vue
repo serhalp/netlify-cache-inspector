@@ -11,25 +11,17 @@ const props = defineProps<{
 
 const showUrl = computed(() => {
   if (props.runs.length === 0) return true
-  return !props.runs.every(run => run.url === props.inputUrl)
+  return !props.runs.every((run) => run.url === props.inputUrl)
 })
 </script>
 
 <template>
   <div class="mt-10">
-    <div
-      v-if="loading"
-      data-testid="loading-indicator"
-      class="loading-pulse"
-    >
+    <div v-if="loading" data-testid="loading-indicator" class="loading-pulse">
       <span class="mono-label">Inspecting URL...</span>
     </div>
 
-    <div
-      v-if="error"
-      data-testid="error"
-      class="error-banner"
-    >
+    <div v-if="error" data-testid="error" class="error-banner">
       {{ error }}
     </div>
 
@@ -44,16 +36,8 @@ const showUrl = computed(() => {
       />
     </div>
 
-    <div
-      v-if="runs.length > 0"
-      class="text-center mt-10"
-    >
-      <button
-        class="btn-secondary"
-        @click="onClear()"
-      >
-        Clear runs
-      </button>
+    <div v-if="runs.length > 0" class="text-center mt-10">
+      <button class="btn-secondary" @click="onClear()">Clear runs</button>
     </div>
   </div>
 </template>
@@ -66,8 +50,13 @@ const showUrl = computed(() => {
 }
 
 @keyframes pulse-opacity {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .error-banner {

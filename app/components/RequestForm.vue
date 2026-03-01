@@ -45,11 +45,11 @@ const handleSubmit = () => {
 .url-input {
   padding: 0.625rem 1rem;
   background: white;
-  border: 1px solid #D1D5DA;
+  border: 1px solid #d1d5da;
   border-radius: 9999px;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.875rem;
-  color: #181A1C;
+  color: #181a1c;
   transition: all 0.2s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
@@ -66,7 +66,7 @@ const handleSubmit = () => {
 :is(.dark) .url-input {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(208, 255, 254, 0.15);
-  color: #E9EBED;
+  color: #e9ebed;
 }
 
 :is(.dark) .url-input:focus {

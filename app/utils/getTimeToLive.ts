@@ -12,11 +12,9 @@ export const getTimeToLive = (
   const effectiveAge = age ?? (now - effectiveDate.getTime()) / 1000
   const trulyEffectiveDate = date ?? new Date(now - 1000 * effectiveAge)
 
-  const effectiveMaxAge
-    = maxAge
-      ?? (expiresAt != null
-        ? (expiresAt.getTime() - trulyEffectiveDate.getTime()) / 1000
-        : undefined)
+  const effectiveMaxAge =
+    maxAge ??
+    (expiresAt != null ? (expiresAt.getTime() - trulyEffectiveDate.getTime()) / 1000 : undefined)
 
   if (effectiveMaxAge != null) {
     return effectiveMaxAge - effectiveAge

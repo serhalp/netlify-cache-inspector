@@ -11,7 +11,15 @@ vi.mock('./RunPanel.vue', () => ({
   default: {
     name: 'RunPanel',
     template: '<div class="run-panel-mock">{{ runId }}</div>',
-    props: ['runId', 'url', 'status', 'durationInMs', 'cacheHeaders', 'enableDiffOnHover', 'showUrl'],
+    props: [
+      'runId',
+      'url',
+      'status',
+      'durationInMs',
+      'cacheHeaders',
+      'enableDiffOnHover',
+      'showUrl',
+    ],
   },
 }))
 

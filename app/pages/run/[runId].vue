@@ -1,9 +1,22 @@
 <script setup lang="ts">
-const { runs, error, loading, handleRequestFormSubmit, handleClickClear, getRunFromApiRun, setRuns, setError } = useRunManager()
+const {
+  runs,
+  error,
+  loading,
+  handleRequestFormSubmit,
+  handleClickClear,
+  getRunFromApiRun,
+  setRuns,
+  setError,
+} = useRunManager()
 
 const route = useRoute()
 
-const { data: initialRuns, pending: initialLoading, error: preloadedRunsError } = await useAsyncData('preloadedRuns', async () => {
+const {
+  data: initialRuns,
+  pending: initialLoading,
+  error: preloadedRunsError,
+} = await useAsyncData('preloadedRuns', async () => {
   const { runId } = route.params
   if (typeof runId === 'string') {
     const responseBody = await $fetch(`/api/runs/${runId}`)
@@ -33,10 +46,7 @@ const inputUrl = ref(initialRuns.value?.[0]?.url ?? '')
     />
 
     <!-- Show loading state while initial run is loading -->
-    <div
-      v-else-if="initialLoading"
-      class="py-6 text-center text-neutral-600 dark:text-neutral-300"
-    >
+    <div v-else-if="initialLoading" class="py-6 text-center text-neutral-600 dark:text-neutral-300">
       Loading run...
     </div>
 

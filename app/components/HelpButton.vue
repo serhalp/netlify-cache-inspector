@@ -21,10 +21,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 }
 
 const handleClickOutside = (e: MouseEvent) => {
-  if (
-    !buttonEl.value?.contains(e.target as Node)
-    && !popoverEl.value?.contains(e.target as Node)
-  ) {
+  if (!buttonEl.value?.contains(e.target as Node) && !popoverEl.value?.contains(e.target as Node)) {
     isOpen.value = false
   }
 }
@@ -67,8 +64,13 @@ onUnmounted(() => {
         <ol class="help-steps">
           <li>Paste any URL hosted on <strong>Netlify</strong></li>
           <li>Hit <strong>Inspect</strong> to fetch it with debug headers</li>
-          <li>See a structured breakdown of cache behavior: which layers hit or missed, TTLs, and more</li>
-          <li>Run it again to <strong>compare</strong> side by side. Hover any field to diff values across runs</li>
+          <li>
+            See a structured breakdown of cache behavior: which layers hit or missed, TTLs, and more
+          </li>
+          <li>
+            Run it again to <strong>compare</strong> side by side. Hover any field to diff values
+            across runs
+          </li>
         </ol>
         <p class="text-base text-neutral-600 dark:text-neutral-400 mt-3 mb-0">
           Each run is saved with a permalink you can share.
@@ -86,9 +88,9 @@ onUnmounted(() => {
   width: 28px;
   height: 28px;
   border-radius: 9999px;
-  border: 1px solid #D1D5DA;
-  background: #F6F6F7;
-  color: #545A61;
+  border: 1px solid #d1d5da;
+  background: #f6f6f7;
+  color: #545a61;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -106,7 +108,7 @@ onUnmounted(() => {
 :is(.dark) .help-btn {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(208, 255, 254, 0.15);
-  color: #9DA7B2;
+  color: #9da7b2;
 }
 
 :is(.dark) .help-btn:hover {
@@ -123,15 +125,19 @@ onUnmounted(() => {
   padding: 1.25rem 1.375rem;
   border-radius: 12px;
   background: white;
-  border: 1px solid #E9EBED;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9ebed;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   z-index: 100;
 }
 
 :is(.dark) .help-popover {
-  background: #181A1C;
+  background: #181a1c;
   border-color: rgba(208, 255, 254, 0.12);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .help-steps {
@@ -139,11 +145,11 @@ onUnmounted(() => {
   padding-left: 1.25rem;
   font-size: 1rem;
   line-height: 1.6;
-  color: #545A61;
+  color: #545a61;
 }
 
 :is(.dark) .help-steps {
-  color: #9DA7B2;
+  color: #9da7b2;
 }
 
 .help-steps li {
@@ -155,12 +161,12 @@ onUnmounted(() => {
 }
 
 .help-steps strong {
-  color: #181A1C;
+  color: #181a1c;
   font-weight: 600;
 }
 
 :is(.dark) .help-steps strong {
-  color: #E9EBED;
+  color: #e9ebed;
 }
 
 .popover-enter-active {

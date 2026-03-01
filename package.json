@@ -1,28 +1,26 @@
 {
   "name": "netlify-cache-inspector",
-  "description": "Inspect and compare cache headers for requests to Netlify sites",
   "private": true,
+  "description": "Inspect and compare cache headers for requests to Netlify sites",
   "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "test:unit": "vitest run",
     "knip": "knip",
-    "test": "pnpm run typecheck && pnpm run lint && pnpm run test:unit",
+    "test": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test:unit",
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.0",
     "@netlify/nuxt": "0.2.25",
-    "@nuxt/eslint": "^1.15.1",
     "date-fns": "^4.1.0",
     "highlight.js": "^11.11.1",
     "nuxt": "^4.3.1",
@@ -36,9 +34,14 @@
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^20.6.2",
     "knip": "^5.83.1",
+    "oxfmt": "^0.35.0",
+    "oxlint": "^1.50.0",
     "typescript": "^5.6.2",
     "vitest": "^4.0.18",
     "vue-tsc": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531"
 }

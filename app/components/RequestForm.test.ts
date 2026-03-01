@@ -47,7 +47,9 @@ describe('RequestForm', () => {
   it('uses default URL when no initialUrl prop is provided', () => {
     const wrapper = mount(RequestForm)
     const input = wrapper.find('input')
-    expect(input.element.value).toBe('https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page')
+    expect(input.element.value).toBe(
+      'https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page',
+    )
   })
 
   it('uses inputUrl model value when provided', () => {

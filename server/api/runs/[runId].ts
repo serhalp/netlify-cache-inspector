@@ -13,8 +13,7 @@ export default defineEventHandler(async (event) => {
   try {
     const run = await getRun(runId)
     return run
-  }
-  catch (error) {
+  } catch (error) {
     throw createError({
       statusCode: 500,
       message: error instanceof Error ? error.message : 'Failed to fetch run',

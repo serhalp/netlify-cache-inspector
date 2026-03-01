@@ -54,18 +54,15 @@ describe('getTimeToLive', () => {
   })
 
   // FIXME(serhalp) Real bug. Fix logic. It's depending on `now` when given two absolute dates...
-  it.fails(
-    'returns the diff in seconds from `expiresAt` to `date` if `maxAge` and `age` are not defined and `expiresAt` and `date` are defined',
-    () => {
-      const age = undefined
-      const date = new Date(1_000_000)
-      const expiresAt = new Date(1_000_000 + 15_000)
-      const maxAge = null
-      const now = Date.now()
+  it.fails('returns the diff in seconds from `expiresAt` to `date` if `maxAge` and `age` are not defined and `expiresAt` and `date` are defined', () => {
+    const age = undefined
+    const date = new Date(1_000_000)
+    const expiresAt = new Date(1_000_000 + 15_000)
+    const maxAge = null
+    const now = Date.now()
 
-      expect(getTimeToLive(age, date, expiresAt, maxAge, now)).toBe(15)
-    },
-  )
+    expect(getTimeToLive(age, date, expiresAt, maxAge, now)).toBe(15)
+  })
 
   it('returns the diff in seconds from `expiresAt` to `now` if `maxAge`, `age`, and `date` are not defined and `expiresAt` is defined', () => {
     const age = undefined

@@ -8,23 +8,20 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
 <template>
   <div>
     <Transition name="hero">
-      <section
-        v-if="showHero"
-        class="hero"
-      >
-        <h1 class="font-heading font-bold text-3xl sm:text-4xl tracking-tight text-neutral-800 dark:text-neutral-50 mb-3">
+      <section v-if="showHero" class="hero">
+        <h1
+          class="font-heading font-bold text-3xl sm:text-4xl tracking-tight text-neutral-800 dark:text-neutral-50 mb-3"
+        >
           Understand how Netlify<br />caches your site
         </h1>
         <p class="text-xl text-neutral-600 dark:text-neutral-400 max-w-xl mb-8 leading-relaxed">
-          Paste a URL, inspect the response cache headers, and see exactly what each CDN layer did. Hits, misses, TTLs, the whole picture.
+          Paste a URL, inspect the response cache headers, and see exactly what each CDN layer did.
+          Hits, misses, TTLs, the whole picture.
         </p>
 
         <div class="features">
           <div class="feature">
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
+            <div class="feature-icon" aria-hidden="true">
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -43,10 +40,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
             </p>
           </div>
           <div class="feature">
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
+            <div class="feature-icon" aria-hidden="true">
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -66,10 +60,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
             </p>
           </div>
           <div class="feature">
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
+            <div class="feature-icon" aria-hidden="true">
               <svg
                 class="w-4 h-4"
                 fill="none"

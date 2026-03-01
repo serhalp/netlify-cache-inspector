@@ -14,11 +14,10 @@ const showRawHeaders = ref(false)
 
 <template>
   <div class="run-card">
-    <div
-      v-if="props.showUrl"
-      class="flex items-baseline justify-between gap-3 mb-3"
-    >
-      <h3 class="font-mono text-sm font-500 text-neutral-800 dark:text-neutral-100 break-all leading-relaxed">
+    <div v-if="props.showUrl" class="flex items-baseline justify-between gap-3 mb-3">
+      <h3
+        class="font-mono text-sm font-500 text-neutral-800 dark:text-neutral-100 break-all leading-relaxed"
+      >
         {{ props.url }}
       </h3>
       <NuxtLink
@@ -43,7 +42,8 @@ const showRawHeaders = ref(false)
 
     <div class="flex items-center justify-between mb-4">
       <span class="mono-label">
-        <span :class="props.status >= 400 ? 'text-red-500' : ''">HTTP {{ props.status }}</span> &middot; {{ props.durationInMs }}<span class="normal-case">ms</span>
+        <span :class="props.status >= 400 ? 'text-red-500' : ''">HTTP {{ props.status }}</span>
+        &middot; {{ props.durationInMs }}<span class="normal-case">ms</span>
         <template v-if="!props.showUrl">
           &middot;
           <NuxtLink
@@ -86,9 +86,7 @@ const showRawHeaders = ref(false)
     />
     <div v-if="showRawHeaders">
       <hr class="raw-separator" />
-      <h4 class="mono-label mb-2">
-        Raw cache headers
-      </h4>
+      <h4 class="mono-label mb-2">Raw cache headers</h4>
       <RawCacheHeaders :cache-headers="props.cacheHeaders" />
     </div>
   </div>
@@ -101,7 +99,7 @@ const showRawHeaders = ref(false)
   flex-direction: column;
   padding: 1.25rem;
   border-radius: 0.75rem;
-  border: 1px solid #E9EBED;
+  border: 1px solid #e9ebed;
   background: white;
   transition: border-color 0.15s cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -120,7 +118,7 @@ const showRawHeaders = ref(false)
 }
 
 .run-card:hover {
-  border-color: #D1D5DA;
+  border-color: #d1d5da;
 }
 
 :is(.dark) .run-card {
@@ -146,7 +144,7 @@ const showRawHeaders = ref(false)
 }
 
 :is(.dark) .permalink-link {
-  color: #9DA7B2;
+  color: #9da7b2;
 }
 
 .permalink-link:hover {
@@ -184,7 +182,7 @@ const showRawHeaders = ref(false)
   display: inline-block;
   width: 1.75rem;
   height: 1rem;
-  background-color: #D1D5DA;
+  background-color: #d1d5da;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease;
   flex-shrink: 0;
@@ -216,7 +214,7 @@ const showRawHeaders = ref(false)
 }
 
 .toggle-label:hover .toggle-track {
-  background-color: #9DA7B2;
+  background-color: #9da7b2;
 }
 
 :is(.dark) .toggle-label:hover .toggle-track {
@@ -230,7 +228,7 @@ const showRawHeaders = ref(false)
 .raw-separator {
   border: none;
   height: 1px;
-  background: #E9EBED;
+  background: #e9ebed;
   margin: 1rem 0;
 }
 

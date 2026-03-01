@@ -7,8 +7,7 @@
  * TODO(serhalp) Fork instead of inlining? Open a PR?
  */
 
-const HEADER_REGEXP
-  = /([a-zA-Z][a-zA-Z_-]*)\s*(?:=(?:"([^"]*)"|([^ \t",;]*)))?/g
+const HEADER_REGEXP = /([a-zA-Z][a-zA-Z_-]*)\s*(?:=(?:"([^"]*)"|([^ \t",;]*)))?/g
 
 const SUPPORTED_DIRECTIVES = {
   maxAge: 'max-age',
@@ -105,14 +104,10 @@ export class CacheControl {
     }
 
     this.maxAge = parseDuration(values[SUPPORTED_DIRECTIVES.maxAge])
-    this.sharedMaxAge = parseDuration(
-      values[SUPPORTED_DIRECTIVES.sharedMaxAge],
-    )
+    this.sharedMaxAge = parseDuration(values[SUPPORTED_DIRECTIVES.sharedMaxAge])
 
     this.maxStale = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.maxStale])
-    this.maxStaleDuration = parseDuration(
-      values[SUPPORTED_DIRECTIVES.maxStale],
-    )
+    this.maxStaleDuration = parseDuration(values[SUPPORTED_DIRECTIVES.maxStale])
     if (this.maxStaleDuration) {
       this.maxStale = true
     }
@@ -120,28 +115,16 @@ export class CacheControl {
     this.minFresh = parseDuration(values[SUPPORTED_DIRECTIVES.minFresh])
 
     this.immutable = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.immutable])
-    this.mustRevalidate = parseBooleanOnly(
-      values[SUPPORTED_DIRECTIVES.mustRevalidate],
-    )
+    this.mustRevalidate = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.mustRevalidate])
     this.noCache = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.noCache])
     this.noStore = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.noStore])
-    this.noTransform = parseBooleanOnly(
-      values[SUPPORTED_DIRECTIVES.noTransform],
-    )
-    this.onlyIfCached = parseBooleanOnly(
-      values[SUPPORTED_DIRECTIVES.onlyIfCached],
-    )
+    this.noTransform = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.noTransform])
+    this.onlyIfCached = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.onlyIfCached])
     this.private = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.private])
-    this.proxyRevalidate = parseBooleanOnly(
-      values[SUPPORTED_DIRECTIVES.proxyRevalidate],
-    )
+    this.proxyRevalidate = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.proxyRevalidate])
     this.public = parseBooleanOnly(values[SUPPORTED_DIRECTIVES.public])
-    this.staleWhileRevalidate = parseDuration(
-      values[SUPPORTED_DIRECTIVES.staleWhileRevalidate],
-    )
-    this.staleIfError = parseDuration(
-      values[SUPPORTED_DIRECTIVES.staleIfError],
-    )
+    this.staleWhileRevalidate = parseDuration(values[SUPPORTED_DIRECTIVES.staleWhileRevalidate])
+    this.staleIfError = parseDuration(values[SUPPORTED_DIRECTIVES.staleIfError])
 
     for (const [key, value] of Object.entries(values)) {
       if (!Object.keys(SUPPORTED_DIRECTIVES).includes(key)) {

@@ -14,9 +14,8 @@ export const saveRun = async (run: Run): Promise<void> => {
   // Validate the run data before saving
   if (run.url) {
     try {
-      new URL(run.url)
-    }
-    catch {
+      new URL(run.url) // oxlint-disable-line no-new -- validation only
+    } catch {
       throw new Error(`Cannot save run with invalid URL: ${run.url}`)
     }
   }

@@ -12,7 +12,6 @@ vi.mock('~/utils/getCacheHeaders', () => ({
 
 // Mock fetch and $fetch
 global.fetch = vi.fn()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 global.$fetch = vi.fn() as any
 
 describe('useRunManager', () => {
@@ -59,7 +58,6 @@ describe('useRunManager', () => {
       headers: { 'cache-control': 'max-age=3600' },
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockFetch = vi.mocked($fetch as any)
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
@@ -78,7 +76,6 @@ describe('useRunManager', () => {
   })
 
   it('handles API request error', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockFetch = vi.mocked($fetch as any)
     mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
 
@@ -95,13 +92,15 @@ describe('useRunManager', () => {
     const { runs, setRuns, handleClickClear } = useRunManager()
 
     // Add some runs first
-    setRuns([{
-      runId: 'test-run',
-      url: 'https://example.com',
-      status: 200,
-      durationInMs: 100,
-      cacheHeaders: {},
-    }])
+    setRuns([
+      {
+        runId: 'test-run',
+        url: 'https://example.com',
+        status: 200,
+        durationInMs: 100,
+        cacheHeaders: {},
+      },
+    ])
 
     expect(runs.value).toHaveLength(1)
 

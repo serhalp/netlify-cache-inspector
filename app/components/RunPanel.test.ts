@@ -27,7 +27,7 @@ const mockProps = {
   durationInMs: 150,
   cacheHeaders: {
     'cache-control': 'max-age=3600',
-    'etag': '"abc123"',
+    etag: '"abc123"',
   },
   enableDiffOnHover: false,
   showUrl: true,

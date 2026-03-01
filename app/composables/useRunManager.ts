@@ -5,16 +5,13 @@ export const useRunManager = () => {
   const error = ref<string | null>(null)
   const loading = ref<boolean>(false)
 
+  // oxlint-disable-next-line unicorn/consistent-function-scoping -- intentionally scoped inside composable
   const getRunFromApiRun = (apiRun: ApiRun): Run => {
     const { headers, ...run } = apiRun
     return { ...run, cacheHeaders: getCacheHeaders(headers) }
   }
 
-  const handleRequestFormSubmit = async ({
-    url,
-  }: {
-    url: string
-  }): Promise<void> => {
+  const handleRequestFormSubmit = async ({ url }: { url: string }): Promise<void> => {
     loading.value = true
     try {
       const responseBody: ApiRun = await $fetch<ApiRun>('/api/inspect-url', {
@@ -24,16 +21,10 @@ export const useRunManager = () => {
 
       runs.value.push(getRunFromApiRun(responseBody))
       error.value = null
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    catch (err: any) {
-      error.value
-        = err?.data?.message
-          ?? err?.toString?.()
-          ?? new Error(`Fetch error: ${err}`)
+    } catch (err: any) {
+      error.value = err?.data?.message ?? err?.toString?.() ?? new Error(`Fetch error: ${err}`)
       return
-    }
-    finally {
+    } finally {
       loading.value = false
     }
   }

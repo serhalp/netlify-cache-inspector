@@ -16,16 +16,18 @@ pnpm run dev    # http://localhost:3000
 
 ## Commands
 
-| Command          | Purpose                                   |
-| ---------------- | ----------------------------------------- |
-| `pnpm dev`       | Dev server                                |
-| `pnpm build`     | Production build                          |
-| `pnpm test`      | Full suite: typecheck + lint + unit tests |
-| `pnpm test:unit` | Unit tests only                           |
-| `pnpm typecheck` | TypeScript type checking                  |
-| `pnpm lint`      | ESLint check                              |
-| `pnpm lint:fix`  | ESLint auto-fix                           |
-| `pnpm knip`      | Check for unused exports/dependencies     |
+| Command             | Purpose                                            |
+| ------------------- | -------------------------------------------------- |
+| `pnpm dev`          | Dev server                                         |
+| `pnpm build`        | Production build                                   |
+| `pnpm test`         | Full suite: typecheck + lint + format + unit tests |
+| `pnpm test:unit`    | Unit tests only                                    |
+| `pnpm typecheck`    | TypeScript type checking                           |
+| `pnpm lint`         | Oxlint check                                       |
+| `pnpm lint:fix`     | Oxlint auto-fix                                    |
+| `pnpm format`       | Format with oxfmt                                  |
+| `pnpm format:check` | Check formatting                                   |
+| `pnpm knip`         | Check for unused exports/dependencies              |
 
 Run a single test file:
 
@@ -45,9 +47,8 @@ pnpm vitest run app/utils/getCacheAnalysis.test.ts
 ## Code conventions
 
 - Vue Composition API with `<script setup lang="ts">`
-- ESLint with `@nuxt/eslint` stylistic rules (no Prettier)
+- **Oxlint** for linting (`oxlint.config.ts`), **oxfmt** for formatting (`.oxfmtrc.json`)
 - No `any` without justification
-- `vue/html-self-closing` set to `void: 'always'`
 
 ### Commits
 
