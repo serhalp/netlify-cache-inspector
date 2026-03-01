@@ -21,7 +21,6 @@ export default defineConfig({
     'no-else-return': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
-    'require-await': 'error',
     'typescript/no-explicit-any': 'error',
     'typescript/no-non-null-assertion': 'error',
     'typescript/only-throw-error': 'error',
