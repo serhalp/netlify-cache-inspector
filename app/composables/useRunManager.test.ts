@@ -12,7 +12,8 @@ vi.mock('~/utils/getCacheHeaders', () => ({
 
 // Mock fetch and $fetch
 global.fetch = vi.fn()
-global.$fetch = vi.fn() as any
+// @ts-expect-error -- $fetch mock for tests
+global.$fetch = vi.fn()
 
 describe('useRunManager', () => {
   beforeEach(() => {
@@ -58,7 +59,8 @@ describe('useRunManager', () => {
       headers: { 'cache-control': 'max-age=3600' },
     }
 
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = vi.mocked($fetch)
+    // @ts-expect-error -- Nuxt's $fetch types are too deeply recursive for mockResolvedValueOnce
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()
@@ -76,7 +78,7 @@ describe('useRunManager', () => {
   })
 
   it('handles API request error', async () => {
-    const mockFetch = vi.mocked($fetch as any)
+    const mockFetch = vi.mocked($fetch)
     mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()

@@ -21,8 +21,12 @@ export const useRunManager = () => {
 
       runs.value.push(getRunFromApiRun(responseBody))
       error.value = null
-    } catch (err: any) {
-      error.value = err?.data?.message ?? err?.toString?.() ?? new Error(`Fetch error: ${err}`)
+    } catch (err: unknown) {
+      const e = err as Record<string, unknown> | undefined
+      error.value =
+        ((e?.data as Record<string, unknown>)?.message as string) ??
+        (typeof e?.toString === 'function' ? e.toString() : null) ??
+        new Error(`Fetch error: ${err}`)
       return
     } finally {
       loading.value = false

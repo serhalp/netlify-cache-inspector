@@ -69,9 +69,8 @@ export const useDataHover = () => {
         const absMs = Math.abs(deltaMs)
         if (absMs < 1000) {
           return `${sign}${absMs}ms`
-        } else {
-          return `${sign}${Math.round(absMs / 1000)}s`
         }
+        return `${sign}${Math.round(absMs / 1000)}s`
       }
 
       return `${sign}${humanDuration}`
