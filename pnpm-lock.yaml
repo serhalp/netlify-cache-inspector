@@ -12,8 +12,8 @@ importers:
         specifier: ^10.7.0
         version: 10.7.0
       '@netlify/nuxt':
-        specifier: 0.2.25
-        version: 0.2.25(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)
+        specifier: 0.2.27
+        version: 0.2.27(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -838,12 +838,16 @@ packages:
   '@napi-rs/wasm-runtime@1.1.1':
     resolution: {integrity: sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A==}
 
-  '@netlify/ai@0.3.8':
-    resolution: {integrity: sha512-qz8XDb/82UzsUMKn+sB84V3ZGqeNQOvGwNo840nHIV9saJwLPTd+FOqSUoKUIxZphNA7kQ0uGeadSUkJzDz7og==}
+  '@netlify/ai@0.4.0':
+    resolution: {integrity: sha512-ZSDSR5RuV9qkW4L2uwKvwDdSGBqef2NyLGsrdoEx0Yj7ulSWjPSTVCrl+uY23lgaEsoCVj+dSbN9yC+uXw7dJw==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/api@14.0.14':
     resolution: {integrity: sha512-/YwcFbI0RsKXof+e+f48pVqmELzkGWOrhqZuL5xCUNdHYhvUd9El0jQDv7fBjdhxHSrflnZfXFUW56xaI69k4A==}
+    engines: {node: '>=18.14.0'}
+
+  '@netlify/api@14.0.17':
+    resolution: {integrity: sha512-96C0og8NfSotKvLyfFH2a0LBKWH5nseEnSq2TsRDgpUlrzQKYylbva9J+B7CtNZ/DfKgR/k0AncbEXtRvDuaLg==}
     engines: {node: '>=18.14.0'}
 
   '@netlify/binary-info@1.0.0':
@@ -866,8 +870,8 @@ packages:
     resolution: {integrity: sha512-qziF8R9kf7mRNgSpmUH96O0aV1ZiwK4c9ZecFQbDSQuYhgy9GY1WTjiQF0oQnohjTjWNtXhrU39LAeXWNLaBJg==}
     engines: {node: ^18.14.0 || >=20}
 
-  '@netlify/dev@4.11.3':
-    resolution: {integrity: sha512-U/zvV8yiX5EyFwuG+j6JqiqK/vWJpjEMUraGqNVc7pW9rO2pRJU6MxPbbuHSoNlK9+XPYDOZbtRxEwdckPSWUw==}
+  '@netlify/dev@4.12.1':
+    resolution: {integrity: sha512-CjI7ig6/T4VbgBO/ohDDoXw5atutRXEHBpaUBDNqiWN+6phT8AVKasTwxQxtZzadH0yWGjXsHJYfjEoVpgd2og==}
     engines: {node: '>=20.6.1'}
     peerDependencies:
       '@netlify/db-dev': 0.2.0
@@ -910,12 +914,16 @@ packages:
     resolution: {integrity: sha512-1X3fUmacCLMlPIqyeV5tdo6Wbf9aBSWobgr4DyRvg9zDV9jbKqgdN3BNbcUXmVaqfN+0iiv0k9p02mcRV3OyOw==}
     engines: {node: '>=20.6.1'}
 
-  '@netlify/nuxt@0.2.25':
-    resolution: {integrity: sha512-qMr6TZK3vt5Opevzf3fdmQ4P3X4H59R5KAAXZjK1bRdcyQR7H/cEMEZ+q90UzphUXrFI7hVlGbhUcq+U8NfgEQ==}
+  '@netlify/nuxt@0.2.27':
+    resolution: {integrity: sha512-sPkDbryBhmZoAcD4tDYnog3H7RDnnS27Hdlt90h53bPc0Tu004kb/++YsuFnFmfzLygCVdBKZmMOavszRKr62w==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@netlify/open-api@2.49.0':
     resolution: {integrity: sha512-zr8dElQUsZo+gqZh3SA2NYv44IKaASwYBC97pO7sPI9GKaDW6dbeJ8P+fOI3VuQaodQSuIcyda0sM3dZAyqHnA==}
+    engines: {node: '>=14.8.0'}
+
+  '@netlify/open-api@2.50.0':
+    resolution: {integrity: sha512-nvtP3GQqAg2fDCzZIz/PNIjgdQcbKRqJlRRQquRfBTP3DJi4254fMApWvBoj6+v07eowy2/t9xXHu+KRPw6iKw==}
     engines: {node: '>=14.8.0'}
 
   '@netlify/otel@5.1.1':
@@ -6425,7 +6433,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.29.0
       '@babel/generator': 7.29.1
-      '@babel/parser': 7.27.7
+      '@babel/parser': 7.29.0
       '@babel/template': 7.28.6
       '@babel/types': 7.29.0
       debug: 4.4.3
@@ -6901,13 +6909,20 @@ snapshots:
       '@tybys/wasm-util': 0.10.1
     optional: true
 
-  '@netlify/ai@0.3.8':
+  '@netlify/ai@0.4.0':
     dependencies:
-      '@netlify/api': 14.0.14
+      '@netlify/api': 14.0.17
 
   '@netlify/api@14.0.14':
     dependencies:
       '@netlify/open-api': 2.49.0
+      node-fetch: 3.3.2
+      p-wait-for: 5.0.2
+      picoquery: 2.5.0
+
+  '@netlify/api@14.0.17':
+    dependencies:
+      '@netlify/open-api': 2.50.0
       node-fetch: 3.3.2
       p-wait-for: 5.0.2
       picoquery: 2.5.0
@@ -6972,9 +6987,9 @@ snapshots:
       uuid: 13.0.0
       write-file-atomic: 5.0.1
 
-  '@netlify/dev@4.11.3(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)':
+  '@netlify/dev@4.12.1(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)':
     dependencies:
-      '@netlify/ai': 0.3.8
+      '@netlify/ai': 0.4.0
       '@netlify/blobs': 10.7.0
       '@netlify/config': 24.4.0
       '@netlify/dev-utils': 4.3.3
@@ -7115,9 +7130,9 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@netlify/nuxt@0.2.25(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)':
+  '@netlify/nuxt@0.2.27(db0@0.3.4)(ioredis@5.9.3)(magicast@0.5.2)(rollup@4.57.1)':
     dependencies:
-      '@netlify/dev': 4.11.3(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)
+      '@netlify/dev': 4.12.1(db0@0.3.4)(ioredis@5.9.3)(rollup@4.57.1)
       '@netlify/dev-utils': 4.3.3
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       h3: 1.15.5
@@ -7149,6 +7164,8 @@ snapshots:
       - uploadthing
 
   '@netlify/open-api@2.49.0': {}
+
+  '@netlify/open-api@2.50.0': {}
 
   '@netlify/otel@5.1.1':
     dependencies:
