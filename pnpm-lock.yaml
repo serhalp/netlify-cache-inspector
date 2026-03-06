@@ -12,8 +12,8 @@ importers:
         specifier: ^10.7.0
         version: 10.7.0
       '@netlify/nuxt':
-        specifier: 0.2.27
-        version: 0.2.27(db0@0.3.4)(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)
+        specifier: 0.2.30
+        version: 0.2.30(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -22,7 +22,7 @@ importers:
         version: 11.11.1
       nuxt:
         specifier: ^4.3.1
-        version: 4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
+        version: 4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
       vue:
         specifier: ^3.5.29
         version: 3.5.29(typescript@5.9.3)
@@ -287,6 +287,9 @@ packages:
         optional: true
       oxlint:
         optional: true
+
+  '@electric-sql/pglite@0.3.15':
+    resolution: {integrity: sha512-Cj++n1Mekf9ETfdc16TlDi+cDDQF0W7EcbyRHYOAeZdsAe8M/FJg18itDTSwyHfar2WIezawM9o0EKaRGVKygQ==}
 
   '@emnapi/core@1.8.1':
     resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
@@ -895,18 +898,17 @@ packages:
     engines: {node: '>=18.14.0'}
     hasBin: true
 
+  '@netlify/db-dev@0.5.0':
+    resolution: {integrity: sha512-H3ysKhMv3sKyfQd+5ylShMZ6/puDCUwd/0adpFMWw3ycBoGSJCQVaqFZDjWLJ+pKspYw78MUrhywqqCv3P8rzA==}
+    engines: {node: '>=20.6.1'}
+
   '@netlify/dev-utils@4.3.3':
     resolution: {integrity: sha512-qziF8R9kf7mRNgSpmUH96O0aV1ZiwK4c9ZecFQbDSQuYhgy9GY1WTjiQF0oQnohjTjWNtXhrU39LAeXWNLaBJg==}
     engines: {node: ^18.14.0 || >=20}
 
-  '@netlify/dev@4.12.1':
-    resolution: {integrity: sha512-CjI7ig6/T4VbgBO/ohDDoXw5atutRXEHBpaUBDNqiWN+6phT8AVKasTwxQxtZzadH0yWGjXsHJYfjEoVpgd2og==}
+  '@netlify/dev@4.14.1':
+    resolution: {integrity: sha512-RzSV1zF58U2yIOTnkccGFiryGo5o1vetPO8F3pp8phxj3B3u4HSrG1NeODT55MreMLU8I7+jYf1Sc74Xb/vx5Q==}
     engines: {node: '>=20.6.1'}
-    peerDependencies:
-      '@netlify/db-dev': 0.2.0
-    peerDependenciesMeta:
-      '@netlify/db-dev':
-        optional: true
 
   '@netlify/edge-bundler@14.9.13':
     resolution: {integrity: sha512-NZlJFq4g/0XVOeNXUNrDE0fJI7rCIzC3jUANXxDKaciubDNAe1PdHpAPm5cEEkPUgkeG8f6DhjAIRyJwlYzCFg==}
@@ -943,8 +945,8 @@ packages:
     resolution: {integrity: sha512-1X3fUmacCLMlPIqyeV5tdo6Wbf9aBSWobgr4DyRvg9zDV9jbKqgdN3BNbcUXmVaqfN+0iiv0k9p02mcRV3OyOw==}
     engines: {node: '>=20.6.1'}
 
-  '@netlify/nuxt@0.2.27':
-    resolution: {integrity: sha512-sPkDbryBhmZoAcD4tDYnog3H7RDnnS27Hdlt90h53bPc0Tu004kb/++YsuFnFmfzLygCVdBKZmMOavszRKr62w==}
+  '@netlify/nuxt@0.2.30':
+    resolution: {integrity: sha512-lqv/CKX2SUEleh2PZSyOx6iW1YTa5i33ZaIf/74oWU/eLi64g+xSmfbOHoj6KdtI1kbf31RGSISJ4JAQaz7azQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@netlify/open-api@2.50.0':
@@ -4894,6 +4896,9 @@ packages:
   perfect-debounce@2.1.0:
     resolution: {integrity: sha512-LjgdTytVFXeUgtHZr9WYViYSM/g8MkcTPYDlPa3cDqMirHjKiSZPYd6DoL7pK8AJQr+uWkQvCjHNdiMqsrJs+g==}
 
+  pg-gateway@0.3.0-beta.4:
+    resolution: {integrity: sha512-CTjsM7Z+0Nx2/dyZ6r8zRsc3f9FScoD5UAOlfUx1Fdv/JOIWvRbF7gou6l6vP+uypXQVoYPgw8xZDXgMGvBa4Q==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -6597,6 +6602,8 @@ snapshots:
       eslint: 10.0.2(jiti@2.6.1)
       oxlint: 1.51.0
 
+  '@electric-sql/pglite@0.3.15': {}
+
   '@emnapi/core@1.8.1':
     dependencies:
       '@emnapi/wasi-threads': 1.1.0
@@ -7052,6 +7059,11 @@ snapshots:
       yargs: 17.7.2
       zod: 4.3.6
 
+  '@netlify/db-dev@0.5.0':
+    dependencies:
+      '@electric-sql/pglite': 0.3.15
+      pg-gateway: 0.3.0-beta.4
+
   '@netlify/dev-utils@4.3.3':
     dependencies:
       '@whatwg-node/server': 0.10.18
@@ -7070,16 +7082,17 @@ snapshots:
       uuid: 13.0.0
       write-file-atomic: 5.0.1
 
-  '@netlify/dev@4.12.1(db0@0.3.4)(ioredis@5.10.0)(rollup@4.59.0)':
+  '@netlify/dev@4.14.1(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(rollup@4.59.0)':
     dependencies:
       '@netlify/ai': 0.4.0
       '@netlify/blobs': 10.7.0
       '@netlify/config': 24.4.3
+      '@netlify/db-dev': 0.5.0
       '@netlify/dev-utils': 4.3.3
       '@netlify/edge-functions-dev': 1.0.11
       '@netlify/functions-dev': 1.1.12(rollup@4.59.0)
       '@netlify/headers': 2.1.3
-      '@netlify/images': 1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)
+      '@netlify/images': 1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
       '@netlify/redirects': 3.1.5
       '@netlify/runtime': 4.1.16
       '@netlify/static': 3.1.3
@@ -7190,9 +7203,9 @@ snapshots:
     dependencies:
       '@netlify/headers-parser': 9.0.3
 
-  '@netlify/images@1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)':
+  '@netlify/images@1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)':
     dependencies:
-      ipx: 3.1.1(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)
+      ipx: 3.1.1(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7214,9 +7227,9 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@netlify/nuxt@0.2.27(db0@0.3.4)(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)':
+  '@netlify/nuxt@0.2.30(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)':
     dependencies:
-      '@netlify/dev': 4.12.1(db0@0.3.4)(ioredis@5.10.0)(rollup@4.59.0)
+      '@netlify/dev': 4.14.1(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(rollup@4.59.0)
       '@netlify/dev-utils': 4.3.3
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       h3: 1.15.5
@@ -7229,7 +7242,6 @@ snapshots:
       - '@azure/storage-blob'
       - '@capacitor/preferences'
       - '@deno/kv'
-      - '@netlify/db-dev'
       - '@planetscale/database'
       - '@upstash/redis'
       - '@vercel/blob'
@@ -7507,7 +7519,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/nitro-server@4.3.1(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)(magicast@0.5.2)(nuxt@4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(typescript@5.9.3)':
+  '@nuxt/nitro-server@4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(nuxt@4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(typescript@5.9.3)':
     dependencies:
       '@nuxt/devalue': 2.0.2
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
@@ -7524,8 +7536,8 @@ snapshots:
       impound: 1.0.0
       klona: 2.0.6
       mocked-exports: 0.1.1
-      nitropack: 2.13.1(@netlify/blobs@10.7.0)
-      nuxt: 4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
+      nitropack: 2.13.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)
+      nuxt: 4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
       ohash: 2.0.11
       pathe: 2.0.3
       pkg-types: 2.3.0
@@ -7533,7 +7545,7 @@ snapshots:
       std-env: 3.10.0
       ufo: 1.6.3
       unctx: 2.5.0
-      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)
+      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
       vue: 3.5.29(typescript@5.9.3)
       vue-bundle-renderer: 2.2.0
       vue-devtools-stub: 0.1.0
@@ -7632,7 +7644,7 @@ snapshots:
       - typescript
       - vite
 
-  '@nuxt/vite-builder@4.3.1(@types/node@25.3.3)(eslint@10.0.2(jiti@2.6.1))(magicast@0.5.2)(nuxt@4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vue-tsc@3.2.5(typescript@5.9.3))(vue@3.5.29(typescript@5.9.3))(yaml@2.8.2)':
+  '@nuxt/vite-builder@4.3.1(@types/node@25.3.3)(eslint@10.0.2(jiti@2.6.1))(magicast@0.5.2)(nuxt@4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vue-tsc@3.2.5(typescript@5.9.3))(vue@3.5.29(typescript@5.9.3))(yaml@2.8.2)':
     dependencies:
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       '@rollup/plugin-replace': 6.0.3(rollup@4.59.0)
@@ -7651,7 +7663,7 @@ snapshots:
       magic-string: 0.30.21
       mlly: 1.8.1
       mocked-exports: 0.1.1
-      nuxt: 4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
+      nuxt: 4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
       pathe: 2.0.3
       pkg-types: 2.3.0
       postcss: 8.5.8
@@ -9590,7 +9602,9 @@ snapshots:
 
   date-fns@4.1.0: {}
 
-  db0@0.3.4: {}
+  db0@0.3.4(@electric-sql/pglite@0.3.15):
+    optionalDependencies:
+      '@electric-sql/pglite': 0.3.15
 
   debug@4.4.3:
     dependencies:
@@ -10474,7 +10488,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ipx@3.1.1(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0):
+  ipx@3.1.1(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0):
     dependencies:
       '@fastify/accept-negotiator': 2.0.1
       citty: 0.1.6
@@ -10490,7 +10504,7 @@ snapshots:
       sharp: 0.34.5
       svgo: 4.0.1
       ufo: 1.6.3
-      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)
+      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
       xss: 1.0.15
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -11046,7 +11060,7 @@ snapshots:
 
   netlify-redirector@0.5.0: {}
 
-  nitropack@2.13.1(@netlify/blobs@10.7.0):
+  nitropack@2.13.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@rollup/plugin-alias': 6.0.0(rollup@4.59.0)
@@ -11067,7 +11081,7 @@ snapshots:
       cookie-es: 2.0.0
       croner: 9.1.0
       crossws: 0.3.5
-      db0: 0.3.4
+      db0: 0.3.4(@electric-sql/pglite@0.3.15)
       defu: 6.1.4
       destr: 2.0.5
       dot-prop: 10.1.0
@@ -11113,7 +11127,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       unimport: 5.7.0
       unplugin-utils: 0.3.1
-      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)
+      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
       untyped: 2.0.0
       unwasm: 0.5.3
       youch: 4.1.0
@@ -11219,16 +11233,16 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2):
+  nuxt@4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2):
     dependencies:
       '@dxup/nuxt': 0.3.2(magicast@0.5.2)
       '@nuxt/cli': 3.33.1(@nuxt/schema@4.3.1)(cac@6.7.14)(magicast@0.5.2)
       '@nuxt/devtools': 3.2.2(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue@3.5.29(typescript@5.9.3))
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
-      '@nuxt/nitro-server': 4.3.1(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0)(magicast@0.5.2)(nuxt@4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(typescript@5.9.3)
+      '@nuxt/nitro-server': 4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(nuxt@4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(typescript@5.9.3)
       '@nuxt/schema': 4.3.1
       '@nuxt/telemetry': 2.7.0(@nuxt/kit@4.3.1(magicast@0.5.2))
-      '@nuxt/vite-builder': 4.3.1(@types/node@25.3.3)(eslint@10.0.2(jiti@2.6.1))(magicast@0.5.2)(nuxt@4.3.1(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4)(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vue-tsc@3.2.5(typescript@5.9.3))(vue@3.5.29(typescript@5.9.3))(yaml@2.8.2)
+      '@nuxt/vite-builder': 4.3.1(@types/node@25.3.3)(eslint@10.0.2(jiti@2.6.1))(magicast@0.5.2)(nuxt@4.3.1(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.0)(@parcel/watcher@2.5.6)(@types/node@25.3.3)(@vue/compiler-sfc@3.5.29)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.0)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2))(optionator@0.9.4)(oxlint@1.51.0)(rollup@4.59.0)(terser@5.46.0)(typescript@5.9.3)(vue-tsc@3.2.5(typescript@5.9.3))(vue@3.5.29(typescript@5.9.3))(yaml@2.8.2)
       '@unhead/vue': 2.1.10(vue@3.5.29(typescript@5.9.3))
       '@vue/shared': 3.5.29
       c12: 3.3.3(magicast@0.5.2)
@@ -11693,6 +11707,8 @@ snapshots:
   pend@1.2.0: {}
 
   perfect-debounce@2.1.0: {}
+
+  pg-gateway@0.3.0-beta.4: {}
 
   picocolors@1.1.1: {}
 
@@ -12760,7 +12776,7 @@ snapshots:
       picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4)(ioredis@5.10.0):
+  unstorage@1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0):
     dependencies:
       anymatch: 3.1.3
       chokidar: 5.0.0
@@ -12772,7 +12788,7 @@ snapshots:
       ufo: 1.6.3
     optionalDependencies:
       '@netlify/blobs': 10.7.0
-      db0: 0.3.4
+      db0: 0.3.4(@electric-sql/pglite@0.3.15)
       ioredis: 5.10.0
 
   untun@0.1.3:
