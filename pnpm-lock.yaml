@@ -12,8 +12,8 @@ importers:
         specifier: ^10.7.0
         version: 10.7.0
       '@netlify/nuxt':
-        specifier: 0.2.30
-        version: 0.2.30(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)
+        specifier: 0.2.32
+        version: 0.2.32(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -889,8 +889,12 @@ packages:
     resolution: {integrity: sha512-wuiaKRbRLG/L049yR+7/p7xSKa4jx6JRBnweRYwP6mMYn9D+x/wccPgsxEMtKqthmow6frs7ZSrNYTt9U3yUdQ==}
     engines: {node: ^14.16.0 || >=16.0.0}
 
-  '@netlify/cache@3.4.0':
-    resolution: {integrity: sha512-yOHqRfwtLhtL5DaTjjLtwnBu+25TfcfSU6XQ7zDZ3YX+JPYvY6Qs3l9uKn6cm+ty3ER2ODhGS6fsNjptnHRDPg==}
+  '@netlify/blobs@10.7.1':
+    resolution: {integrity: sha512-yxG0vdGz5UmksQV4ZW69sdNR4hooPYH0R8J/JcIBbQLfymm4bbOHwe/dNiW/Rp/NGtJ3W4PZtOkcuz2LhvhmXQ==}
+    engines: {node: ^14.16.0 || >=16.0.0}
+
+  '@netlify/cache@3.4.1':
+    resolution: {integrity: sha512-wtmCO5LHq8SgPJZzSx3AnP7OSRWC6TDcdZs7PZ/33b0ovzhFuAPtSNjg+lRflgrEIqS/nYKgoqlEiaXGe1wFQA==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/config@24.4.3':
@@ -898,16 +902,20 @@ packages:
     engines: {node: '>=18.14.0'}
     hasBin: true
 
-  '@netlify/db-dev@0.5.0':
-    resolution: {integrity: sha512-H3ysKhMv3sKyfQd+5ylShMZ6/puDCUwd/0adpFMWw3ycBoGSJCQVaqFZDjWLJ+pKspYw78MUrhywqqCv3P8rzA==}
+  '@netlify/db-dev@0.7.0':
+    resolution: {integrity: sha512-xB2ciUJsWFw34DtMMmAh19qGUJy1N5mFAi6yYFFqeBlnd8StSxoUblXcqVZcQJLXm68OAxSxkfGf1qUucIDyMA==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/dev-utils@4.3.3':
     resolution: {integrity: sha512-qziF8R9kf7mRNgSpmUH96O0aV1ZiwK4c9ZecFQbDSQuYhgy9GY1WTjiQF0oQnohjTjWNtXhrU39LAeXWNLaBJg==}
     engines: {node: ^18.14.0 || >=20}
 
-  '@netlify/dev@4.14.1':
-    resolution: {integrity: sha512-RzSV1zF58U2yIOTnkccGFiryGo5o1vetPO8F3pp8phxj3B3u4HSrG1NeODT55MreMLU8I7+jYf1Sc74Xb/vx5Q==}
+  '@netlify/dev-utils@4.4.0':
+    resolution: {integrity: sha512-wviHbvbrfinLqUMv1nPN4wquMpDK1aMLzdGMVjaC0Vs74G536bvpk5cYj+KMYk0pr1u+8Ludze0En5O9pi8LuQ==}
+    engines: {node: ^18.14.0 || >=20}
+
+  '@netlify/dev@4.16.0':
+    resolution: {integrity: sha512-NGviIPwxI8XdGOPFvfoMiaMccV2WZPOKFSExz8cYFfsdClWj4oFRqBom2YOSE3KhJs0wNQaLFUUZl5dERLKgvQ==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/edge-bundler@14.9.13':
@@ -917,16 +925,16 @@ packages:
   '@netlify/edge-functions-bootstrap@2.16.0':
     resolution: {integrity: sha512-v8QQihSbBHj3JxtJsHoepXALpNumD9M7egHoc8z62FYl5it34dWczkaJoFFopEyhiBVKi4K/n0ZYpdzwfujd6g==}
 
-  '@netlify/edge-functions-dev@1.0.11':
-    resolution: {integrity: sha512-ASybM6fkopOKHorwI1TwsbBlF+eZQCMmlddWtSpyWDunKc4P7i/FEkzdTinNQvcLX7RIGOwjrxanTMEOen/Zvg==}
+  '@netlify/edge-functions-dev@1.0.12':
+    resolution: {integrity: sha512-MWlFRtKmuUy3VZvXM8ZxLpF3XkxEd3VLmW+eAE4a0sCrUUC9zfKjP61Y0qEq+6VeR+P9S65gm10BI8OOTRaMRA==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/edge-functions@3.0.3':
     resolution: {integrity: sha512-grElRK+rTBdYrPsULPKrhcHhrW+fwpDRLPbGByqa6Xrz0fhzcFJ2D9ijxEQ/onFcSVPYHT1u1mI48GhS5bZ/Ag==}
     engines: {node: '>=18.0.0'}
 
-  '@netlify/functions-dev@1.1.12':
-    resolution: {integrity: sha512-rWFCthzhKiuM62yPd2upDY9+y/Ww5ahEKA8+E8WS8dgQKg+5/G/Yka6zfPNpkkFM3/oNi0R7LffWn2DMxrTMPQ==}
+  '@netlify/functions-dev@1.2.0':
+    resolution: {integrity: sha512-P/WUsFb/ndWCGML4l0jAaKE2De/0vtp2fBKaZh2kjok/9KQlkqZ/IbOD852x5Pd62dqTxb1/2phgEvgxa/2+/g==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/functions@5.1.2':
@@ -937,16 +945,16 @@ packages:
     resolution: {integrity: sha512-KNzC9RaKDwJVS44iTK6JxNA6LeXH0PUw0pLktWpmMVI/0FR98bvxaHcAisjHqbThAjxL9QjL1UZh0KzHCkxpNQ==}
     engines: {node: '>=18.14.0'}
 
-  '@netlify/headers@2.1.3':
-    resolution: {integrity: sha512-jVjhHokAQLGI5SJA2nj8OWeNQ7ASV4m0n4aiR4PHrhM8ot385V2BbUGkSpC28M92uqP0l1cbAQaSoSOU4re8iQ==}
+  '@netlify/headers@2.1.4':
+    resolution: {integrity: sha512-Sj+0l8wCECtxGH4w4qXnT6QKD1ZqP32OlWNufy5sD3wPm2IB5XoAkdJ7EkgsxjObBmJT89CkZlsT29KewCgnZA==}
     engines: {node: '>=20.6.1'}
 
-  '@netlify/images@1.3.3':
-    resolution: {integrity: sha512-1X3fUmacCLMlPIqyeV5tdo6Wbf9aBSWobgr4DyRvg9zDV9jbKqgdN3BNbcUXmVaqfN+0iiv0k9p02mcRV3OyOw==}
+  '@netlify/images@1.3.4':
+    resolution: {integrity: sha512-SaNWcDcrMFovBeLWXGWmHnfhir+9MGvRK/+0flyytddddRzsKzQBykkxBinHjvVVsdpgKGSkc5QbKHm5UylbzQ==}
     engines: {node: '>=20.6.1'}
 
-  '@netlify/nuxt@0.2.30':
-    resolution: {integrity: sha512-lqv/CKX2SUEleh2PZSyOx6iW1YTa5i33ZaIf/74oWU/eLi64g+xSmfbOHoj6KdtI1kbf31RGSISJ4JAQaz7azQ==}
+  '@netlify/nuxt@0.2.32':
+    resolution: {integrity: sha512-Sd3Zjdatx6VrY5IJcX9zvaU/PZkEJ1zZdSfkhk5bbaZY+gvyMSWi2zoDjWkExgrmP47dcYDQe3qygOlcV1ifJg==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@netlify/open-api@2.50.0':
@@ -957,28 +965,32 @@ packages:
     resolution: {integrity: sha512-WCSlOsd0a0Vn+iPC5PYru7rq/5/QpBGnvam6C7cq9DEiTFqfwExNoxk6SWI0T6nI56gkBryaGsENLTEnUue1lg==}
     engines: {node: ^18.14.0 || >=20.6.1}
 
+  '@netlify/otel@5.1.2':
+    resolution: {integrity: sha512-tIA8W/rC+Duz815uwoEaFTZ4oiIU478gE180hNREMWefJxBcZoS5GYky808FdGNbML2sxNX56LhkD20rSnUTbg==}
+    engines: {node: ^18.14.0 || >=20.6.1}
+
   '@netlify/redirect-parser@15.0.4':
     resolution: {integrity: sha512-UYHRCO4HZI6WMpf8RheaCWnGafeJeFTsp/5yK887fyGqohDmFbc26NuFUvRl7J6sNu+di/1lLmRXP+yJ1X9TDA==}
     engines: {node: '>=18.14.0'}
 
-  '@netlify/redirects@3.1.5':
-    resolution: {integrity: sha512-yU4YBqRYoqPobg/u96QI07IuevAc8+tVLAcnty6/vBJAlo5d7E72r+U6dez48EPGIJHY5hEQK4jT0m9SmKg8mg==}
+  '@netlify/redirects@3.1.6':
+    resolution: {integrity: sha512-P9b/itniI0htbIYGLdOzd7xqNFCREfpIc17EdkX7L7Ne9HCz7r46x/FJrRDSXolm7vaSUFopZSDUYFoj7UWp+Q==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/runtime-utils@2.3.0':
     resolution: {integrity: sha512-cW8weDvsKV7zfia2m5EcBy6KILGoPD+eYZ3qWNGnIo05DGF28goPES0xKSDkNYgAF/2rRSIhie2qcBhbGVgSRg==}
     engines: {node: ^18.14.0 || >=20}
 
-  '@netlify/runtime@4.1.16':
-    resolution: {integrity: sha512-GOXhRRSVndiDDTmmI19AWZjBwY9bPM3re8XP5F2ZOowzGWzVD3aOBH2lycwmA+iqSGVHWFcyaf0Ea0vLw8NA6g==}
+  '@netlify/runtime@4.1.17':
+    resolution: {integrity: sha512-vAuSuvC/Ip87RdERA3LcjbNPAhtEIEBZY4vJsJ0lfUHB/uWASti45XPqh1YectFUaPiL6zrRIt1WPzkd9zUi2g==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/serverless-functions-api@2.10.0':
     resolution: {integrity: sha512-+gkCy5mwa39zCEeYjKA4FE/qELGbwwFsA+HDnSRJZ7nz3z3+ToYUxrhJ0XmFRCe9gEipUVzqmUaVee/xlY5ipw==}
     engines: {node: '>=18.0.0'}
 
-  '@netlify/static@3.1.3':
-    resolution: {integrity: sha512-88VG2jwWY1eOT/IiMbkrak7qyo+t7om0v731i63JiCDfXjCEp+yFPNr9L4v8S6wcCmgnkGQ6Sr5roF1sEtp6+Q==}
+  '@netlify/static@3.1.4':
+    resolution: {integrity: sha512-fYJDrumBmABskSQZu7QXZNDD7E5vtMNIOn71GlNppf+3pnTd0PimEb6qbuP5IqKkmIrWn3USoRi5I4KPXfcAew==}
     engines: {node: '>=20.6.1'}
 
   '@netlify/types@2.3.0':
@@ -7021,7 +7033,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@netlify/cache@3.4.0':
+  '@netlify/blobs@10.7.1':
+    dependencies:
+      '@netlify/dev-utils': 4.4.0
+      '@netlify/otel': 5.1.2
+      '@netlify/runtime-utils': 2.3.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@netlify/cache@3.4.1':
     dependencies:
       '@netlify/runtime-utils': 2.3.0
 
@@ -7053,7 +7073,7 @@ snapshots:
       yargs: 17.7.2
       zod: 4.3.6
 
-  '@netlify/db-dev@0.5.0':
+  '@netlify/db-dev@0.7.0':
     dependencies:
       '@electric-sql/pglite': 0.3.15
       pg-gateway: 0.3.0-beta.4
@@ -7076,20 +7096,38 @@ snapshots:
       uuid: 13.0.0
       write-file-atomic: 5.0.1
 
-  '@netlify/dev@4.14.1(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(rollup@4.59.0)':
+  '@netlify/dev-utils@4.4.0':
+    dependencies:
+      '@whatwg-node/server': 0.10.18
+      ansis: 4.2.0
+      chokidar: 4.0.3
+      decache: 4.6.2
+      dettle: 1.0.5
+      dot-prop: 9.0.0
+      empathic: 2.0.0
+      env-paths: 3.0.0
+      image-size: 2.0.2
+      js-image-generator: 1.0.4
+      parse-gitignore: 2.0.0
+      semver: 7.7.4
+      tmp-promise: 3.0.3
+      uuid: 13.0.0
+      write-file-atomic: 5.0.1
+
+  '@netlify/dev@4.16.0(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(rollup@4.59.0)':
     dependencies:
       '@netlify/ai': 0.4.0
-      '@netlify/blobs': 10.7.0
+      '@netlify/blobs': 10.7.1
       '@netlify/config': 24.4.3
-      '@netlify/db-dev': 0.5.0
-      '@netlify/dev-utils': 4.3.3
-      '@netlify/edge-functions-dev': 1.0.11
-      '@netlify/functions-dev': 1.1.12(rollup@4.59.0)
-      '@netlify/headers': 2.1.3
-      '@netlify/images': 1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
-      '@netlify/redirects': 3.1.5
-      '@netlify/runtime': 4.1.16
-      '@netlify/static': 3.1.3
+      '@netlify/db-dev': 0.7.0
+      '@netlify/dev-utils': 4.4.0
+      '@netlify/edge-functions-dev': 1.0.12
+      '@netlify/functions-dev': 1.2.0(rollup@4.59.0)
+      '@netlify/headers': 2.1.4
+      '@netlify/images': 1.3.4(@netlify/blobs@10.7.1)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
+      '@netlify/redirects': 3.1.6
+      '@netlify/runtime': 4.1.17
+      '@netlify/static': 3.1.4
       ulid: 3.0.2
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -7144,9 +7182,9 @@ snapshots:
 
   '@netlify/edge-functions-bootstrap@2.16.0': {}
 
-  '@netlify/edge-functions-dev@1.0.11':
+  '@netlify/edge-functions-dev@1.0.12':
     dependencies:
-      '@netlify/dev-utils': 4.3.3
+      '@netlify/dev-utils': 4.4.0
       '@netlify/edge-bundler': 14.9.13
       '@netlify/edge-functions': 3.0.3
       '@netlify/edge-functions-bootstrap': 2.16.0
@@ -7157,10 +7195,10 @@ snapshots:
     dependencies:
       '@netlify/types': 2.3.0
 
-  '@netlify/functions-dev@1.1.12(rollup@4.59.0)':
+  '@netlify/functions-dev@1.2.0(rollup@4.59.0)':
     dependencies:
-      '@netlify/blobs': 10.7.0
-      '@netlify/dev-utils': 4.3.3
+      '@netlify/blobs': 10.7.1
+      '@netlify/dev-utils': 4.4.0
       '@netlify/functions': 5.1.2
       '@netlify/zip-it-and-ship-it': 14.4.1(rollup@4.59.0)
       cron-parser: 4.9.0
@@ -7193,13 +7231,13 @@ snapshots:
       map-obj: 5.0.2
       path-exists: 5.0.0
 
-  '@netlify/headers@2.1.3':
+  '@netlify/headers@2.1.4':
     dependencies:
       '@netlify/headers-parser': 9.0.3
 
-  '@netlify/images@1.3.3(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)':
+  '@netlify/images@1.3.4(@netlify/blobs@10.7.1)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)':
     dependencies:
-      ipx: 3.1.1(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
+      ipx: 3.1.1(@netlify/blobs@10.7.1)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7221,10 +7259,10 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@netlify/nuxt@0.2.30(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)':
+  '@netlify/nuxt@0.2.32(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(magicast@0.5.2)(rollup@4.59.0)':
     dependencies:
-      '@netlify/dev': 4.14.1(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(rollup@4.59.0)
-      '@netlify/dev-utils': 4.3.3
+      '@netlify/dev': 4.16.0(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)(rollup@4.59.0)
+      '@netlify/dev-utils': 4.4.0
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       h3: 1.15.5
     transitivePeerDependencies:
@@ -7266,6 +7304,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@netlify/otel@5.1.2':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation': 0.203.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-node': 1.30.1(@opentelemetry/api@1.9.0)
+    transitivePeerDependencies:
+      - supports-color
+
   '@netlify/redirect-parser@15.0.4':
     dependencies:
       '@iarna/toml': 2.2.5
@@ -7273,9 +7321,9 @@ snapshots:
       is-plain-obj: 4.1.0
       path-exists: 5.0.0
 
-  '@netlify/redirects@3.1.5':
+  '@netlify/redirects@3.1.6':
     dependencies:
-      '@netlify/dev-utils': 4.3.3
+      '@netlify/dev-utils': 4.4.0
       '@netlify/redirect-parser': 15.0.4
       cookie: 1.1.1
       jsonwebtoken: 9.0.3
@@ -7283,10 +7331,10 @@ snapshots:
 
   '@netlify/runtime-utils@2.3.0': {}
 
-  '@netlify/runtime@4.1.16':
+  '@netlify/runtime@4.1.17':
     dependencies:
-      '@netlify/blobs': 10.7.0
-      '@netlify/cache': 3.4.0
+      '@netlify/blobs': 10.7.1
+      '@netlify/cache': 3.4.1
       '@netlify/runtime-utils': 2.3.0
       '@netlify/types': 2.3.0
     transitivePeerDependencies:
@@ -7294,7 +7342,7 @@ snapshots:
 
   '@netlify/serverless-functions-api@2.10.0': {}
 
-  '@netlify/static@3.1.3':
+  '@netlify/static@3.1.4':
     dependencies:
       mime-types: 3.0.2
 
@@ -10478,7 +10526,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ipx@3.1.1(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0):
+  ipx@3.1.1(@netlify/blobs@10.7.1)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0):
     dependencies:
       '@fastify/accept-negotiator': 2.0.1
       citty: 0.1.6
@@ -10494,7 +10542,7 @@ snapshots:
       sharp: 0.34.5
       svgo: 4.0.1
       ufo: 1.6.3
-      unstorage: 1.17.4(@netlify/blobs@10.7.0)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
+      unstorage: 1.17.4(@netlify/blobs@10.7.1)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0)
       xss: 1.0.15
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -12777,6 +12825,21 @@ snapshots:
       ufo: 1.6.3
     optionalDependencies:
       '@netlify/blobs': 10.7.0
+      db0: 0.3.4(@electric-sql/pglite@0.3.15)
+      ioredis: 5.10.0
+
+  unstorage@1.17.4(@netlify/blobs@10.7.1)(db0@0.3.4(@electric-sql/pglite@0.3.15))(ioredis@5.10.0):
+    dependencies:
+      anymatch: 3.1.3
+      chokidar: 5.0.0
+      destr: 2.0.5
+      h3: 1.15.5
+      lru-cache: 11.2.6
+      node-fetch-native: 1.6.7
+      ofetch: 1.5.1
+      ufo: 1.6.3
+    optionalDependencies:
+      '@netlify/blobs': 10.7.1
       db0: 0.3.4(@electric-sql/pglite@0.3.15)
       ioredis: 5.10.0
 
