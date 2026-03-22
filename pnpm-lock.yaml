@@ -31,8 +31,8 @@ importers:
         version: 5.0.3(@vue/compiler-sfc@3.5.30)(vue@3.5.30(typescript@5.9.3))
     devDependencies:
       '@e18e/eslint-plugin':
-        specifier: ^0.2.0
-        version: 0.2.0(eslint@10.0.2(jiti@2.6.1))(oxlint@1.56.0)
+        specifier: ^0.3.0
+        version: 0.3.0(eslint@10.0.2(jiti@2.6.1))(oxlint@1.56.0)
       '@nuxt/test-utils':
         specifier: ^4.0.0
         version: 4.0.0(@vue/test-utils@2.4.6)(happy-dom@20.8.3)(jsdom@27.4.0)(magicast@0.5.2)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))(vitest@4.1.0(@opentelemetry/api@1.9.0)(@types/node@25.3.3)(happy-dom@20.8.3)(jsdom@27.4.0)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)))
@@ -284,11 +284,11 @@ packages:
   '@dxup/unimport@0.1.2':
     resolution: {integrity: sha512-/B8YJGPzaYq1NbsQmwgP8EZqg40NpTw4ZB3suuI0TplbxKHeK94jeaawLmVhCv+YwUnOpiWEz9U6SeThku/8JQ==}
 
-  '@e18e/eslint-plugin@0.2.0':
-    resolution: {integrity: sha512-mXgODVwhuDjTJ+UT+XSvmMmCidtGKfrV5nMIv1UtpWex2pYLsIM3RSpT8HWIMAebS9qANbXPKlSX4BE7ZvuCgA==}
+  '@e18e/eslint-plugin@0.3.0':
+    resolution: {integrity: sha512-hHgfpxsrZ2UYHcicA+tGZnmk19uJTaye9VH79O+XS8R4ona2Hx3xjhXghclNW58uXMk3xXlbYEOMr8thsoBmWg==}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
-      oxlint: ^1.41.0
+      oxlint: ^1.55.0
     peerDependenciesMeta:
       eslint:
         optional: true
@@ -6586,7 +6586,7 @@ snapshots:
 
   '@dxup/unimport@0.1.2': {}
 
-  '@e18e/eslint-plugin@0.2.0(eslint@10.0.2(jiti@2.6.1))(oxlint@1.56.0)':
+  '@e18e/eslint-plugin@0.3.0(eslint@10.0.2(jiti@2.6.1))(oxlint@1.56.0)':
     dependencies:
       eslint-plugin-depend: 1.5.0(eslint@10.0.2(jiti@2.6.1))
     optionalDependencies:
