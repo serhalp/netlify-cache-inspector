@@ -2,7 +2,7 @@ import type { KnipConfig } from 'knip'
 
 export default {
   entry: ['oxlint.config.ts'],
-  // knip's Nuxt plugin doesn't support the Nuxt 4 app/ directory convention yet.
+  // knip's Nuxt plugin doesn't support the Nuxt 5 app/ directory convention yet.
   // Note: custom entry replaces (not merges with) the plugin defaults.
   nuxt: {
     entry: [
