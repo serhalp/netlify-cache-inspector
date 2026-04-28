@@ -1,7 +1,7 @@
 # Netlify Cache Inspector
 
 A web app for inspecting and comparing caching behaviour on live Netlify sites.
-
+dfasd
 Submit a URL and the app fetches it with Netlify's debug headers enabled, then displays a structured breakdown of the caching behavior: which cache layers were hit, cache-control directives, TTLs, and more. Run the same URL multiple times and compare results side-by-side with interactive hover-based diffing.
 
 ![Screenshot of the Netlify Cache Inspector UI showing a comparison of two runs with cache status, cache-control directives, and more](./docs/screenshot.png)
