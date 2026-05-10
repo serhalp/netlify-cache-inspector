@@ -33,7 +33,7 @@ This site deploys automatically to Netlify.
 
 ## Tech stack
 
-- [Nuxt 4](https://nuxt.com) (Vue 3, file-based routing, server API routes)
+- [Nuxt 5](https://nuxt.com) (Vue 3, file-based routing, server API routes)
 - [UnoCSS](https://unocss.dev) (utility CSS, dark mode, custom theme)
 - [Netlify Blobs](https://docs.netlify.com/blobs/overview/) (run persistence)
 - [Vitest](https://vitest.dev) + [Vue Test Utils](https://test-utils.vuejs.org) (testing)

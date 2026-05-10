@@ -6,7 +6,7 @@ See also: [ARCHITECTURE.md](./ARCHITECTURE.md) for project structure and data fl
 
 ## Project Overview
 
-Netlify Cache Inspector is a Nuxt 4 web app for inspecting and comparing HTTP cache headers on Netlify sites. Users submit a URL, the server fetches it with Netlify debug headers (`x-nf-debug-logging: 1`), and the frontend displays structured cache analysis. Multiple runs can be compared side-by-side with hover-based diffing.
+Netlify Cache Inspector is a Nuxt 5 web app for inspecting and comparing HTTP cache headers on Netlify sites. Users submit a URL, the server fetches it with Netlify debug headers (`x-nf-debug-logging: 1`), and the frontend displays structured cache analysis. Multiple runs can be compared side-by-side with hover-based diffing.
 
 ## Commands
 
@@ -31,7 +31,7 @@ Package manager is **pnpm** (pinned in `packageManager` field). Enable via `core
 
 ## Architecture
 
-**Nuxt 4** with `future: { compatibilityVersion: 4 }` — frontend code lives under `app/` (not project root).
+**Nuxt 5** with `future: { compatibilityVersion: 5 }` — frontend code lives under `app/` (not project root).
 
 ### Data Flow
 

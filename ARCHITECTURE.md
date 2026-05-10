@@ -2,7 +2,7 @@
 
 ## Project structure
 
-Nuxt 4, with the new `app/` directory structure.
+Nuxt 5, with the `app/` directory structure.
 
 ```
 app/
