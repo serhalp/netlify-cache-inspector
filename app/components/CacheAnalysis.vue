@@ -75,6 +75,7 @@ onUnmounted(() => {
         :aria-label="`Served by: ${getFieldTooltip('served-by').text}`"
         >Served by:</span
       >
+      {{ ' ' }}
       <strong class="text-neutral-800 dark:text-neutral-100">{{
         cacheAnalysis.servedBy.source
       }}</strong>
@@ -87,6 +88,7 @@ onUnmounted(() => {
         :aria-label="`CDN nodes: ${getFieldTooltip('cdn-nodes').text}`"
         >CDN node(s):</span
       >
+      {{ ' ' }}
       <code class="inline-code">{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
