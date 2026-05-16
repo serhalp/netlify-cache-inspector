@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@netlify/blobs':
-        specifier: ^10.7.0
+        specifier: ^10.7.4
         version: 10.7.4
       '@netlify/nuxt':
         specifier: 0.3.5
@@ -18,53 +18,53 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       h3:
-        specifier: ^1.15.0
+        specifier: ^1.15.11
         version: 1.15.11
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
       nuxt:
-        specifier: ^4.4.2
+        specifier: ^4.4.4
         version: 4.4.4(@babel/core@7.29.0)(@babel/plugin-syntax-jsx@7.28.6(@babel/core@7.29.0))(@electric-sql/pglite@0.3.15)(@netlify/blobs@10.7.4)(@parcel/watcher@2.5.6)(@types/node@25.8.0)(@vue/compiler-sfc@3.5.34)(cac@6.7.14)(db0@0.3.4(@electric-sql/pglite@0.3.15))(eslint@10.0.2(jiti@2.6.1))(ioredis@5.10.1)(magicast@0.5.2)(optionator@0.9.4)(oxlint@1.65.0)(rollup-plugin-visualizer@7.0.1(rollup@4.60.2))(rollup@4.60.2)(srvx@0.11.15)(terser@5.47.1)(typescript@6.0.3)(vite@7.3.2(@types/node@25.8.0)(jiti@2.6.1)(terser@5.47.1)(yaml@2.8.4))(vue-tsc@3.2.7(typescript@6.0.3))(yaml@2.8.4)
       vue:
-        specifier: ^3.5.29
+        specifier: ^3.5.34
         version: 3.5.34(typescript@6.0.3)
       vue-router:
-        specifier: ^5.0.3
+        specifier: ^5.0.6
         version: 5.0.6(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@6.0.3))
     devDependencies:
       '@e18e/eslint-plugin':
         specifier: ^0.5.0
         version: 0.5.0(eslint@10.0.2(jiti@2.6.1))(oxlint@1.65.0)
       '@nuxt/test-utils':
-        specifier: ^4.0.0
+        specifier: ^4.0.3
         version: 4.0.3(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.34)(@vue/server-renderer@3.5.34(vue@3.5.34(typescript@6.0.3)))(vue@3.5.34(typescript@6.0.3)))(crossws@0.4.5(srvx@0.11.15))(happy-dom@20.8.9)(jsdom@27.4.0)(magicast@0.5.2)(typescript@6.0.3)(vite@7.3.2(@types/node@25.8.0)(jiti@2.6.1)(terser@5.47.1)(yaml@2.8.4))(vitest@4.1.5(@opentelemetry/api@1.9.0)(@types/node@25.8.0)(happy-dom@20.8.9)(jsdom@27.4.0)(vite@7.3.2(@types/node@25.8.0)(jiti@2.6.1)(terser@5.47.1)(yaml@2.8.4)))
       '@unocss/nuxt':
-        specifier: ^66.6.5
+        specifier: ^66.6.8
         version: 66.6.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(magicast@0.5.2)(vite@7.3.2(@types/node@25.8.0)(jiti@2.6.1)(terser@5.47.1)(yaml@2.8.4))(webpack@5.105.2(postcss@8.5.13))
       '@vue/test-utils':
-        specifier: ^2.4.6
+        specifier: ^2.4.10
         version: 2.4.10(@vue/compiler-dom@3.5.34)(@vue/server-renderer@3.5.34(vue@3.5.34(typescript@6.0.3)))(vue@3.5.34(typescript@6.0.3))
       happy-dom:
-        specifier: ^20.8.3
+        specifier: ^20.8.9
         version: 20.8.9
       knip:
-        specifier: ^6.0.0
+        specifier: ^6.12.2
         version: 6.12.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       oxfmt:
         specifier: ^0.49.0
         version: 0.49.0
       oxlint:
-        specifier: ^1.51.0
+        specifier: ^1.65.0
         version: 1.65.0
       typescript:
-        specifier: ^6.0.0
+        specifier: ^6.0.3
         version: 6.0.3
       vitest:
-        specifier: ^4.0.18
+        specifier: ^4.1.5
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@25.8.0)(happy-dom@20.8.9)(jsdom@27.4.0)(vite@7.3.2(@types/node@25.8.0)(jiti@2.6.1)(terser@5.47.1)(yaml@2.8.4))
       vue-tsc:
-        specifier: ^3.2.5
+        specifier: ^3.2.7
         version: 3.2.7(typescript@6.0.3)
 
 packages:
@@ -3504,8 +3504,8 @@ packages:
   dettle@1.0.5:
     resolution: {integrity: sha512-ZVyjhAJ7sCe1PNXEGveObOH9AC8QvMga3HJIghHawtG7mE4K5pW9nz/vDGAr/U7a3LWgdOzEE7ac9MURnyfaTA==}
 
-  devalue@5.7.1:
-    resolution: {integrity: sha512-MUbZ586EgQqdRnC4yDrlod3BEdyvE4TapGYHMW2CiaW+KkkFmWEFqBUaLltEZCGi0iFXCEjRF0OjF0DV2QHjOA==}
+  devalue@5.8.1:
+    resolution: {integrity: sha512-4CXDYRBGqN+57wVJkuXBYmpAVUSg3L6JAQa/DFqm238G73E1wuyc/JhGQJzN7vUf/CMphYau2zXbfWzDR5aTEw==}
 
   diff@8.0.4:
     resolution: {integrity: sha512-DPi0FmjiSU5EvQV0++GFDOJ9ASQUVFh5kD+OzOnYdi7n3Wpm9hWWGfB/O2blfHcMVTL5WkQXSnRiK9makhrcnw==}
@@ -7907,7 +7907,7 @@ snapshots:
       consola: 3.4.2
       defu: 6.1.7
       destr: 2.0.5
-      devalue: 5.7.1
+      devalue: 5.8.1
       errx: 0.1.0
       escape-string-regexp: 5.0.0
       exsolve: 1.0.8
@@ -10195,7 +10195,7 @@ snapshots:
 
   dettle@1.0.5: {}
 
-  devalue@5.7.1: {}
+  devalue@5.8.1: {}
 
   diff@8.0.4: {}
 
@@ -11783,7 +11783,7 @@ snapshots:
       consola: 3.4.2
       cookie-es: 2.0.1
       defu: 6.1.7
-      devalue: 5.7.1
+      devalue: 5.8.1
       errx: 0.1.0
       escape-string-regexp: 5.0.0
       exsolve: 1.0.8
