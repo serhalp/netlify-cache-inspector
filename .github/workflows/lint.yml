@@ -20,6 +20,11 @@ jobs:
           node-version: 24.x
       - name: Set up PNPM
         run: corepack enable
-      - run: pnpm install
+      - name: Prepare Socket Firewall
+        uses: SocketDev/action@2d3f25590c6ed6ba11a9a14c064d962a3a04698f # v1.3.1
+        with:
+          mode: firewall-free
+      - name: Install deps (Socket Firewall ✔️)
+        run: sfw pnpm ci
 
       - run: pnpm run lint
