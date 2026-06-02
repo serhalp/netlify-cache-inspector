@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: e18e/action-dependency-diff@v1
         with:
           # Too noisy. Will enable if it ever supports reporting *changes* in duplicates.
