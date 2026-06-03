@@ -6,17 +6,19 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
+    "generate": "nuxt generate",
+    "knip": "knip",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "test:unit": "vitest run",
-    "knip": "knip",
     "test": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test:unit",
-    "typecheck": "nuxi typecheck"
+    "typecheck": "nuxi typecheck",
+    "zizmor": "zizmor --pedantic .",
+    "zizmor:fix": "zizmor --pedantic --fix ."
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.0",

@@ -57,3 +57,28 @@ pnpm vitest run app/utils/getCacheAnalysis.test.ts
 ### Styling
 
 UnoCSS utility classes and shortcuts (defined in `uno.config.ts`). Component-specific styles use scoped CSS. Dark mode uses `:is(.dark)` selectors in scoped styles and `dark:` prefix for UnoCSS utilities.
+
+### GitHub Actions security analysis
+
+CI runs [zizmor](https://docs.zizmor.sh/) against the repository's GitHub Actions workflows. The
+shared policy lives in `.github/zizmor.yml`, and the `zizmor` task uses the same pedantic persona as
+CI.
+
+You may run it locally by [installing `zizmor`](https://docs.zizmor.sh/installation/) and running:
+
+```bash
+pnpm run zizmor
+```
+
+Some audits resolve action refs and vulnerability metadata through GitHub. To run those online
+checks locally, authenticate with the GitHub CLI and pass its token:
+
+```bash
+GH_TOKEN="$(gh auth token)" pnpm run zizmor
+```
+
+To fix audit findings automatically, run:
+
+```bash
+GH_TOKEN="$(gh auth token)" pnpm run zizmor:fix
+```

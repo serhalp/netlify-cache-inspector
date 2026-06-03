@@ -23,5 +23,5 @@ export default {
   },
   ignoreFiles: ['uno.config.ts'],
   ignoreDependencies: ['vue', 'vue-router', 'vue-tsc', 'vitest-environment-nuxt'],
-  ignoreBinaries: [],
+  ignoreBinaries: ['zizmor'],
 } satisfies KnipConfig
