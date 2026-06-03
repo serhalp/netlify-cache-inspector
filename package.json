@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.0",
-    "@netlify/nuxt": "0.3.6",
+    "@netlify/nuxt": "0.3.7",
     "date-fns": "^4.4.0",
     "h3": "^1.15.0",
     "highlight.js": "^11.11.1",
@@ -37,10 +37,10 @@
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^20.8.3",
     "knip": "^6.0.0",
-    "oxfmt": "^0.52.0",
-    "oxlint": "^1.51.0",
+    "oxfmt": "^0.53.0",
+    "oxlint": "^1.68.0",
     "typescript": "^6.0.0",
-    "vitest": "^4.0.18",
+    "vitest": "^4.1.8",
     "vue-tsc": "^3.3.3"
   },
   "engines": {
