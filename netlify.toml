@@ -1,7 +1,7 @@
 [build]
-  command = "pnpm run build"
-  functions = "netlify/functions"
-  publish = "dist"
+command = "pnpm run build"
+functions = "netlify/functions"
+publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "26"
+NODE_VERSION = "26"
