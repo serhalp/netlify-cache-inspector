@@ -26,7 +26,7 @@
     "date-fns": "^4.4.0",
     "h3": "^1.15.0",
     "highlight.js": "^11.11.1",
-    "nuxt": "^4.4.2",
+    "nuxt": "npm:nuxt-nightly@latest",
     "vue": "^3.5.35",
     "vue-router": "^5.1.0"
   },
