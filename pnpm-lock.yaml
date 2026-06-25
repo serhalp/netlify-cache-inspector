@@ -35,7 +35,7 @@ importers:
     devDependencies:
       '@e18e/eslint-plugin':
         specifier: ^0.5.0
-        version: 0.5.0(oxlint@1.70.0)
+        version: 0.5.1(oxlint@1.70.0)
       '@nuxt/test-utils':
         specifier: ^4.0.0
         version: 4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.38)(@vue/server-renderer@3.5.38(vue@3.5.38(typescript@6.0.3)))(vue@3.5.38(typescript@6.0.3)))(crossws@0.4.6(srvx@0.11.17))(happy-dom@20.10.6)(magicast@0.5.3)(typescript@6.0.3)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))(vitest@4.1.8(@opentelemetry/api@1.9.0)(@types/node@26.0.0)(happy-dom@20.10.6)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))
@@ -273,11 +273,11 @@ packages:
   '@dxup/unimport@0.1.2':
     resolution: {integrity: sha512-/B8YJGPzaYq1NbsQmwgP8EZqg40NpTw4ZB3suuI0TplbxKHeK94jeaawLmVhCv+YwUnOpiWEz9U6SeThku/8JQ==}
 
-  '@e18e/eslint-plugin@0.5.0':
-    resolution: {integrity: sha512-UtClP/mXtMPAxSe5c+OaNQ2nEMCNCdNAkAoKfVCT9jKeC5Y4O6cV/jjXxN7/bRVC75XmNjbVz7YAQtHvU9McyQ==}
+  '@e18e/eslint-plugin@0.5.1':
+    resolution: {integrity: sha512-mqUozeyNI9xvJbjrOO7y765dT7Kud3bwCm/DHwctxdEngPdJWQaS9BNGgpM1wCCzZfOtlKQh4ZRhm3VRomT9KA==}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
-      oxlint: ^1.63.0
+      oxlint: ^1.68.0
     peerDependenciesMeta:
       eslint:
         optional: true
@@ -4947,8 +4947,8 @@ packages:
   module-details-from-path@1.0.4:
     resolution: {integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==}
 
-  module-replacements@3.0.0-beta.7:
-    resolution: {integrity: sha512-n1F9l3gF1wNh13xmnXS2JU7P9c3DlzCgVEyLKrVN0U37RwrXyYoePMMvYvs/6aUONAxbnscphzESZTCorXFh7Q==}
+  module-replacements@3.0.0-beta.8:
+    resolution: {integrity: sha512-sc8TepP9elxoOBXEpxmhPzKKjTjbswHVcmsKGbgvm3k6jZlLu/WMV/Lfmga6IGMgHU/V3WtY2s6VEgM4nTElUQ==}
 
   mrmime@2.0.1:
     resolution: {integrity: sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ==}
@@ -5735,18 +5735,8 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  semver@7.8.1:
-    resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.8.2:
     resolution: {integrity: sha512-c8jsqUZm3omBOI66G90z1Dyw5z622G8oLG+omfsHBJf3CWQTlOcwOjvOG6wtiNfW6anKm/eA39LMwMtMez2TiQ==}
-    engines: {node: '>=10'}
-    hasBin: true
-
-  semver@7.8.4:
-    resolution: {integrity: sha512-rUCObTnP32Q08R2uuIrt7r9PlEonuTmtuXYcW6s5kjdlj3xbnwe+21yXptAUYcMAABLkYYTtnmzb3w3EDZfueA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -7010,11 +7000,11 @@ snapshots:
 
   '@dxup/unimport@0.1.2': {}
 
-  '@e18e/eslint-plugin@0.5.0(oxlint@1.70.0)':
+  '@e18e/eslint-plugin@0.5.1(oxlint@1.70.0)':
     dependencies:
       empathic: 2.0.1
-      module-replacements: 3.0.0-beta.7
-      semver: 7.8.1
+      module-replacements: 3.0.0-beta.8
+      semver: 7.8.5
     optionalDependencies:
       oxlint: 1.70.0
 
@@ -7528,7 +7518,7 @@ snapshots:
       image-size: 2.0.2
       js-image-generator: 1.0.4
       parse-gitignore: 2.0.0
-      semver: 7.8.1
+      semver: 7.8.5
       tmp-promise: 3.0.3
 
   '@netlify/dev@4.18.7(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1)(rollup@4.62.2)(srvx@0.11.17)':
@@ -7625,7 +7615,7 @@ snapshots:
       jwt-decode: 4.0.0
       lambda-local: 2.2.0
       read-package-up: 11.0.0
-      semver: 7.8.4
+      semver: 7.8.5
       source-map-support: 0.5.21
     transitivePeerDependencies:
       - bare-abort-controller
@@ -7786,7 +7776,7 @@ snapshots:
       precinct: 12.3.2
       require-package-name: 2.0.1
       resolve: 2.0.0-next.7
-      semver: 7.8.4
+      semver: 7.8.5
       tmp-promise: 3.0.3
       toml: 3.0.0
       unixify: 1.0.0
@@ -7964,7 +7954,7 @@ snapshots:
       pkg-types: 2.3.1
       rc9: 3.0.1
       scule: 1.3.0
-      semver: 7.8.1
+      semver: 7.8.5
       tinyglobby: 0.2.17
       ufo: 1.6.4
       unctx: 2.5.0
@@ -7989,7 +7979,7 @@ snapshots:
       pkg-types: 2.3.1
       rc9: 3.0.1
       scule: 1.3.0
-      semver: 7.8.1
+      semver: 7.8.5
       tinyglobby: 0.2.17
       ufo: 1.6.4
       unctx: 2.5.0
@@ -8014,7 +8004,7 @@ snapshots:
       pkg-types: 2.3.1
       rc9: 3.0.1
       scule: 1.3.0
-      semver: 7.8.4
+      semver: 7.8.5
       tinyglobby: 0.2.17
       ufo: 1.6.4
       unctx: 2.5.0
@@ -9155,7 +9145,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.60.1
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.8.4
+      semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@5.9.3)
       typescript: 5.9.3
@@ -10460,7 +10450,7 @@ snapshots:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.9
-      semver: 7.8.2
+      semver: 7.8.5
 
   ee-first@1.1.1: {}
 
@@ -11619,7 +11609,7 @@ snapshots:
 
   module-details-from-path@1.0.4: {}
 
-  module-replacements@3.0.0-beta.7: {}
+  module-replacements@3.0.0-beta.8: {}
 
   mrmime@2.0.1: {}
 
@@ -12787,11 +12777,7 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.8.1: {}
-
   semver@7.8.2: {}
-
-  semver@7.8.4: {}
 
   semver@7.8.5: {}
 
