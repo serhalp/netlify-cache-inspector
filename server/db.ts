@@ -1,4 +1,6 @@
 import { getStore } from '@netlify/blobs'
+// FIXME(serhalp): Shouldn't need to import, but getting a type error on nuxt-nightly@5.0.0-29707068.37577be5
+import { createError } from 'h3'
 
 interface Run {
   runId: string
@@ -28,7 +30,7 @@ export const getRun = async (runId: string): Promise<Run> => {
 
   if (!run) {
     throw createError({
-      statusCode: 404,
+      status: 404,
       message: 'Run not found',
     })
   }
