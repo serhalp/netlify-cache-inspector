@@ -21,27 +21,27 @@
     "zizmor:fix": "zizmor --pedantic --fix ."
   },
   "dependencies": {
-    "@netlify/blobs": "^10.7.0",
+    "@netlify/blobs": "^10.7.9",
     "@netlify/nuxt": "0.3.8",
     "date-fns": "^4.4.0",
-    "h3": "^1.15.0",
+    "h3": "^1.15.11",
     "highlight.js": "^11.11.1",
-    "nuxt": "npm:nuxt-nightly@latest",
-    "vue": "^3.5.35",
+    "nuxt": "npm:nuxt-nightly@4.5.0-29699121.80914bf2",
+    "vue": "^3.5.39",
     "vue-router": "^5.1.0"
   },
   "devDependencies": {
-    "@e18e/eslint-plugin": "^0.5.0",
-    "@nuxt/test-utils": "^4.0.0",
-    "@unocss/nuxt": "^66.6.5",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^20.8.3",
-    "knip": "^6.0.0",
-    "oxfmt": "^0.55.0",
-    "oxlint": "^1.68.0",
-    "typescript": "^6.0.0",
-    "vitest": "^4.1.8",
-    "vue-tsc": "^3.3.3"
+    "@e18e/eslint-plugin": "^0.5.1",
+    "@nuxt/test-utils": "^4.0.3",
+    "@unocss/nuxt": "^66.7.2",
+    "@vue/test-utils": "^2.4.11",
+    "happy-dom": "^20.10.6",
+    "knip": "^6.20.0",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9",
+    "vue-tsc": "^3.3.5"
   },
   "engines": {
     "node": ">=22.0.0"

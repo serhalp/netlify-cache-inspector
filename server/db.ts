@@ -28,7 +28,7 @@ export const getRun = async (runId: string): Promise<Run> => {
 
   if (!run) {
     throw createError({
-      statusCode: 404,
+      status: 404,
       message: 'Run not found',
     })
   }
