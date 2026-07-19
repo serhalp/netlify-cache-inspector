@@ -12,8 +12,8 @@ importers:
         specifier: ^10.7.9
         version: 10.7.9(supports-color@10.2.2)
       '@netlify/nuxt':
-        specifier: 0.3.8
-        version: 0.3.8(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@10.2.2))(magicast@0.5.3)(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)
+        specifier: 0.3.9
+        version: 0.3.9(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@10.2.2))(magicast@0.5.3)(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)
       date-fns:
         specifier: ^4.4.0
         version: 4.4.0
@@ -924,8 +924,8 @@ packages:
     resolution: {integrity: sha512-3ZlN8PNBaZFNr+uERzOtb9rQkb23xxS4k4iW188mgvSrMhxdVXPS5pkpOxAHPEunatSlT/a6oCuy3fsltrtr6A==}
     engines: {node: '>=20.6.1'}
 
-  '@netlify/nuxt@0.3.8':
-    resolution: {integrity: sha512-WDVELfO9pv2daUmg+9qyNC5Ts5wvPqbHzTE7SRcNr5suxUc07geyjk2e1pKuhaVqSYlzRS7dp1ht83Y1wLVh/A==}
+  '@netlify/nuxt@0.3.9':
+    resolution: {integrity: sha512-XgPeqtUpD+wa8+tkAFcr0UFG272ql2iQfYQnFo7PRIWV6944tLVFKVfLI7vJmKK5Ve8cW9fcMQaQavrcyhLccg==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@netlify/open-api@2.56.0':
@@ -7375,7 +7375,7 @@ snapshots:
       - srvx
       - uploadthing
 
-  '@netlify/nuxt@0.3.8(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@10.2.2))(magicast@0.5.3)(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)':
+  '@netlify/nuxt@0.3.9(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@10.2.2))(magicast@0.5.3)(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)':
     dependencies:
       '@netlify/dev': 4.18.8(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@10.2.2))(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)
       '@netlify/dev-utils': 4.4.6
