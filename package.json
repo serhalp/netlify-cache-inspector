@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.9",
-    "@netlify/nuxt": "0.3.8",
+    "@netlify/nuxt": "0.3.9",
     "date-fns": "^4.4.0",
     "h3": "^1.15.11",
     "highlight.js": "^11.11.1",
