@@ -38,7 +38,7 @@ importers:
         version: 0.5.1(oxlint@1.77.0)
       '@nuxt/test-utils':
         specifier: ^4.0.3
-        version: 4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.1)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
+        version: 4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.2)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       '@unocss/nuxt':
         specifier: ^66.7.2
         version: 66.7.5(esbuild@0.28.1)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
@@ -47,7 +47,7 @@ importers:
         version: 2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3))
       happy-dom:
         specifier: ^20.10.6
-        version: 20.11.1
+        version: 20.11.2
       knip:
         specifier: ^6.20.0
         version: 6.32.0
@@ -62,7 +62,7 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2)
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2)
       vue-tsc:
         specifier: ^3.3.5
         version: 3.3.9(typescript@6.0.3)
@@ -4130,8 +4130,8 @@ packages:
       crossws:
         optional: true
 
-  happy-dom@20.11.1:
-    resolution: {integrity: sha512-XSt8tMzbW9ymE7687xztkO1ckR7qJNQ3LywY9vlYGhGi3zXrGBHuUo2Cl1ztZaICW+1eAGdkLbj6iwVqDT33kg==}
+  happy-dom@20.11.2:
+    resolution: {integrity: sha512-7MB+bJLkxu3SowAfBJbjW+c55kNz5tkR45gu2qzrxznezhLeN5YIlJbwUgSzlGc+qWoZ8Ykg71H5ezz69xixrw==}
     engines: {node: '>=20.0.0'}
 
   has-bigints@1.1.0:
@@ -6565,8 +6565,8 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  ws@8.21.2:
-    resolution: {integrity: sha512-54dMVAo4WIe6SKy3vBgN+9bJZqqQ8IMRevAkOLQALhi49qkkQDQfWdAZ8KQlXiEabw88ARXXdUrlvtbKQX+aKw==}
+  ws@8.21.3:
+    resolution: {integrity: sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -7830,7 +7830,7 @@ snapshots:
       vite-plugin-inspect: 11.4.1(@nuxt/kit@4.4.8(magicast@0.5.3))(vite@8.1.2)
       vite-plugin-vue-tracer: 1.4.0(vite@8.1.2)(vue@3.5.41(typescript@6.0.3))
       which: 6.0.1
-      ws: 8.21.2
+      ws: 8.21.3
     optionalDependencies:
       '@vitejs/devtools': 0.3.3(@netlify/blobs@10.7.12(supports-color@10.2.2))(crossws@0.4.7(srvx@0.12.5))(db0@0.3.4(@electric-sql/pglite@0.3.16))(esbuild@0.28.1)(ioredis@5.11.1(supports-color@10.2.2))(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
     transitivePeerDependencies:
@@ -8016,7 +8016,7 @@ snapshots:
       rc9: 3.0.1
       std-env: 4.2.0
 
-  '@nuxt/test-utils@4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.1)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))':
+  '@nuxt/test-utils@4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.2)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))':
     dependencies:
       '@clack/prompts': 1.2.0
       '@nuxt/devtools-kit': 2.7.0(magicast@0.5.3)(vite@8.1.2)
@@ -8045,12 +8045,12 @@ snapshots:
       tinyexec: 1.3.0
       ufo: 1.6.4
       unplugin: 3.3.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
-      vitest-environment-nuxt: 2.0.0(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.1)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
+      vitest-environment-nuxt: 2.0.0(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.2)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       vue: 3.5.41(typescript@6.0.3)
     optionalDependencies:
       '@vue/test-utils': 2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3))
-      happy-dom: 20.11.1
-      vitest: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2)
+      happy-dom: 20.11.2
+      vitest: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2)
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -9343,7 +9343,7 @@ snapshots:
       unconfig: 7.5.0
       unstorage: 1.17.5(@netlify/blobs@10.7.12(supports-color@10.2.2))(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@10.2.2))
       vue-virtual-scroller: 3.0.4(vue@3.5.41(typescript@6.0.3))
-      ws: 8.21.2
+      ws: 8.21.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -9398,7 +9398,7 @@ snapshots:
       tinyexec: 1.3.0
       vite: 8.1.2(@types/node@26.1.2)(@vitejs/devtools@0.3.3)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
       vue: 3.5.41(typescript@6.0.3)
-      ws: 8.21.2
+      ws: 8.21.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10417,7 +10417,7 @@ snapshots:
       nostics: 0.2.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       pathe: 2.0.3
       valibot: 1.4.2(typescript@6.0.3)
-      ws: 8.21.2
+      ws: 8.21.3
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -11016,7 +11016,7 @@ snapshots:
     optionalDependencies:
       crossws: 0.4.7(srvx@0.12.5)
 
-  happy-dom@20.11.1:
+  happy-dom@20.11.2:
     dependencies:
       '@types/node': 26.1.2
       '@types/whatwg-mimetype': 3.0.2
@@ -11024,7 +11024,7 @@ snapshots:
       buffer-image-size: 0.6.4
       entities: 7.0.1
       whatwg-mimetype: 3.0.0
-      ws: 8.21.2
+      ws: 8.21.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -13694,9 +13694,9 @@ snapshots:
       terser: 5.48.0
       yaml: 2.9.0
 
-  vitest-environment-nuxt@2.0.0(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.1)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19)):
+  vitest-environment-nuxt@2.0.0(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.2)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19)):
     dependencies:
-      '@nuxt/test-utils': 4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.1)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
+      '@nuxt/test-utils': 4.0.3(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@6.0.3)))(crossws@0.4.7(srvx@0.12.5))(esbuild@0.28.1)(happy-dom@20.11.2)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
     transitivePeerDependencies:
       - '@cucumber/cucumber'
       - '@farmfe/core'
@@ -13721,7 +13721,7 @@ snapshots:
       - vitest
       - webpack
 
-  vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.1)(vite@8.1.2):
+  vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(happy-dom@20.11.2)(vite@8.1.2):
     dependencies:
       '@vitest/expect': 4.1.9
       '@vitest/mocker': 4.1.9(vite@8.1.2)
@@ -13746,7 +13746,7 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
       '@types/node': 26.1.2
-      happy-dom: 20.11.1
+      happy-dom: 20.11.2
     transitivePeerDependencies:
       - msw
 
@@ -13973,7 +13973,7 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.21.2: {}
+  ws@8.21.3: {}
 
   wsl-utils@0.3.1:
     dependencies:
