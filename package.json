@@ -21,7 +21,7 @@
     "zizmor:fix": "zizmor --pedantic --fix ."
   },
   "dependencies": {
-    "@netlify/blobs": "^10.7.9",
+    "@netlify/blobs": "^11.0.0",
     "@netlify/nuxt": "0.3.9",
     "date-fns": "^4.4.0",
     "h3": "^1.15.11",
