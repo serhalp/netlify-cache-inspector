@@ -1,4 +1,4 @@
-# foo
+# foo bar
 
 A web app for inspecting and comparing caching behaviour on live Netlify sites.
 
