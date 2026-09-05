@@ -22,7 +22,7 @@ importers:
         version: 1.15.11
       highlight.js:
         specifier: ^11.11.1
-        version: 11.11.2
+        version: 11.12.0
       nuxt:
         specifier: npm:nuxt-nightly@4.5.0-29716853.29bdf786
         version: nuxt-nightly@4.5.0-29716853.29bdf786(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@electric-sql/pglite@0.3.16)(@netlify/blobs@11.0.3(supports-color@10.2.2))(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vitejs/devtools@0.3.3)(@vue/compiler-sfc@3.5.42)(crossws@0.4.12(srvx@1.0.3))(db0@0.3.4(@electric-sql/pglite@0.3.16))(esbuild@0.28.1)(ioredis@5.11.1(supports-color@10.2.2))(lightningcss@1.32.0)(magicast@0.5.3)(nuxt-nightly@4.5.0-29716853.29bdf786)(oxc-parser@0.137.0)(oxlint@1.81.0)(rollup-plugin-visualizer@7.0.1(rolldown@1.1.3)(rollup@4.62.2))(rollup@4.62.2)(srvx@1.0.3)(supports-color@10.2.2)(terser@5.48.0)(typescript@6.0.3)(vite@8.1.2)(vue-tsc@3.3.11(typescript@6.0.3))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))(yaml@2.9.0)
@@ -4096,8 +4096,8 @@ packages:
   hast-util-whitespace@3.0.0:
     resolution: {integrity: sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==}
 
-  highlight.js@11.11.2:
-    resolution: {integrity: sha512-oaXMACAU0kzOMXBjWpNcX+vlwSBCIAiZ9BHa7gA15NOTtT2L/l8OSZDuqS2XppOhZBPJ7hm4o8ep2kyuip2uEQ==}
+  highlight.js@11.12.0:
+    resolution: {integrity: sha512-nbfWpyRMcMrPMmDwJB+dhX/eiaPKtc2RB+0QZskqJ3WjRA/FDS0e9hZrx8EC/lbEv8gXy98FcDbNa/dspAaJMg==}
     engines: {node: '>=12.0.0'}
 
   hookable@5.5.3:
@@ -11173,7 +11173,7 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.5
 
-  highlight.js@11.11.2: {}
+  highlight.js@11.12.0: {}
 
   hookable@5.5.3: {}
 
