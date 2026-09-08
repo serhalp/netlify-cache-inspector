@@ -38,7 +38,7 @@ importers:
         version: 0.8.0(oxlint@1.81.0)
       '@nuxt/test-utils':
         specifier: ^4.0.3
-        version: 4.3.0(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
+        version: 4.3.2(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       '@unocss/nuxt':
         specifier: ^66.7.2
         version: 66.10.0(@devframes/hub@0.9.12(crossws@0.4.12(srvx@1.0.3))(devframe@0.9.12(cac@7.0.0)(srvx@1.0.3)))(cac@7.0.0)(crossws@0.4.12(srvx@1.0.3))(esbuild@0.28.1)(magic-string@1.2.3)(magicast@0.5.3)(oxc-parser@0.137.0)(rolldown@1.1.3)(rollup@4.62.2)(srvx@1.0.3)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19)))(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
@@ -927,8 +927,8 @@ packages:
     peerDependencies:
       '@nuxt/kit': '>=3.0.0'
 
-  '@nuxt/test-utils@4.3.0':
-    resolution: {integrity: sha512-Pn0f3smV/+ai3kdbEWP8WHB1CExGvN5QFtWEXJfHZi2BxUrwBpRcDMvYUAAGY26gAMb49sfzVGbeJjzz0gUgiw==}
+  '@nuxt/test-utils@4.3.2':
+    resolution: {integrity: sha512-RgBgYN/CyJYWdHzGA8+bznK7bfqpdCUTkA6WGylYuSdt51l6w/jbz/2PyGuGqFkta4H7KQifWNIeFVjW5x66tg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@cucumber/cucumber': '>=11.0.0'
@@ -941,7 +941,7 @@ packages:
       happy-dom: '>=20.0.11'
       jsdom: '>=27.4.0'
       playwright-core: ^1.43.1
-      vitest: ^4.0.2
+      vitest: ^4.0.2 || ^5.0.0
     peerDependenciesMeta:
       '@cucumber/cucumber':
         optional: true
@@ -5921,8 +5921,8 @@ packages:
     resolution: {integrity: sha512-Dufbdbi5sSm9VHDGh1DQfMPHR5yPiMBiN+aLKqAF+5D5fDsw9UughbK8MRopvd2r84+qRwveIXtLs/FAO93eiQ==}
     engines: {node: ^16.14.0 || >= 17.3.0}
 
-  tinyexec@1.3.0:
-    resolution: {integrity: sha512-QKAl9m8gWWGHV8jZcPeym6j+XULi6tOf1mT83WYJ4Lk2ytW/uwAWkrP0uFsdoYMdueVJ0qs26wZ+23xeB4ibNQ==}
+  tinyexec@1.3.1:
+    resolution: {integrity: sha512-GCvB3aoys96IuDFBMcTB46JOR6mdMtAToqwiW8JlWhsoh1mhHi/xn9ss/Dg7N555GiJyEt2qzoG/NHCwM6h1EA==}
     engines: {node: '>=18'}
 
   tinyglobby@0.2.17:
@@ -6686,7 +6686,7 @@ snapshots:
   '@antfu/install-pkg@1.1.0':
     dependencies:
       package-manager-detector: 1.8.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
 
   '@babel/code-frame@7.29.7':
     dependencies:
@@ -6891,7 +6891,7 @@ snapshots:
       nostics: 0.2.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       pathe: 2.0.3
       perfect-debounce: 2.1.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -6911,7 +6911,7 @@ snapshots:
       h3: 2.0.1-rc.31(crossws@0.4.12(srvx@1.0.3))
       pathe: 2.0.3
       perfect-debounce: 2.1.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
       ufo: 1.6.4
       zigpty: 0.2.1
     transitivePeerDependencies:
@@ -7699,7 +7699,7 @@ snapshots:
       srvx: 1.0.3
       std-env: 4.2.0
       tinyclip: 1.0.1
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
       uqr: 0.1.3
       verkit: 0.4.0
     optionalDependencies:
@@ -8000,7 +8000,7 @@ snapshots:
       rc9: 3.0.1
       std-env: 4.2.0
 
-  '@nuxt/test-utils@4.3.0(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))':
+  '@nuxt/test-utils@4.3.2(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))':
     dependencies:
       '@clack/prompts': 1.7.0
       '@nuxt/devtools-kit': 2.7.0(magicast@0.5.3)(vite@8.1.2)
@@ -8025,7 +8025,7 @@ snapshots:
       radix3: 1.1.2
       scule: 1.3.0
       std-env: 4.2.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
       ufo: 1.6.4
       unplugin: 3.3.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       vitest-environment-nuxt: 2.0.0(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
@@ -8680,7 +8680,7 @@ snapshots:
 
   '@publint/pack@0.1.5':
     dependencies:
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
     optional: true
 
   '@quansync/fs@1.0.0':
@@ -9373,7 +9373,7 @@ snapshots:
       nostics: 0.3.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
       pathe: 2.0.3
       perfect-debounce: 2.1.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
       vite: 8.1.2(@types/node@26.2.0)(@vitejs/devtools@0.3.3)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@farmfe/core'
@@ -9481,7 +9481,7 @@ snapshots:
       obug: 2.1.4
       pathe: 2.0.3
       perfect-debounce: 2.1.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
       vite: 8.1.2(@types/node@26.2.0)(@vitejs/devtools@0.3.3)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
       vue: 3.5.42(typescript@6.0.3)
       ws: 8.21.3
@@ -12230,7 +12230,7 @@ snapshots:
     dependencies:
       citty: 0.2.2
       pathe: 2.0.3
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
 
   object-inspect@1.13.4: {}
 
@@ -13492,7 +13492,7 @@ snapshots:
 
   tinyclip@1.0.1: {}
 
-  tinyexec@1.3.0: {}
+  tinyexec@1.3.1: {}
 
   tinyglobby@0.2.17:
     dependencies:
@@ -13959,7 +13959,7 @@ snapshots:
 
   vitest-environment-nuxt@2.0.0(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19)):
     dependencies:
-      '@nuxt/test-utils': 4.3.0(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
+      '@nuxt/test-utils': 4.3.2(@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3)))(esbuild@0.28.1)(happy-dom@20.14.0)(magicast@0.5.3)(rolldown@1.1.3)(rollup@4.62.2)(typescript@6.0.3)(vite@8.1.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.0)(vite@8.1.2))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.19))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.19))
     transitivePeerDependencies:
       - '@cucumber/cucumber'
       - '@farmfe/core'
@@ -14001,7 +14001,7 @@ snapshots:
       picomatch: 4.0.7
       std-env: 4.2.0
       tinybench: 2.9.0
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
       vite: 8.1.2(@types/node@26.2.0)(@vitejs/devtools@0.3.3)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
