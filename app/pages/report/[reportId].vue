@@ -1,12 +1,13 @@
 <script setup lang="ts">
-const { runs, reportId, error, loading, handleRequestFormSubmit, handleClickClear, loadRun } =
+const { runs, reportId, error, loading, handleRequestFormSubmit, handleClickClear, loadReport } =
   useRunManager()
 
 const route = useRoute()
-const runId = typeof route.params.runId === 'string' ? route.params.runId : ''
+const requestedReportId = typeof route.params.reportId === 'string' ? route.params.reportId : ''
 
-const { pending: initialLoading, error: preloadError } = await useAsyncData(`run-${runId}`, () =>
-  loadRun(runId),
+const { pending: initialLoading, error: preloadError } = await useAsyncData(
+  `report-${requestedReportId}`,
+  () => loadReport(requestedReportId),
 )
 
 const initialError = computed(() =>
@@ -19,12 +20,12 @@ if (import.meta.server && preloadError.value) {
   if (event) setResponseStatus(event, preloadError.value.statusCode ?? 500)
 }
 
-const inputUrl = ref(runs.value[0]?.url ?? '')
+// Pre-fill with the last run's URL so re-running for comparison is one click away
+const inputUrl = ref(runs.value.at(-1)?.url ?? '')
 </script>
 
 <template>
   <div>
-    <!-- Only render RequestForm when we have loaded the initial run -->
     <RequestForm
       v-if="!initialLoading"
       v-model:input-url="inputUrl"
@@ -32,9 +33,8 @@ const inputUrl = ref(runs.value[0]?.url ?? '')
       @submit="handleRequestFormSubmit"
     />
 
-    <!-- Show loading state while initial run is loading -->
     <div v-else-if="initialLoading" class="py-6 text-center text-neutral-600 dark:text-neutral-300">
-      Loading run...
+      Loading report...
     </div>
 
     <RunDisplay

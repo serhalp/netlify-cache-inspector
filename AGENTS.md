@@ -45,14 +45,15 @@ Package manager is **pnpm** (pinned in `packageManager` field). Enable via `core
 
 - `ApiRun` (from server): `{ runId, url, status, headers, durationInMs }`
 - `Run` (frontend): `{ runId, url, status, cacheHeaders, durationInMs }` — headers filtered to cache-relevant subset
+- `ApiReport` (from server): `{ reportId, runIds }` — `GET /api/reports/:reportId` also includes `runs: ApiRun[]`
 
 ### Hover Diff
 
 `useDataHover.ts` uses module-level shared state (not per-instance). When multiple runs exist, hovering a field highlights matching/differing values across panels.
 
-### Permalink
+### Permalinks
 
-Runs are persisted in Netlify Blobs. `/run/[runId]` page loads a run via `GET /api/runs/:runId`.
+Runs and reports (ordered sets of runs) are persisted in Netlify Blobs and are immutable. `/run/[runId]` loads a run via `GET /api/runs/:runId`; `/report/[reportId]` loads a report via `GET /api/reports/:reportId`. Report IDs are content-addressed hashes of their run IDs (`server/reports.ts`), so `POST /api/reports` is idempotent and adding a run to a shared report yields a new URL rather than mutating the old one. `useRunManager` keeps state in `useState` and navigates (`/`, `/run/:id`, `/report/:id`) after every change so the URL always matches the runs on screen.
 
 ### Styling
 

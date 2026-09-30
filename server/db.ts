@@ -1,3 +1,4 @@
+import { createError } from 'h3'
 import { getStore } from '@netlify/blobs'
 
 interface Run {
@@ -8,7 +9,14 @@ interface Run {
   durationInMs: number
 }
 
+interface Report {
+  reportId: string
+  runIds: string[]
+  createdAt: string
+}
+
 const runs = getStore({ name: 'runs' })
+const reports = getStore({ name: 'reports' })
 
 export const saveRun = async (run: Run): Promise<void> => {
   // Validate the run data before saving
@@ -23,8 +31,11 @@ export const saveRun = async (run: Run): Promise<void> => {
   await runs.setJSON(run.runId, run)
 }
 
+export const findRun = async (runId: string): Promise<Run | null> =>
+  runs.get(runId, { type: 'json' })
+
 export const getRun = async (runId: string): Promise<Run> => {
-  const run: Run | null = await runs.get(runId, { type: 'json' })
+  const run = await findRun(runId)
 
   if (!run) {
     throw createError({
@@ -34,4 +45,24 @@ export const getRun = async (runId: string): Promise<Run> => {
   }
 
   return run
+}
+
+export const saveReport = async (report: Report): Promise<void> => {
+  await reports.setJSON(report.reportId, report)
+}
+
+export const findReport = async (reportId: string): Promise<Report | null> =>
+  reports.get(reportId, { type: 'json' })
+
+export const getReport = async (reportId: string): Promise<Report> => {
+  const report = await findReport(reportId)
+
+  if (!report) {
+    throw createError({
+      status: 404,
+      message: 'Report not found',
+    })
+  }
+
+  return report
 }

@@ -50,8 +50,13 @@ export default defineNuxtConfig({
     '/': {
       prerender: true,
     },
+    // Run and report pages are immutable other than new deploys
     '/run/**': {
-      // Cache each run page, since they're immutable other than new deploys
+      headers: {
+        'cache-control': 'public, max-age=0, must-revalidate',
+      },
+    },
+    '/report/**': {
       headers: {
         'cache-control': 'public, max-age=0, must-revalidate',
       },

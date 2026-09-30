@@ -7,3 +7,10 @@ export interface Run {
 }
 
 export type ApiRun = Omit<Run, 'cacheHeaders'> & { headers: Record<string, string> }
+
+export interface ApiReport {
+  reportId: string
+  runIds: string[]
+}
+
+export type ApiReportWithRuns = ApiReport & { runs: ApiRun[] }

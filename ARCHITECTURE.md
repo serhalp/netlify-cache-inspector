@@ -14,7 +14,8 @@ app/
   app.vue           Root layout (header, footer, color mode)
 server/
   api/              Nuxt server API routes
-  db.ts             Netlify Blobs storage layer
+  db.ts             Netlify Blobs storage layer (runs and reports)
+  reports.ts        Report ID generation and request validation
 uno.config.ts       UnoCSS theme, colors, fonts, shortcuts
 ```
 
@@ -31,6 +32,7 @@ uno.config.ts       UnoCSS theme, colors, fonts, shortcuts
 
 - `ApiRun` (server response): `{ runId, url, status, headers, durationInMs }`
 - `Run` (frontend): `{ runId, url, status, cacheHeaders, durationInMs }`
+- `ApiReport` (server response): `{ reportId, runIds }`; `GET /api/reports/:reportId` also includes `runs: ApiRun[]`
 
 ## Cache analysis pipeline
 
@@ -43,7 +45,7 @@ uno.config.ts       UnoCSS theme, colors, fonts, shortcuts
 
 ## Composables
 
-**`useRunManager`** -- manages run state (`runs`, `error`, `loading`), handles API calls, and exposes methods for adding/clearing runs.
+**`useRunManager`** -- manages run state (`runs`, `reportId`, `error`, `loading`) in Nuxt `useState` so it survives navigation, handles API calls, and keeps the URL in sync with the runs on screen (see _Permalink system_). `loadRun()` / `loadReport()` populate state for the permalink pages and skip the fetch when the state already matches the route.
 
 **`useDataHover`** -- powers cross-panel hover diffing. Uses module-level shared state (not per-instance) so all panels read the same hover. Supports delta calculation for numeric values and dates.
 
@@ -51,12 +53,14 @@ uno.config.ts       UnoCSS theme, colors, fonts, shortcuts
 
 ## Server
 
-Two API routes:
+Four API routes:
 
 - `POST /api/inspect-url` -- fetches a URL with debug headers, validates it's Netlify, persists to Blobs, returns `ApiRun`
 - `GET /api/runs/:runId` -- retrieves a persisted run by ID
+- `POST /api/reports` -- persists an ordered list of existing run IDs as a report, returns `ApiReport`
+- `GET /api/reports/:reportId` -- retrieves a report with its runs resolved
 
-Storage uses Netlify Blobs (`server/db.ts`). Run IDs are 8-character SHA256 hashes of `${url}-${timestamp}`.
+Storage uses Netlify Blobs (`server/db.ts`) with two stores, `runs` and `reports`. Run IDs are 8-character SHA256 hashes of `${url}-${timestamp}`. Report IDs are 12-character SHA256 hashes of the ordered run ID list, so reports are content-addressed: saving the same run set twice yields the same ID and is a no-op. A report stores only run IDs; runs are resolved on read.
 
 ## Styling
 
@@ -66,7 +70,17 @@ Dark mode uses class-based toggling: `:is(.dark)` selectors in scoped CSS for co
 
 ## Permalink system
 
-Runs are persisted to Netlify Blobs on creation. The `/run/[runId]` page loads a run via the API and pre-populates the form with that run's URL, so users can immediately re-run for comparison.
+Runs are persisted to Netlify Blobs on creation and are immutable. The URL always identifies what is on screen, and `useRunManager.syncRoute()` navigates after every change:
+
+| Runs on screen | Route                |
+| -------------- | -------------------- |
+| 0              | `/`                  |
+| 1              | `/run/[runId]`       |
+| 2 or more      | `/report/[reportId]` |
+
+Reports are immutable and content-addressed, and there is no update endpoint. Adding a run to a report someone shared with you therefore produces a new report with a new URL (copy-on-write) through the same `POST /api/reports` call that created the original; the shared URL keeps showing the original runs. Navigation uses history pushes, so Back steps through previous snapshots.
+
+The `/run/[runId]` and `/report/[reportId]` pages load their data via the API, then pre-populate the form with a run URL so users can immediately re-run for comparison. The home page resets the shared state so it always starts empty.
 
 ## Path aliases
 

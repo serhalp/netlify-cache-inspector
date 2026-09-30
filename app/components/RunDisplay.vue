@@ -3,6 +3,7 @@ import type { Run } from '~/types/run'
 
 const props = defineProps<{
   runs: readonly Run[]
+  reportId: string | null
   error: string | null
   loading: boolean
   inputUrl: string
@@ -13,6 +14,20 @@ const showUrl = computed(() => {
   if (props.runs.length === 0) return true
   return !props.runs.every((run) => run.url === props.inputUrl)
 })
+
+const copied = ref(false)
+const copyReportLink = async (): Promise<void> => {
+  if (!props.reportId) return
+  try {
+    await navigator.clipboard.writeText(`${window.location.origin}/report/${props.reportId}`)
+  } catch {
+    return
+  }
+  copied.value = true
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
+}
 </script>
 
 <template>
@@ -36,7 +51,16 @@ const showUrl = computed(() => {
       />
     </div>
 
-    <div v-if="runs.length > 0" class="text-center mt-10">
+    <div v-if="runs.length > 0" class="flex flex-wrap justify-center gap-3 mt-10">
+      <button
+        v-if="reportId"
+        class="btn-secondary"
+        data-testid="copy-report-link"
+        title="Copy a permalink to this report"
+        @click="copyReportLink()"
+      >
+        {{ copied ? 'Link copied!' : 'Copy report link' }}
+      </button>
       <button class="btn-secondary" @click="onClear()">Clear runs</button>
     </div>
   </div>

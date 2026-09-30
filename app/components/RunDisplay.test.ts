@@ -1,8 +1,9 @@
 /**
  * @vitest-environment happy-dom
  */
-import { describe, it, expect, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { mount, flushPromises } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import RunDisplay from './RunDisplay.vue'
 import type { Run } from '~/types/run'
 
@@ -45,6 +46,7 @@ describe('RunDisplay', () => {
     const wrapper = mount(RunDisplay, {
       props: {
         runs: [],
+        reportId: null,
         error: null,
         loading: true,
         inputUrl: '',
@@ -62,6 +64,7 @@ describe('RunDisplay', () => {
     const wrapper = mount(RunDisplay, {
       props: {
         runs: [],
+        reportId: null,
         error: errorMessage,
         loading: false,
         inputUrl: '',
@@ -78,6 +81,7 @@ describe('RunDisplay', () => {
     const wrapper = mount(RunDisplay, {
       props: {
         runs: mockRuns,
+        reportId: null,
         error: null,
         loading: false,
         inputUrl: '',
@@ -96,6 +100,7 @@ describe('RunDisplay', () => {
     const wrapper = mount(RunDisplay, {
       props: {
         runs: mockRuns,
+        reportId: null,
         error: null,
         loading: false,
         inputUrl: '',
@@ -112,6 +117,7 @@ describe('RunDisplay', () => {
     const wrapper = mount(RunDisplay, {
       props: {
         runs: [],
+        reportId: null,
         error: null,
         loading: false,
         inputUrl: '',
@@ -127,6 +133,7 @@ describe('RunDisplay', () => {
     const wrapper = mount(RunDisplay, {
       props: {
         runs: mockRuns,
+        reportId: null,
         error: null,
         loading: false,
         inputUrl: '',
@@ -136,5 +143,82 @@ describe('RunDisplay', () => {
 
     await wrapper.find('button').trigger('click')
     expect(mockOnClear).toHaveBeenCalledOnce()
+  })
+
+  describe('report link', () => {
+    const writeText = vi.fn()
+
+    beforeEach(() => {
+      vi.useFakeTimers()
+      vi.stubGlobal('navigator', { clipboard: { writeText } })
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+      vi.unstubAllGlobals()
+      writeText.mockReset()
+    })
+
+    it('hides the copy button when there is no report', () => {
+      const wrapper = mount(RunDisplay, {
+        props: {
+          runs: mockRuns,
+          reportId: null,
+          error: null,
+          loading: false,
+          inputUrl: '',
+          onClear: vi.fn(),
+        },
+      })
+
+      expect(wrapper.find('[data-testid="copy-report-link"]').exists()).toBe(false)
+    })
+
+    it('copies the report permalink and confirms briefly', async () => {
+      writeText.mockResolvedValueOnce(undefined)
+      const wrapper = mount(RunDisplay, {
+        props: {
+          runs: mockRuns,
+          reportId: 'abc123def456',
+          error: null,
+          loading: false,
+          inputUrl: '',
+          onClear: vi.fn(),
+        },
+      })
+
+      const button = wrapper.find('[data-testid="copy-report-link"]')
+      expect(button.text()).toBe('Copy report link')
+
+      await button.trigger('click')
+      await flushPromises()
+
+      expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/report/abc123def456`)
+      expect(button.text()).toBe('Link copied!')
+
+      vi.advanceTimersByTime(2000)
+      await nextTick()
+      expect(button.text()).toBe('Copy report link')
+    })
+
+    it('leaves the label unchanged when the clipboard is unavailable', async () => {
+      writeText.mockRejectedValueOnce(new Error('denied'))
+      const wrapper = mount(RunDisplay, {
+        props: {
+          runs: mockRuns,
+          reportId: 'abc123def456',
+          error: null,
+          loading: false,
+          inputUrl: '',
+          onClear: vi.fn(),
+        },
+      })
+
+      const button = wrapper.find('[data-testid="copy-report-link"]')
+      await button.trigger('click')
+      await flushPromises()
+
+      expect(button.text()).toBe('Copy report link')
+    })
   })
 })

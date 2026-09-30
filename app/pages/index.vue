@@ -1,5 +1,10 @@
 <script setup lang="ts">
-const { runs, error, loading, handleRequestFormSubmit, handleClickClear } = useRunManager()
+const { runs, reportId, error, loading, handleRequestFormSubmit, handleClickClear, reset } =
+  useRunManager()
+
+// The home page always starts fresh; runs from a previous permalink stay reachable via Back
+reset()
+
 const inputUrl = ref('https://nextjs-netlify-durable-cache-demo.netlify.app/isr-page')
 
 const showHero = computed(() => runs.value.length === 0 && !loading.value)
@@ -76,7 +81,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
               Shareable permalinks
             </p>
             <p class="text-base text-neutral-600 dark:text-neutral-400 leading-snug">
-              Every run gets a unique link you can send to teammates
+              Every run and every comparison gets a unique link you can send to teammates
             </p>
           </div>
         </div>
@@ -91,6 +96,7 @@ const showHero = computed(() => runs.value.length === 0 && !loading.value)
 
     <RunDisplay
       :runs="runs"
+      :report-id="reportId"
       :error="error"
       :loading="loading"
       :input-url="inputUrl"

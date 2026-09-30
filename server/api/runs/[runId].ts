@@ -1,4 +1,4 @@
-import { createError, defineEventHandler, getRouterParam } from 'h3'
+import { createError, defineEventHandler, getRouterParam, isError } from 'h3'
 import { getRun } from '~server/db'
 
 export default defineEventHandler(async (event) => {
@@ -15,6 +15,8 @@ export default defineEventHandler(async (event) => {
     const run = await getRun(runId)
     return run
   } catch (error) {
+    // Let the 404 from the store through instead of masking it as a 500
+    if (isError(error)) throw error
     throw createError({
       statusCode: 500,
       message: error instanceof Error ? error.message : 'Failed to fetch run',
