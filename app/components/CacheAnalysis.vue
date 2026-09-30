@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { formatDuration, intervalToDuration } from 'date-fns'
+import type { Freshness } from '~/utils/getFreshness'
 import {
   getFieldTooltip,
   getCacheNameTooltip,
@@ -38,6 +39,31 @@ const formatDate = (date: Date): string =>
 const now = ref(Date.now())
 
 const cacheAnalysis = computed(() => getCacheAnalysis(props.cacheHeaders, now.value))
+
+interface FreshnessNote {
+  text: string
+  tone: 'revalidating' | 'stale'
+}
+
+// Only meaningful next to a stale-while-revalidate value, so a fresh response gets no note.
+const getFreshnessNote = (freshness: Freshness | undefined): FreshnessNote | undefined => {
+  if (freshness?.state === 'stale-while-revalidate') {
+    return {
+      text: `serving stale while revalidating, ${formatSeconds(freshness.staleWhileRevalidateTtl)} left`,
+      tone: 'revalidating',
+    }
+  }
+  if (freshness?.state === 'stale') {
+    return { text: 'stale, window elapsed', tone: 'stale' }
+  }
+  return undefined
+}
+
+const freshnessNotes = computed(() => ({
+  browser: getFreshnessNote(cacheAnalysis.value.cacheControl.freshness),
+  cdn: getFreshnessNote(cacheAnalysis.value.cacheControl.cdnFreshness),
+  netlifyCdn: getFreshnessNote(cacheAnalysis.value.cacheControl.netlifyCdnFreshness),
+}))
 
 const handleDataKeyHover = (
   dataKey: string,
@@ -242,6 +268,13 @@ onUnmounted(() => {
                   :title="formatHumanSeconds(parameters.ttl)"
                 >
                   {{ formatSeconds(parameters.ttl) }}
+                  <span
+                    v-if="parameters.hit && parameters.ttl < 0"
+                    class="freshness-note freshness-revalidating tooltip-trigger"
+                    tabindex="0"
+                    :title="formatTooltip(getFieldTooltip('served-stale'))"
+                    >served stale</span
+                  >
                   <span
                     v-if="
                       isKeyHovered(`TTL-${cacheIndex}`) &&
@@ -606,6 +639,9 @@ onUnmounted(() => {
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
+            <span v-if="cacheAnalysis.cacheControl.ttl < 0" class="freshness-note freshness-stale"
+              >stale</span
+            >
             <span
               v-if="
                 isKeyHovered('TTL (browser)') &&
@@ -616,6 +652,62 @@ onUnmounted(() => {
             >
               ({{ getDelta(cacheAnalysis.cacheControl.ttl) }})
             </span>
+          </dd>
+        </div>
+      </template>
+
+      <template v-if="cacheAnalysis.cacheControl.staleWhileRevalidate">
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('SWR (browser)') }">
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('swr-browser'))"
+            @mouseenter="
+              handleDataKeyHover('SWR (browser)', cacheAnalysis.cacheControl.staleWhileRevalidate)
+            "
+            @mouseleave="handleDataKeyLeave"
+            @focus="
+              handleDataKeyHover('SWR (browser)', cacheAnalysis.cacheControl.staleWhileRevalidate)
+            "
+            @blur="handleDataKeyLeave"
+          >
+            <span class="label-full">Stale-while-revalidate</span>
+            <span class="label-short">SWR</span
+            >{{
+              cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate ||
+              cacheAnalysis.cacheControl.cdnStaleWhileRevalidate
+                ? ' (browser)'
+                : ''
+            }}
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching':
+                isKeyHovered('SWR (browser)') &&
+                isValueMatching(cacheAnalysis.cacheControl.staleWhileRevalidate),
+              'value-different':
+                isKeyHovered('SWR (browser)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.staleWhileRevalidate),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.staleWhileRevalidate)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.staleWhileRevalidate) }}
+            <span
+              v-if="
+                isKeyHovered('SWR (browser)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.staleWhileRevalidate) &&
+                getDelta(cacheAnalysis.cacheControl.staleWhileRevalidate)
+              "
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.staleWhileRevalidate) }})
+            </span>
+            <span
+              v-if="freshnessNotes.browser"
+              :class="['freshness-note', `freshness-${freshnessNotes.browser.tone}`]"
+              >{{ freshnessNotes.browser.text }}</span
+            >
           </dd>
         </div>
       </template>
@@ -645,6 +737,11 @@ onUnmounted(() => {
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
             <span
+              v-if="cacheAnalysis.cacheControl.cdnTtl < 0"
+              class="freshness-note freshness-stale"
+              >stale</span
+            >
+            <span
               v-if="
                 isKeyHovered('TTL (CDN)') &&
                 !isValueMatching(cacheAnalysis.cacheControl.cdnTtl) &&
@@ -654,6 +751,61 @@ onUnmounted(() => {
             >
               ({{ getDelta(cacheAnalysis.cacheControl.cdnTtl) }})
             </span>
+          </dd>
+        </div>
+      </template>
+
+      <template v-if="cacheAnalysis.cacheControl.cdnStaleWhileRevalidate">
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('SWR (CDN)') }">
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('swr-cdn'))"
+            @mouseenter="
+              handleDataKeyHover('SWR (CDN)', cacheAnalysis.cacheControl.cdnStaleWhileRevalidate)
+            "
+            @mouseleave="handleDataKeyLeave"
+            @focus="
+              handleDataKeyHover('SWR (CDN)', cacheAnalysis.cacheControl.cdnStaleWhileRevalidate)
+            "
+            @blur="handleDataKeyLeave"
+          >
+            <span class="label-full">Stale-while-revalidate</span>
+            <span class="label-short">SWR</span>
+            ({{
+              cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate
+                ? 'other CDNs'
+                : 'Netlify CDN'
+            }})
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching':
+                isKeyHovered('SWR (CDN)') &&
+                isValueMatching(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate),
+              'value-different':
+                isKeyHovered('SWR (CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate) }}
+            <span
+              v-if="
+                isKeyHovered('SWR (CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate) &&
+                getDelta(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate)
+              "
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate) }})
+            </span>
+            <span
+              v-if="freshnessNotes.cdn"
+              :class="['freshness-note', `freshness-${freshnessNotes.cdn.tone}`]"
+              >{{ freshnessNotes.cdn.text }}</span
+            >
           </dd>
         </div>
       </template>
@@ -689,6 +841,11 @@ onUnmounted(() => {
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
             <span
+              v-if="cacheAnalysis.cacheControl.netlifyCdnTtl < 0"
+              class="freshness-note freshness-stale"
+              >stale</span
+            >
+            <span
               v-if="
                 isKeyHovered('TTL (Netlify CDN)') &&
                 !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnTtl) &&
@@ -698,6 +855,62 @@ onUnmounted(() => {
             >
               ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnTtl) }})
             </span>
+          </dd>
+        </div>
+      </template>
+
+      <template v-if="cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate">
+        <div class="data-row" :class="{ 'row-highlighted': isKeyHovered('SWR (Netlify CDN)') }">
+          <dt
+            class="data-key"
+            tabindex="0"
+            :title="formatTooltip(getFieldTooltip('swr-netlify-cdn'))"
+            @mouseenter="
+              handleDataKeyHover(
+                'SWR (Netlify CDN)',
+                cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate,
+              )
+            "
+            @mouseleave="handleDataKeyLeave"
+            @focus="
+              handleDataKeyHover(
+                'SWR (Netlify CDN)',
+                cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate,
+              )
+            "
+            @blur="handleDataKeyLeave"
+          >
+            <span class="label-full">Stale-while-revalidate</span>
+            <span class="label-short">SWR</span> (Netlify CDN)
+          </dt>
+          <dd
+            class="data-value"
+            :class="{
+              'value-matching':
+                isKeyHovered('SWR (Netlify CDN)') &&
+                isValueMatching(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate),
+              'value-different':
+                isKeyHovered('SWR (Netlify CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate),
+            }"
+            :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate)"
+          >
+            {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate) }}
+            <span
+              v-if="
+                isKeyHovered('SWR (Netlify CDN)') &&
+                !isValueMatching(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate) &&
+                getDelta(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate)
+              "
+              class="delta"
+            >
+              ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate) }})
+            </span>
+            <span
+              v-if="freshnessNotes.netlifyCdn"
+              :class="['freshness-note', `freshness-${freshnessNotes.netlifyCdn.tone}`]"
+              >{{ freshnessNotes.netlifyCdn.text }}</span
+            >
           </dd>
         </div>
       </template>
@@ -979,6 +1192,24 @@ onUnmounted(() => {
 
 :is(.dark) .delta {
   color: #9da7b2;
+}
+
+.freshness-note {
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-left: 0.25em;
+}
+
+.freshness-stale {
+  color: #fe4e5c;
+}
+
+.freshness-revalidating {
+  color: #b45309;
+}
+
+:is(.dark) .freshness-revalidating {
+  color: #fbbf24;
 }
 
 .tooltip-trigger {

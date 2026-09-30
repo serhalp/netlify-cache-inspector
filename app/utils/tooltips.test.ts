@@ -58,6 +58,11 @@ describe('tooltip utilities', () => {
       expect(tooltip.text).toContain('Vary header field(s) differed')
     })
 
+    it('returns specific tooltip for stale', () => {
+      const tooltip = getForwardReasonTooltip('stale')
+      expect(tooltip.text).toContain('stale (expired) and could not be served as-is')
+    })
+
     it('returns generic tooltip for unknown forward reasons', () => {
       const tooltip = getForwardReasonTooltip('unknown-reason')
       expect(tooltip.text).toContain('Cache forwarding reason: unknown-reason')
@@ -81,6 +86,22 @@ describe('tooltip utilities', () => {
       expect(tooltip.url).toBe(
         'https://docs.netlify.com/build/caching/caching-overview/#cache-key-variation',
       )
+    })
+
+    it('returns specific tooltips for stale-while-revalidate fields with docs URL', () => {
+      for (const key of ['swr-cdn', 'swr-netlify-cdn']) {
+        const tooltip = getFieldTooltip(key)
+        expect(tooltip.text).toContain('Stale-while-revalidate')
+        expect(tooltip.url).toBe(
+          'https://docs.netlify.com/build/caching/caching-overview/#stale-while-revalidate-directive',
+        )
+      }
+      expect(getFieldTooltip('swr-browser').text).toContain('browsers may keep serving')
+    })
+
+    it('returns specific tooltip for served-stale', () => {
+      const tooltip = getFieldTooltip('served-stale')
+      expect(tooltip.text).toContain('served a stored response that had already expired')
     })
 
     it('returns generic tooltip for unknown fields', () => {

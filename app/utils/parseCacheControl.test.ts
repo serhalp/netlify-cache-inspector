@@ -88,6 +88,129 @@ describe('parseCacheControl', () => {
     expect(result.netlifyCdnTtl).toBe(2900) // 3000 - 100
   })
 
+  it('parses stale-while-revalidate from Cache-Control for all tiers when no CDN headers are present', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60, stale-while-revalidate=600',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.staleWhileRevalidate).toBe(600)
+    expect(result.cdnStaleWhileRevalidate).toBe(600)
+    expect(result.netlifyCdnStaleWhileRevalidate).toBe(600)
+  })
+
+  it('prefers CDN-Cache-Control stale-while-revalidate for the CDN tier', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60, stale-while-revalidate=600',
+      'CDN-Cache-Control': 's-maxage=120, stale-while-revalidate=1200',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.staleWhileRevalidate).toBe(600)
+    expect(result.cdnStaleWhileRevalidate).toBe(1200)
+    expect(result.netlifyCdnStaleWhileRevalidate).toBe(1200)
+  })
+
+  it('prefers Debug-Netlify-CDN-Cache-Control stale-while-revalidate for the Netlify CDN tier', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60, stale-while-revalidate=600',
+      'CDN-Cache-Control': 's-maxage=120, stale-while-revalidate=1200',
+      'Debug-Netlify-CDN-Cache-Control': 's-maxage=300, stale-while-revalidate=3000',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.staleWhileRevalidate).toBe(600)
+    expect(result.cdnStaleWhileRevalidate).toBe(1200)
+    expect(result.netlifyCdnStaleWhileRevalidate).toBe(3000)
+  })
+
+  it('leaves stale-while-revalidate undefined when no header specifies it', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.staleWhileRevalidate).toBeUndefined()
+    expect(result.cdnStaleWhileRevalidate).toBeUndefined()
+    expect(result.netlifyCdnStaleWhileRevalidate).toBeUndefined()
+  })
+
+  it('reports freshness as fresh while within max-age', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60, stale-while-revalidate=600',
+      Age: '10',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.freshness).toEqual({ state: 'fresh' })
+  })
+
+  it('reports freshness as stale-while-revalidate with the remaining window once max-age has elapsed', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60, stale-while-revalidate=600',
+      Age: '100',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.ttl).toBe(-40)
+    expect(result.freshness).toEqual({
+      state: 'stale-while-revalidate',
+      staleWhileRevalidateTtl: 560,
+    })
+  })
+
+  it('reports freshness as stale once the stale-while-revalidate window has elapsed', () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60, stale-while-revalidate=600',
+      Age: '700',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.freshness).toEqual({ state: 'stale' })
+  })
+
+  it("computes freshness per tier from that tier's TTL and stale-while-revalidate", () => {
+    const headers = new Headers({
+      'Cache-Control': 'max-age=60',
+      'Debug-Netlify-CDN-Cache-Control': 's-maxage=60, stale-while-revalidate=600',
+      Age: '100',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.freshness).toEqual({ state: 'stale' })
+    expect(result.netlifyCdnFreshness).toEqual({
+      state: 'stale-while-revalidate',
+      staleWhileRevalidateTtl: 560,
+    })
+  })
+
+  it('leaves freshness undefined when there is no TTL', () => {
+    const headers = new Headers({
+      'Cache-Control': 'stale-while-revalidate=600',
+    })
+    const now = Date.now()
+
+    const result = parseCacheControl(headers, now)
+
+    expect(result.freshness).toBeUndefined()
+  })
+
   it('returns must-revalidate when must-revalidate directive is present', () => {
     const headers = new Headers({
       'Cache-Control': 'max-age=3600, must-revalidate',

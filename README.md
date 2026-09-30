@@ -23,7 +23,7 @@ The dev server starts at http://localhost:3000 if port is 3000 is available.
 2. The server fetches it and extracts cache-relevant response headers
 3. Headers are parsed into a structured breakdown:
    - **Cache status** per layer (edge, durable cache, origin frameworks)
-   - **Cache-control** directives with TTL calculations
+   - **Cache-control** directives with TTL and stale-while-revalidate calculations
    - **Served-by** detection (CDN edge, durable cache, function, edge function)
 4. Results are persisted so runs can be shared via permalink
 

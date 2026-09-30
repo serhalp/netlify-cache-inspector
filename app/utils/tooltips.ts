@@ -28,7 +28,7 @@ const FORWARD_REASONS: Record<string, TooltipDefinition> = {
     text: 'The request included a cache directive (e.g., no-cache) that prevented the cache from returning a stored response.',
   },
   stale: {
-    text: 'The cache had a stored response that was stale (expired).',
+    text: 'The cache had a stored response, but it was stale (expired) and could not be served as-is, e.g. because no stale-while-revalidate window applied or it had already elapsed.',
   },
   partial: {
     text: 'The cache responded with a partial stored response.',
@@ -71,6 +71,10 @@ export const FIELD_TOOLTIPS: Record<string, TooltipDefinition> = {
   ttl: {
     text: 'Time To Live - how long this response can be cached before it expires.',
   },
+  'served-stale': {
+    text: 'This cache layer served a stored response that had already expired, most likely because a stale-while-revalidate window allowed it to while the response was revalidated in the background.',
+    url: 'https://docs.netlify.com/build/caching/caching-overview/#stale-while-revalidate-directive',
+  },
   'stored-response': {
     text: 'Whether this cache layer stored the response for future use.',
   },
@@ -106,6 +110,17 @@ export const FIELD_TOOLTIPS: Record<string, TooltipDefinition> = {
   },
   'ttl-netlify-cdn': {
     text: "How long Netlify's CDN specifically is allowed to cache this response.",
+  },
+  'swr-browser': {
+    text: 'Stale-while-revalidate - how long browsers may keep serving this response after its TTL expires, while revalidating it in the background.',
+  },
+  'swr-cdn': {
+    text: 'Stale-while-revalidate - how long CDN servers may keep serving this response after its TTL expires, while revalidating it in the background.',
+    url: 'https://docs.netlify.com/build/caching/caching-overview/#stale-while-revalidate-directive',
+  },
+  'swr-netlify-cdn': {
+    text: "Stale-while-revalidate - how long Netlify's CDN specifically may keep serving this response after its TTL expires, while revalidating it in the background.",
+    url: 'https://docs.netlify.com/build/caching/caching-overview/#stale-while-revalidate-directive',
   },
   vary: {
     text: 'Headers that determine cache variations - responses will be cached separately based on these header values.',
