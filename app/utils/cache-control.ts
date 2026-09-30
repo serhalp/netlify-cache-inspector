@@ -27,6 +27,8 @@ const SUPPORTED_DIRECTIVES = {
   staleIfError: 'stale-if-error',
 }
 
+export const SUPPORTED_DIRECTIVE_NAMES: string[] = Object.values(SUPPORTED_DIRECTIVES)
+
 function parseBooleanOnly(value: string | null | undefined) {
   return value === null
 }
@@ -127,7 +129,7 @@ export class CacheControl {
     this.staleIfError = parseDuration(values[SUPPORTED_DIRECTIVES.staleIfError])
 
     for (const [key, value] of Object.entries(values)) {
-      if (!Object.keys(SUPPORTED_DIRECTIVES).includes(key)) {
+      if (!SUPPORTED_DIRECTIVE_NAMES.includes(key)) {
         this.extensions[key] = value
       }
     }

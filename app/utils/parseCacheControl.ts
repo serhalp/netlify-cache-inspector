@@ -31,7 +31,7 @@ interface StaleWhileRevalidate {
 
 // RFC 9111 §4.2.4: these directives forbid serving stale, which makes any SWR window inert.
 // `proxy-revalidate` only binds shared caches (CDNs), not browsers.
-const getStaleServingProhibitedBy = (
+export const getStaleServingProhibitedBy = (
   cacheControl: CacheControl,
   isSharedCache: boolean,
 ): string | undefined => {

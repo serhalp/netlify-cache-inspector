@@ -123,6 +123,26 @@ onUnmounted(() => {
       <code class="inline-code">{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
+    <ul
+      v-if="cacheAnalysis.warnings.length > 0"
+      class="warnings mb-3"
+      aria-label="Possible cache misconfigurations"
+    >
+      <li
+        v-for="(warning, warningIndex) in cacheAnalysis.warnings"
+        :key="warningIndex"
+        class="warning tooltip-trigger"
+        tabindex="0"
+        :title="formatTooltip({ text: warning.detail, url: warning.url })"
+      >
+        <span class="warning-icon" aria-hidden="true">&#x26A0;</span>
+        <span>
+          <code class="inline-code">{{ warning.header }}</code>
+          {{ warning.message }}
+        </span>
+      </li>
+    </ul>
+
     <hr class="separator" />
 
     <dl class="space-y-0">
@@ -1018,6 +1038,42 @@ onUnmounted(() => {
 
 :is(.dark) .separator {
   background: rgba(208, 255, 254, 0.08);
+}
+
+.warnings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.warning {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.375rem;
+  border-left: 3px solid #d97706;
+  background-color: rgba(217, 119, 6, 0.08);
+  color: #78350f;
+  text-decoration: none;
+}
+
+:is(.dark) .warning {
+  border-left-color: #fbbf24;
+  background-color: rgba(251, 191, 36, 0.1);
+  color: #fde68a;
+}
+
+.warning-icon {
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+:is(.dark) .warning-icon {
+  color: #fbbf24;
 }
 
 .lifecycle-step {

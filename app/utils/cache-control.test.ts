@@ -86,6 +86,12 @@ describe('parse', () => {
     expect(result.extensions).toHaveProperty('durable', null)
   })
 
+  it('does not treat supported directives as extensions', () => {
+    const result = parse('public, max-age=3600, s-maxage=60, stale-while-revalidate=30')
+
+    expect(result.extensions).toEqual({})
+  })
+
   it('parses extension directives with values', () => {
     const result = parse('max-age=3600, fishiness=42')
 

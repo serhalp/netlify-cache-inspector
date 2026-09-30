@@ -18,6 +18,39 @@ const findRowTexts = (wrapper: ReturnType<typeof mountWithHeaders>, labelPrefix:
     .map((row) => row.text())
 
 describe('CacheAnalysis', () => {
+  describe('warnings', () => {
+    it('renders no warnings list for a well-formed configuration', () => {
+      const wrapper = mountWithHeaders({
+        'Cache-Status': '"Netlify Edge"; hit; ttl=50',
+        'Cache-Control': 'public, max-age=60, stale-while-revalidate=600',
+        Age: '10',
+      })
+
+      expect(wrapper.find('.warnings').exists()).toBe(false)
+      wrapper.unmount()
+    })
+
+    it('renders a warning per misconfiguration with the detail as a tooltip', () => {
+      const wrapper = mountWithHeaders({
+        'Cache-Status': '"Netlify Edge"; hit; ttl=50',
+        'Cache-Control': 'public, maxage=60, stale-while-revalidate=60',
+        'Debug-Netlify-CDN-Cache-Control': 'public, s-maxage=60, stale-while-revalidate=60',
+        Age: '10',
+      })
+
+      const warnings = wrapper.findAll('.warning')
+      expect(warnings).toHaveLength(3)
+      expect(warnings[0]?.text()).toContain('Cache-Control')
+      expect(warnings[0]?.text()).toContain('Did you mean "max-age"?')
+      expect(warnings[1]?.text()).toContain('without max-age or s-maxage')
+      expect(warnings[2]?.text()).toContain('Netlify-CDN-Cache-Control')
+      expect(warnings[2]?.text()).toContain('same value as s-maxage (60)')
+      expect(warnings[2]?.attributes('title')).toContain('extra grace window')
+      expect(warnings[2]?.attributes('title')).toContain('Learn more: https://docs.netlify.com')
+      wrapper.unmount()
+    })
+  })
+
   describe('stale-while-revalidate', () => {
     it('does not render stale-while-revalidate rows when the directive is absent', () => {
       const wrapper = mountWithHeaders({

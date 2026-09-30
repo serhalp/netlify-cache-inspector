@@ -25,6 +25,7 @@ The dev server starts at http://localhost:3000 if port is 3000 is available.
    - **Cache status** per layer (edge, durable cache, origin frameworks)
    - **Cache-control** directives with TTL and stale-while-revalidate calculations
    - **Served-by** detection (CDN edge, durable cache, function, edge function)
+   - **Warnings** for common misconfigurations, such as directive typos or `stale-while-revalidate` set equal to `max-age`
 4. Results are persisted so runs can be shared via permalink
 
 ## Deployment

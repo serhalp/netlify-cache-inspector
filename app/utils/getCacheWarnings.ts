@@ -1,0 +1,156 @@
+import { type CacheControl, parse, SUPPORTED_DIRECTIVE_NAMES } from './cache-control'
+import { getStaleServingProhibitedBy } from './parseCacheControl'
+
+export interface CacheWarning {
+  // The header as the user would have set it (e.g. `Netlify-CDN-Cache-Control`, not the debug name)
+  header: string
+  message: string
+  detail: string
+  url?: string
+}
+
+const SWR_DOCS_URL =
+  'https://docs.netlify.com/build/caching/caching-overview/#stale-while-revalidate-directive'
+const CACHE_CONTROL_DOCS_URL = 'https://docs.netlify.com/build/caching/caching-overview/'
+
+const HEADERS = [
+  { name: 'Cache-Control', headerName: 'Cache-Control' },
+  { name: 'CDN-Cache-Control', headerName: 'CDN-Cache-Control' },
+  { name: 'Netlify-CDN-Cache-Control', headerName: 'Debug-Netlify-CDN-Cache-Control' },
+]
+
+// Directives the parser doesn't model but are valid, so they must not be flagged as typos.
+const KNOWN_EXTENSION_DIRECTIVES = ['durable', 'must-understand']
+const KNOWN_DIRECTIVES = [...SUPPORTED_DIRECTIVE_NAMES, ...KNOWN_EXTENSION_DIRECTIVES]
+
+// Misspellings that normalization alone can't map to the right directive.
+const DIRECTIVE_ALIASES: Record<string, string> = {
+  swr: 'stale-while-revalidate',
+  stalewhilerevalidating: 'stale-while-revalidate',
+  stalewhilerevalidation: 'stale-while-revalidate',
+  sharedmaxage: 's-maxage',
+  sharedmaxaage: 's-maxage',
+  smaxage: 's-maxage',
+  inmutable: 'immutable',
+  immutible: 'immutable',
+}
+
+const NON_ALPHANUMERIC = /[^a-z0-9]/g
+
+const normalize = (directive: string): string =>
+  directive.toLowerCase().replaceAll(NON_ALPHANUMERIC, '')
+
+const KNOWN_DIRECTIVES_BY_NORMALIZED = new Map(KNOWN_DIRECTIVES.map((d) => [normalize(d), d]))
+
+// Optimal string alignment distance: Levenshtein plus adjacent transpositions ("stroe") at cost 1.
+const editDistance = (a: string, b: string): number => {
+  const rows: number[][] = [Array.from({ length: b.length + 1 }, (_, i) => i)]
+  for (let i = 1; i <= a.length; i++) {
+    const row = [i]
+    const previous = rows[i - 1] ?? []
+    for (let j = 1; j <= b.length; j++) {
+      let cost = Math.min(
+        (previous[j] ?? 0) + 1,
+        (row[j - 1] ?? 0) + 1,
+        (previous[j - 1] ?? 0) + (a[i - 1] === b[j - 1] ? 0 : 1),
+      )
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        cost = Math.min(cost, (rows[i - 2]?.[j - 2] ?? 0) + 1)
+      }
+      row[j] = cost
+    }
+    rows.push(row)
+  }
+  return rows[a.length]?.[b.length] ?? 0
+}
+
+/**
+ * Finds the known directive an unrecognized one most likely meant, if any. Separators and case
+ * are ignored (`max_age`, `s-max-age`), then a small edit distance catches plain typos.
+ */
+export const findIntendedDirective = (directive: string): string | undefined => {
+  if (KNOWN_DIRECTIVES.includes(directive.toLowerCase())) return undefined
+
+  const normalized = normalize(directive)
+  const exact = DIRECTIVE_ALIASES[normalized] ?? KNOWN_DIRECTIVES_BY_NORMALIZED.get(normalized)
+  if (exact != null) return exact
+
+  // Short names get a tighter bound so e.g. a legitimate 5-letter extension isn't "corrected".
+  const maxDistance = normalized.length >= 8 ? 2 : 1
+  let best: { directive: string; distance: number } | undefined
+  for (const [knownNormalized, known] of KNOWN_DIRECTIVES_BY_NORMALIZED) {
+    const distance = editDistance(normalized, knownNormalized)
+    if (distance <= maxDistance && (best == null || distance < best.distance)) {
+      best = { directive: known, distance }
+    }
+  }
+  return best?.directive
+}
+
+const getHeaderWarnings = (
+  header: string,
+  cacheControl: CacheControl,
+  hasExpires: boolean,
+): CacheWarning[] => {
+  const warnings: CacheWarning[] = []
+
+  for (const directive of Object.keys(cacheControl.extensions)) {
+    const intended = findIntendedDirective(directive)
+    if (intended == null) continue
+    warnings.push({
+      header,
+      message: `has an unrecognized directive "${directive}". Did you mean "${intended}"?`,
+      detail: `Caches ignore directives they don't recognize, so "${directive}" has no effect. The standard directive is "${intended}".`,
+      url: CACHE_CONTROL_DOCS_URL,
+    })
+  }
+
+  const swr = cacheControl.staleWhileRevalidate
+  if (swr == null) return warnings
+
+  const { maxAge, sharedMaxAge } = cacheControl
+
+  if (swr > 0 && (swr === maxAge || swr === sharedMaxAge)) {
+    const lifetimeDirective = swr === sharedMaxAge ? 's-maxage' : 'max-age'
+    warnings.push({
+      header,
+      message: `sets stale-while-revalidate to the same value as ${lifetimeDirective} (${swr}), which is usually a mistake.`,
+      detail: `stale-while-revalidate is not the cache lifetime. It is an extra grace window that only starts once ${lifetimeDirective} has elapsed, during which a stale response may be served while it is revalidated in the background. Matching it to ${lifetimeDirective} usually means it was mistaken for the lifetime itself. Size it to cover how long a revalidation takes, or how long you are willing to serve stale content.`,
+      url: SWR_DOCS_URL,
+    })
+  }
+
+  const prohibitedBy = getStaleServingProhibitedBy(cacheControl, true)
+  if (prohibitedBy != null) {
+    warnings.push({
+      header,
+      message: `combines stale-while-revalidate with ${prohibitedBy}, which forbids serving stale responses.`,
+      detail: `${prohibitedBy} tells caches they must never serve a stale response, so the stale-while-revalidate window can never be used. Remove one of the two directives depending on which behaviour you want.`,
+      url: SWR_DOCS_URL,
+    })
+  }
+
+  if (maxAge == null && sharedMaxAge == null && !hasExpires) {
+    warnings.push({
+      header,
+      message: 'sets stale-while-revalidate without max-age or s-maxage.',
+      detail:
+        'stale-while-revalidate only extends an existing freshness lifetime. Without max-age, s-maxage or an Expires header there is no lifetime to extend, so caches fall back to their own defaults.',
+      url: SWR_DOCS_URL,
+    })
+  }
+
+  return warnings
+}
+
+/**
+ * Flags common cache-control misconfigurations across all supported cache-control headers.
+ */
+export const getCacheWarnings = (cacheHeaders: Headers): CacheWarning[] => {
+  const hasExpires = cacheHeaders.has('Expires')
+  return HEADERS.flatMap(({ name, headerName }) => {
+    const value = cacheHeaders.get(headerName)
+    if (value == null) return []
+    return getHeaderWarnings(name, parse(value), hasExpires)
+  })
+}
