@@ -1,4 +1,4 @@
-import { parse as parseCacheControlHeader } from './cache-control'
+import { type CacheControl, parse as parseCacheControlHeader } from './cache-control'
 import { getFreshness, type Freshness } from './getFreshness'
 import { getTimeToLive } from './getTimeToLive'
 
@@ -22,6 +22,38 @@ export interface ParsedCacheControl {
   netlifyVary?: string
   // TODO(serhalp) Split into `revalidate`, `cdnRevalidate`, `netlifyCdnRevalidate`
   revalidate?: 'must-revalidate' | 'immutable'
+}
+
+interface StaleWhileRevalidate {
+  value?: number
+  prohibitedBy?: string
+}
+
+// RFC 9111 §4.2.4: these directives forbid serving stale, which makes any SWR window inert.
+// `proxy-revalidate` only binds shared caches (CDNs), not browsers.
+const getStaleServingProhibitedBy = (
+  cacheControl: CacheControl,
+  isSharedCache: boolean,
+): string | undefined => {
+  if (cacheControl.mustRevalidate) return 'must-revalidate'
+  if (isSharedCache && cacheControl.proxyRevalidate) return 'proxy-revalidate'
+  if (cacheControl.noCache) return 'no-cache'
+  if (cacheControl.noStore) return 'no-store'
+  return undefined
+}
+
+// Takes the SWR from the first header (in precedence order) that specifies it, along with any
+// directive in that same header that forbids serving stale.
+const getStaleWhileRevalidate = (
+  cacheControlsByPrecedence: CacheControl[],
+  isSharedCache: boolean,
+): StaleWhileRevalidate => {
+  const source = cacheControlsByPrecedence.find((cc) => cc.staleWhileRevalidate != null)
+  if (source == null) return {}
+  return {
+    value: source.staleWhileRevalidate ?? undefined,
+    prohibitedBy: getStaleServingProhibitedBy(source, isSharedCache),
+  }
 }
 
 export const parseCacheControl = (cacheHeaders: Headers, now: number): ParsedCacheControl => {
@@ -65,14 +97,12 @@ export const parseCacheControl = (cacheHeaders: Headers, now: number): ParsedCac
   )
 
   // Mirrors the (directive-level) fallback chain used for the TTLs above; see the TODOs there.
-  const staleWhileRevalidate = cacheControl.staleWhileRevalidate ?? undefined
-  const cdnStaleWhileRevalidate =
-    cdnCacheControl.staleWhileRevalidate ?? cacheControl.staleWhileRevalidate ?? undefined
-  const netlifyCdnStaleWhileRevalidate =
-    netlifyCdnCacheControl.staleWhileRevalidate ??
-    cdnCacheControl.staleWhileRevalidate ??
-    cacheControl.staleWhileRevalidate ??
-    undefined
+  const staleWhileRevalidate = getStaleWhileRevalidate([cacheControl], false)
+  const cdnStaleWhileRevalidate = getStaleWhileRevalidate([cdnCacheControl, cacheControl], true)
+  const netlifyCdnStaleWhileRevalidate = getStaleWhileRevalidate(
+    [netlifyCdnCacheControl, cdnCacheControl, cacheControl],
+    true,
+  )
 
   return {
     // TODO(serhalp) Actually implement complete logic
@@ -87,12 +117,20 @@ export const parseCacheControl = (cacheHeaders: Headers, now: number): ParsedCac
     ttl,
     cdnTtl,
     netlifyCdnTtl,
-    staleWhileRevalidate,
-    cdnStaleWhileRevalidate,
-    netlifyCdnStaleWhileRevalidate,
-    freshness: getFreshness(ttl, staleWhileRevalidate),
-    cdnFreshness: getFreshness(cdnTtl, cdnStaleWhileRevalidate),
-    netlifyCdnFreshness: getFreshness(netlifyCdnTtl, netlifyCdnStaleWhileRevalidate),
+    staleWhileRevalidate: staleWhileRevalidate.value,
+    cdnStaleWhileRevalidate: cdnStaleWhileRevalidate.value,
+    netlifyCdnStaleWhileRevalidate: netlifyCdnStaleWhileRevalidate.value,
+    freshness: getFreshness(ttl, staleWhileRevalidate.value, staleWhileRevalidate.prohibitedBy),
+    cdnFreshness: getFreshness(
+      cdnTtl,
+      cdnStaleWhileRevalidate.value,
+      cdnStaleWhileRevalidate.prohibitedBy,
+    ),
+    netlifyCdnFreshness: getFreshness(
+      netlifyCdnTtl,
+      netlifyCdnStaleWhileRevalidate.value,
+      netlifyCdnStaleWhileRevalidate.prohibitedBy,
+    ),
     vary: cacheHeaders.get('Vary') ?? undefined,
     netlifyVary: cacheHeaders.get('Netlify-Vary') ?? undefined,
     // TODO(serhalp) Support weirder cases? `proxy-revalidate`, must-understand`, etc.

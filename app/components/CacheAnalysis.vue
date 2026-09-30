@@ -49,12 +49,17 @@ interface FreshnessNote {
 const getFreshnessNote = (freshness: Freshness | undefined): FreshnessNote | undefined => {
   if (freshness?.state === 'stale-while-revalidate') {
     return {
-      text: `serving stale while revalidating, ${formatSeconds(freshness.staleWhileRevalidateTtl)} left`,
+      text: `stale but servable while revalidating, ${formatSeconds(freshness.staleWhileRevalidateTtl)} left`,
       tone: 'revalidating',
     }
   }
   if (freshness?.state === 'stale') {
-    return { text: 'stale, window elapsed', tone: 'stale' }
+    return {
+      text: freshness.staleServingProhibitedBy
+        ? `stale, ${freshness.staleServingProhibitedBy} forbids serving stale`
+        : 'stale, window elapsed',
+      tone: 'stale',
+    }
   }
   return undefined
 }

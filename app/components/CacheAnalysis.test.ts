@@ -10,6 +10,13 @@ const mountWithHeaders = (cacheHeaders: Record<string, string>) =>
     props: { cacheHeaders, enableDiffOnHover: false },
   })
 
+// Rows are `.data-row` with a `dt` label; returns the text of the rows whose label matches.
+const findRowTexts = (wrapper: ReturnType<typeof mountWithHeaders>, labelPrefix: string) =>
+  wrapper
+    .findAll('.data-row')
+    .filter((row) => row.find('dt').text().startsWith(labelPrefix))
+    .map((row) => row.text())
+
 describe('CacheAnalysis', () => {
   describe('stale-while-revalidate', () => {
     it('does not render stale-while-revalidate rows when the directive is absent', () => {
@@ -45,10 +52,13 @@ describe('CacheAnalysis', () => {
         Age: '100',
       })
 
-      const text = wrapper.text()
-      expect(text).toContain('served stale')
-      expect(text).toContain('-40 s')
-      expect(text).toContain('serving stale while revalidating, 560 s left')
+      const cacheStatusTtlRows = findRowTexts(wrapper, 'TTL')
+      expect(cacheStatusTtlRows[0]).toContain('served stale')
+      expect(cacheStatusTtlRows[1]).toContain('-40 s')
+      expect(cacheStatusTtlRows[1]).toContain('stale')
+      expect(findRowTexts(wrapper, 'Stale-while-revalidate')[0]).toContain(
+        'stale but servable while revalidating, 560 s left',
+      )
       wrapper.unmount()
     })
 
@@ -64,6 +74,22 @@ describe('CacheAnalysis', () => {
       wrapper.unmount()
     })
 
+    it('flags a stale response whose stale-while-revalidate window is forbidden by must-revalidate', () => {
+      const wrapper = mountWithHeaders({
+        'Cache-Status': '"Netlify Edge"; fwd=stale; fwd-status=200; stored',
+        'Cache-Control': 'public, max-age=60, stale-while-revalidate=600, must-revalidate',
+        Age: '100',
+      })
+
+      const swrRows = findRowTexts(wrapper, 'Stale-while-revalidate')
+      expect(swrRows).toHaveLength(3)
+      for (const row of swrRows) {
+        expect(row).toContain('stale, must-revalidate forbids serving stale')
+        expect(row).not.toContain('servable')
+      }
+      wrapper.unmount()
+    })
+
     it('labels per-tier stale-while-revalidate rows when CDN headers differ', () => {
       const wrapper = mountWithHeaders({
         'Cache-Status': '"Netlify Edge"; hit; ttl=50',
@@ -72,12 +98,15 @@ describe('CacheAnalysis', () => {
         Age: '10',
       })
 
-      const text = wrapper.text()
-      expect(text).toContain('Stale-while-revalidate')
-      expect(text).toContain('(browser)')
-      expect(text).toContain('(Netlify CDN)')
-      expect(text).toContain('600 s')
-      expect(text).toContain('1200 s')
+      const swrRows = findRowTexts(wrapper, 'Stale-while-revalidate')
+      expect(swrRows).toHaveLength(3)
+      expect(swrRows[0]).toContain('(browser)')
+      expect(swrRows[0]).toContain('600 s')
+      // No CDN-Cache-Control, so the CDN tier falls back to Cache-Control's window
+      expect(swrRows[1]).toContain('(other CDNs)')
+      expect(swrRows[1]).toContain('600 s')
+      expect(swrRows[2]).toContain('(Netlify CDN)')
+      expect(swrRows[2]).toContain('1200 s')
       wrapper.unmount()
     })
   })

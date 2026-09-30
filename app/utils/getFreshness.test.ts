@@ -40,4 +40,19 @@ describe('getFreshness', () => {
   it('returns stale when stale-while-revalidate is zero', () => {
     expect(getFreshness(0, 0)).toEqual({ state: 'stale' })
   })
+
+  it('returns stale naming the prohibiting directive when serving stale is forbidden', () => {
+    expect(getFreshness(-40, 600, 'must-revalidate')).toEqual({
+      state: 'stale',
+      staleServingProhibitedBy: 'must-revalidate',
+    })
+  })
+
+  it('returns fresh while the TTL has not elapsed even when serving stale is forbidden', () => {
+    expect(getFreshness(15, 600, 'must-revalidate')).toEqual({ state: 'fresh' })
+  })
+
+  it('ignores a prohibiting directive when there is no stale-while-revalidate window', () => {
+    expect(getFreshness(-40, undefined, 'must-revalidate')).toEqual({ state: 'stale' })
+  })
 })
