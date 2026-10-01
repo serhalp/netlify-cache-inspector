@@ -62,6 +62,8 @@ Four API routes:
 
 Storage uses Netlify Blobs (`server/db.ts`) with two stores, `runs` and `reports`. Run IDs are 8-character SHA256 hashes of `${url}-${timestamp}`. Report IDs are 12-character SHA256 hashes of the ordered run ID list, so reports are content-addressed: saving the same run set twice yields the same ID and is a no-op. A report stores only run IDs; runs are resolved on read.
 
+All writes are conditional (`onlyIfNew`), so an existing blob is never overwritten: a run ID collision retries with a new ID, and a report ID collision with a different run set is refused. Reads are eventually consistent by default; a miss is re-checked with strong consistency before being reported as missing, which covers reading a run or report seconds after it was written. ID route params are validated against the generated formats before touching the store.
+
 ## Styling
 
 UnoCSS with a custom Netlify-inspired color theme defined in `uno.config.ts`. Shortcuts (`btn`, `btn-primary`, `btn-secondary`, `mono-label`) provide reusable component patterns. Fonts: Pacaembu (headings), Mulish (body), Roboto Mono (code).

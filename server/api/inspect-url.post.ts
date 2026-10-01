@@ -53,7 +53,17 @@ export default defineEventHandler(async (event) => {
     durationInMs,
   }
 
-  await saveRun(run)
+  // 32-bit IDs can collide; never overwrite an existing run since reports reference it by ID
+  // oxlint-disable-next-line no-await-in-loop -- each retry depends on the previous write's outcome
+  for (let attempt = 0; !(await saveRun(run)); attempt++) {
+    if (attempt >= 5) {
+      throw createError({
+        statusCode: 500,
+        message: 'Could not allocate a unique run ID',
+      })
+    }
+    run.runId = generateRunId(`${normalizedUrl}#${attempt}`, Date.now())
+  }
 
   return run
 })

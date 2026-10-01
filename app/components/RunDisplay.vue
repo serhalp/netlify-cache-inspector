@@ -61,7 +61,7 @@ const copyReportLink = async (): Promise<void> => {
       >
         {{ copied ? 'Link copied!' : 'Copy report link' }}
       </button>
-      <button class="btn-secondary" @click="onClear()">Clear runs</button>
+      <button class="btn-secondary" :disabled="loading" @click="onClear()">Clear runs</button>
     </div>
   </div>
 </template>

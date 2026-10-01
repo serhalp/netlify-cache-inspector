@@ -18,7 +18,15 @@ interface Report {
 const runs = getStore({ name: 'runs' })
 const reports = getStore({ name: 'reports' })
 
-export const saveRun = async (run: Run): Promise<void> => {
+// Reads are eventually consistent by default. A miss right after a write (e.g. saving a report
+// seconds after its runs were created) is re-checked at the origin before we call it missing.
+const getJSON = async <T>(store: typeof runs, key: string): Promise<T | null> =>
+  (await store.get(key, { type: 'json' })) ??
+  (await store.get(key, { type: 'json', consistency: 'strong' }))
+
+// Returns false when the key already exists; the caller decides how to react.
+// Never overwrites, so permalinks stay immutable even on an ID collision.
+export const saveRun = async (run: Run): Promise<boolean> => {
   // Validate the run data before saving
   if (run.url) {
     try {
@@ -28,11 +36,11 @@ export const saveRun = async (run: Run): Promise<void> => {
     }
   }
 
-  await runs.setJSON(run.runId, run)
+  const { modified } = await runs.setJSON(run.runId, run, { onlyIfNew: true })
+  return modified
 }
 
-export const findRun = async (runId: string): Promise<Run | null> =>
-  runs.get(runId, { type: 'json' })
+export const findRun = async (runId: string): Promise<Run | null> => getJSON<Run>(runs, runId)
 
 export const getRun = async (runId: string): Promise<Run> => {
   const run = await findRun(runId)
@@ -47,12 +55,13 @@ export const getRun = async (runId: string): Promise<Run> => {
   return run
 }
 
-export const saveReport = async (report: Report): Promise<void> => {
-  await reports.setJSON(report.reportId, report)
+export const saveReport = async (report: Report): Promise<boolean> => {
+  const { modified } = await reports.setJSON(report.reportId, report, { onlyIfNew: true })
+  return modified
 }
 
 export const findReport = async (reportId: string): Promise<Report | null> =>
-  reports.get(reportId, { type: 'json' })
+  getJSON<Report>(reports, reportId)
 
 export const getReport = async (reportId: string): Promise<Report> => {
   const report = await findReport(reportId)

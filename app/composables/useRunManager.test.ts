@@ -42,6 +42,21 @@ const apiRun = (runId: string): ApiRun => ({
 // @ts-expect-error -- Nuxt's $fetch types are too deeply recursive for mockResolvedValueOnce
 const resolveFetchOnce = (value: unknown) => mockFetch.mockResolvedValueOnce(value)
 
+const deferred = <T>() => {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((r) => {
+    resolve = r
+  })
+  return { promise, resolve }
+}
+
+// Lets a test hold a $fetch call open while it changes state around it
+const deferFetchOnce = <T>() => {
+  const d = deferred<T>()
+  mockFetch.mockReturnValueOnce(d.promise)
+  return d
+}
+
 describe('useRunManager', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -114,15 +129,88 @@ describe('useRunManager', () => {
     resolveFetchOnce(apiRun('run-2'))
     mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
 
-    const { runs, reportId, error, handleRequestFormSubmit } = useRunManager()
+    const { runs, reportId, error, loading, handleRequestFormSubmit } = useRunManager()
 
     await handleRequestFormSubmit({ url: 'https://example.com' })
     await handleRequestFormSubmit({ url: 'https://example.com' })
 
     expect(runs.value).toHaveLength(2)
     expect(reportId.value).toBe(null)
+    expect(loading.value).toBe(false)
     expect(error.value).toContain('Could not create a report permalink')
     expect(navigateTo).toHaveBeenCalledTimes(1)
+  })
+
+  it('drops the previous report link when adding to an existing report fails', async () => {
+    resolveFetchOnce({
+      reportId: 'report-1',
+      runIds: ['run-1', 'run-2'],
+      runs: [apiRun('run-1'), apiRun('run-2')],
+    })
+    resolveFetchOnce(apiRun('run-3'))
+    mockFetch.mockRejectedValueOnce(new Error('HTTP 400'))
+
+    const { runs, reportId, error, loadReport, handleRequestFormSubmit } = useRunManager()
+
+    await loadReport('report-1')
+    await handleRequestFormSubmit({ url: 'https://example.com' })
+
+    expect(runs.value).toHaveLength(3)
+    // report-1 only has two runs, so offering its link would mislead
+    expect(reportId.value).toBe(null)
+    expect(error.value).toContain('Could not create a report permalink')
+  })
+
+  it('keeps loading until navigation has completed', async () => {
+    resolveFetchOnce(apiRun('run-1'))
+    const navigation = deferred<void>()
+    navigateTo.mockReturnValueOnce(navigation.promise)
+
+    const { loading, handleRequestFormSubmit } = useRunManager()
+
+    const submit = handleRequestFormSubmit({ url: 'https://example.com' })
+    await vi.waitFor(() => expect(navigateTo).toHaveBeenCalled())
+    expect(loading.value).toBe(true)
+
+    navigation.resolve()
+    await submit
+    expect(loading.value).toBe(false)
+  })
+
+  it('discards an inspection that completes after the runs were replaced', async () => {
+    const inspect = deferFetchOnce<ApiRun>()
+
+    const { runs, error, loading, handleRequestFormSubmit, reset } = useRunManager()
+
+    const submit = handleRequestFormSubmit({ url: 'https://example.com' })
+    reset()
+    inspect.resolve(apiRun('run-1'))
+    await submit
+
+    expect(runs.value).toEqual([])
+    expect(error.value).toBe(null)
+    expect(loading.value).toBe(false)
+    expect(navigateTo).not.toHaveBeenCalled()
+  })
+
+  it('does not navigate to a report saved for runs that are no longer on screen', async () => {
+    resolveFetchOnce(apiRun('run-1'))
+    resolveFetchOnce(apiRun('run-2'))
+    const save = deferFetchOnce<{ reportId: string; runIds: string[] }>()
+
+    const { runs, reportId, handleRequestFormSubmit, reset } = useRunManager()
+
+    await handleRequestFormSubmit({ url: 'https://example.com' })
+    const submit = handleRequestFormSubmit({ url: 'https://example.com' })
+    await vi.waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(3))
+    reset()
+    save.resolve({ reportId: 'report-1', runIds: ['run-1', 'run-2'] })
+    await submit
+
+    expect(runs.value).toEqual([])
+    expect(reportId.value).toBe(null)
+    expect(navigateTo).toHaveBeenCalledTimes(1)
+    expect(navigateTo).toHaveBeenLastCalledWith('/run/run-1')
   })
 
   it('handles API request error', async () => {
@@ -178,6 +266,41 @@ describe('useRunManager', () => {
 
       expect(mockFetch).toHaveBeenCalledTimes(1)
     })
+
+    it('clears a lingering error from a previous page', async () => {
+      resolveFetchOnce(apiRun('run-1'))
+
+      const { error, setError, loadRun } = useRunManager()
+
+      setError('Could not create a report permalink')
+      await loadRun('run-1')
+
+      expect(error.value).toBe(null)
+    })
+
+    it('ignores a response that arrives after the page was left', async () => {
+      const fetch = deferFetchOnce<ApiRun>()
+      const controller = new AbortController()
+
+      const { runs, loadRun } = useRunManager()
+
+      const load = loadRun('run-1', controller.signal)
+      controller.abort()
+      fetch.resolve(apiRun('run-1'))
+      await load
+
+      expect(runs.value).toEqual([])
+    })
+
+    it('encodes the run ID in the request path', async () => {
+      resolveFetchOnce(apiRun('run-1'))
+
+      const { loadRun } = useRunManager()
+
+      await loadRun('../x')
+
+      expect(mockFetch).toHaveBeenCalledWith('/api/runs/..%2Fx')
+    })
   })
 
   describe('loadReport', () => {
@@ -222,6 +345,23 @@ describe('useRunManager', () => {
 
       expect(mockFetch).toHaveBeenCalledTimes(2)
       expect(reportId.value).toBe('report-2')
+    })
+
+    it('ignores a response that arrives after the page was left', async () => {
+      resolveFetchOnce(report)
+      const fetch = deferFetchOnce<ApiReportWithRuns>()
+      const controller = new AbortController()
+
+      const { runs, reportId, loadReport } = useRunManager()
+
+      await loadReport('report-1')
+      const load = loadReport('report-2', controller.signal)
+      controller.abort()
+      fetch.resolve({ ...report, reportId: 'report-2', runs: [apiRun('run-9')] })
+      await load
+
+      expect(reportId.value).toBe('report-1')
+      expect(runs.value.map((run) => run.runId)).toEqual(['run-1', 'run-2'])
     })
   })
 

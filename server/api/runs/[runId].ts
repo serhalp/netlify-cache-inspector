@@ -1,13 +1,15 @@
 import { createError, defineEventHandler, getRouterParam, isError } from 'h3'
 import { getRun } from '~server/db'
+import { RUN_ID_PATTERN } from '~server/reports'
 
 export default defineEventHandler(async (event) => {
   const runId = getRouterParam(event, 'runId')
 
-  if (!runId) {
+  // Reject malformed IDs before they reach the blob store
+  if (!runId || !RUN_ID_PATTERN.test(runId)) {
     throw createError({
-      statusCode: 400,
-      message: 'Missing runId parameter',
+      statusCode: 404,
+      message: 'Run not found',
     })
   }
 

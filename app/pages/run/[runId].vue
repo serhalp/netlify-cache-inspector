@@ -1,12 +1,16 @@
 <script setup lang="ts">
+// Adding a run navigates to a new permalink; don't yank the user back to the top each time
+definePageMeta({ scrollToTop: false })
+
 const { runs, reportId, error, loading, handleRequestFormSubmit, handleClickClear, loadRun } =
   useRunManager()
 
 const route = useRoute()
 const runId = typeof route.params.runId === 'string' ? route.params.runId : ''
 
-const { pending: initialLoading, error: preloadError } = await useAsyncData(`run-${runId}`, () =>
-  loadRun(runId),
+const { pending: initialLoading, error: preloadError } = await useAsyncData(
+  `run-${runId}`,
+  (_, options) => loadRun(runId, options?.signal),
 )
 
 const initialError = computed(() =>
@@ -40,7 +44,7 @@ const inputUrl = ref(runs.value[0]?.url ?? '')
     <RunDisplay
       :runs="runs"
       :report-id="reportId"
-      :error="initialError ?? error"
+      :error="error ?? initialError"
       :loading="loading"
       :input-url="inputUrl"
       :on-clear="handleClickClear"

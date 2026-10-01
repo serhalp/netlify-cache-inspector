@@ -128,6 +128,21 @@ describe('RunDisplay', () => {
     expect(wrapper.find('button').exists()).toBe(false)
   })
 
+  it('disables the clear button while loading', () => {
+    const wrapper = mount(RunDisplay, {
+      props: {
+        runs: mockRuns,
+        reportId: null,
+        error: null,
+        loading: true,
+        inputUrl: '',
+        onClear: vi.fn(),
+      },
+    })
+
+    expect(wrapper.find('button').attributes('disabled')).toBeDefined()
+  })
+
   it('calls onClear when clear button is clicked', async () => {
     const mockOnClear = vi.fn()
     const wrapper = mount(RunDisplay, {
