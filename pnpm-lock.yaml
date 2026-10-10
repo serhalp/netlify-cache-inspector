@@ -176,8 +176,8 @@ importers:
         specifier: ^4.4.0
         version: 4.4.0
       h3:
-        specifier: ^1.15.11
-        version: 1.15.11
+        specifier: ^2.0.0
+        version: 2.0.2(crossws@0.4.12(srvx@1.0.5))
       highlight.js:
         specifier: ^11.11.1
         version: 11.12.0
@@ -196,7 +196,7 @@ importers:
         version: 0.8.1(oxlint@1.83.0)
       '@nuxt/test-utils':
         specifier: ^4.0.3
-        version: 4.3.3(b5d8419c0c0d1f48426267c1a40aede2)
+        version: 4.3.3(f903230b00b511508116b484cb0841ff)
       '@unocss/nuxt':
         specifier: ^66.7.2
         version: 66.10.5(cac@7.0.0)(esbuild@0.28.1)(magic-string@0.30.21)(magicast@0.5.3)(oxc-parser@0.150.0)(rolldown@1.1.3)(rollup@4.62.2)(srvx@1.0.5)(unplugin@3.4.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.28))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.28)))(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.28))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.28))
@@ -4097,9 +4097,9 @@ packages:
       crossws:
         optional: true
 
-  h3@2.0.1-rc.31:
-    resolution: {integrity: sha512-AG7qZzF99a0BSYoXT3evJgIhwSIUKow7R+hwkLRZS06WJ9nbSb7QXUDgs1ByBjp6svTvl++N/GKA7I9YPz9cQQ==}
-    engines: {node: '>=20.11.1'}
+  h3@2.0.2:
+    resolution: {integrity: sha512-+/zvHSNldYpNURuUUG+y1KzdASUhNnSd1VpqxYFVY40ov3YzuBnCETaUQaT+QbKkoxhh9LRa6AEQdB14LALwdA==}
+    engines: {node: '>=20.19.0'}
     hasBin: true
     peerDependencies:
       crossws: ^0.4.12
@@ -5542,8 +5542,9 @@ packages:
   rou3@0.8.1:
     resolution: {integrity: sha512-ePa+XGk00/3HuCqrEnK3LxJW7I0SdNg6EFzKUJG73hMAdDcOUC/i/aSz7LSDwLrGr33kal/rqOGydzwl6U7zBA==}
 
-  rou3@0.9.2:
-    resolution: {integrity: sha512-3SOzvaAg8rkHrXtRjpCvCvbyO5to9oOO27Z/XqHEYXfMRVSw/qMIVdmaOk9W2lcRLtR6dlqTjo9hDeJk70QBYQ==}
+  rou3@1.0.0:
+    resolution: {integrity: sha512-ySeaQkSrua+ut9g+65I7FHqOFBaY8tV0FmccXItoq0q21se32Q3u4YiW7/RqXSosWgYJaaKwRHXy3BST9PeCNQ==}
+    engines: {node: '>=20.19.0'}
 
   run-applescript@7.1.0:
     resolution: {integrity: sha512-DPe5pVFaAsinSaV6QjQ6gdiedWDcRCbUuiQfQa2wmWV7+xC9bGulGI8+TdRmoFkAPaBXk8CrAbnlY2ISniJ47Q==}
@@ -7936,7 +7937,7 @@ snapshots:
       rc9: 3.1.0
       std-env: 4.3.0
 
-  '@nuxt/test-utils@4.3.3(b5d8419c0c0d1f48426267c1a40aede2)':
+  '@nuxt/test-utils@4.3.3(f903230b00b511508116b484cb0841ff)':
     dependencies:
       '@clack/prompts': 1.8.1
       '@nuxt/devtools-kit': 3.4.2(magic-string@1.4.3)(magicast@0.5.3)(oxc-parser@0.150.0)(rolldown@1.1.3)(unplugin@3.4.0(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.2)(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.28))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.28)))(vite@8.1.2)
@@ -7961,7 +7962,7 @@ snapshots:
       vue: 3.5.43(typescript@6.0.3)
     optionalDependencies:
       '@vue/test-utils': 2.5.1(@vue/compiler-dom@3.5.43)(@vue/server-renderer@3.5.43)(vue@3.5.43(typescript@6.0.3))
-      h3: 1.15.11
+      h3: 2.0.2(crossws@0.4.12(srvx@1.0.5))
       happy-dom: 20.14.6
       nuxt: nuxt-nightly@4.5.0-29716853.29bdf786(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@electric-sql/pglite@0.3.16)(@netlify/blobs@11.1.4(supports-color@10.2.2))(@oxc-project/types@0.150.0)(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vitejs/devtools@0.3.3)(@vue/compiler-sfc@3.5.43)(crossws@0.4.12(srvx@1.0.5))(db0@0.3.4(@electric-sql/pglite@0.3.16))(esbuild@0.28.1)(ioredis@5.11.1(supports-color@10.2.2))(lightningcss@1.32.0)(magicast@0.5.3)(nuxt-nightly@4.5.0-29716853.29bdf786)(oxc-parser@0.150.0)(oxlint@1.83.0)(rollup-plugin-visualizer@7.0.1(rolldown@1.1.3)(rollup@4.62.2))(rollup@4.62.2)(supports-color@10.2.2)(terser@5.48.0)(typescript@6.0.3)(vite@8.1.2)(vue-tsc@3.3.12(typescript@6.0.3))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.28))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.28))(yaml@2.9.1)
       vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.6)(vite@8.1.2)
@@ -10370,7 +10371,7 @@ snapshots:
   devframe@1.0.0(cac@7.0.0)(srvx@1.0.5):
     dependencies:
       crossws: 0.4.12(srvx@1.0.5)
-      h3: 2.0.1-rc.31(crossws@0.4.12(srvx@1.0.5))
+      h3: 2.0.2(crossws@0.4.12(srvx@1.0.5))
       nostics: 1.3.0
       pathe: 2.0.3
     optionalDependencies:
@@ -10917,9 +10918,9 @@ snapshots:
     optionalDependencies:
       crossws: 0.4.12(srvx@1.0.5)
 
-  h3@2.0.1-rc.31(crossws@0.4.12(srvx@1.0.5)):
+  h3@2.0.2(crossws@0.4.12(srvx@1.0.5)):
     dependencies:
-      rou3: 0.9.2
+      rou3: 1.0.0
       srvx: 1.0.5
     optionalDependencies:
       crossws: 0.4.12(srvx@1.0.5)
@@ -12771,7 +12772,7 @@ snapshots:
 
   rou3@0.8.1: {}
 
-  rou3@0.9.2: {}
+  rou3@1.0.0: {}
 
   run-applescript@7.1.0: {}
 
@@ -13629,7 +13630,7 @@ snapshots:
 
   vitest-environment-nuxt@2.0.0:
     dependencies:
-      '@nuxt/test-utils': 4.3.3(b5d8419c0c0d1f48426267c1a40aede2)
+      '@nuxt/test-utils': 4.3.3(f903230b00b511508116b484cb0841ff)
 
   vitest@5.0.3(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(happy-dom@20.14.6)(vite@8.1.2):
     dependencies:
