@@ -31,7 +31,9 @@ Package manager is **pnpm** (pinned in `packageManager` field). Enable via `core
 
 ## Architecture
 
-**Nuxt 5** with `future: { compatibilityVersion: 5 }` — frontend code lives under `app/` (not project root).
+**Nuxt 5** on Nitro 3 — frontend code lives under `app/` (not project root).
+
+Server auto-imports are off. Import server helpers (`defineEventHandler`, `readBody`, `createError`, …) from `nuxt/server`; errors use `status`/`statusText`, not `statusCode`/`statusMessage`.
 
 ### Data Flow
 

@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs'
+import { createError } from 'nuxt/server'
 
 interface Run {
   runId: string

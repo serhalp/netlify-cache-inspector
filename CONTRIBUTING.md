@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js >= 22
+- Node.js >= 22.22
 - pnpm (can be enabled via `corepack enable`; pinned version in `packageManager` field)
 
 Never use npm or yarn.
