@@ -2,6 +2,7 @@
  * @vitest-environment happy-dom
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { $fetch } from '#build/fetch'
 import { useRunManager } from './useRunManager'
 import type { ApiRun } from '~/types/run'
 
@@ -10,10 +11,12 @@ vi.mock('~/utils/getCacheHeaders', () => ({
   default: vi.fn((headers: Record<string, string>) => headers),
 }))
 
-// Mock fetch and $fetch
+// Nuxt's $fetch is bound to `globalThis.$fetch` at module load, so mock the module itself
+vi.mock('#build/fetch', () => ({
+  $fetch: vi.fn(),
+}))
+
 global.fetch = vi.fn()
-// @ts-expect-error -- $fetch mock for tests
-global.$fetch = vi.fn()
 
 describe('useRunManager', () => {
   beforeEach(() => {
@@ -60,7 +63,6 @@ describe('useRunManager', () => {
     }
 
     const mockFetch = vi.mocked($fetch)
-    // @ts-expect-error -- Nuxt's $fetch types are too deeply recursive for mockResolvedValueOnce
     mockFetch.mockResolvedValueOnce(mockApiRun)
 
     const { runs, error, loading, handleRequestFormSubmit } = useRunManager()

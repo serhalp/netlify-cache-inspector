@@ -1,16 +1,17 @@
 import { createHash } from 'crypto'
-import { createError, defineEventHandler, readBody } from 'h3'
+import { createError, defineEventHandler, readBody } from 'nuxt/server'
 import { saveRun } from '~server/db'
 
 const generateRunId = (url: string, timestamp: number): string =>
   createHash('sha256').update(`${url}-${timestamp}`).digest('hex').slice(0, 8)
 
 export default defineEventHandler(async (event) => {
-  const { url } = await readBody(event)
+  // h3 v2 returns undefined for an empty body
+  const { url } = (await readBody<{ url?: string }>(event)) ?? {}
 
   if (!url) {
     throw createError({
-      statusCode: 400,
+      status: 400,
       message: 'Please provide a URL to inspect',
     })
   }
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event) => {
     normalizedUrl = parsedUrl.href // This ensures proper URL encoding
   } catch {
     throw createError({
-      statusCode: 400,
+      status: 400,
       message: `Invalid URL provided: ${url}`,
     })
   }
@@ -40,7 +41,7 @@ export default defineEventHandler(async (event) => {
 
   if (!headers.has('X-NF-Request-Id')) {
     throw createError({
-      statusCode: 400,
+      status: 400,
       message: 'This tool can only be used with Netlify sites',
     })
   }

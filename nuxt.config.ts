@@ -43,7 +43,7 @@ export default defineNuxtConfig({
   },
 
   alias: {
-    '~server': resolve(__dirname, './server'),
+    '~server': resolve(import.meta.dirname, './server'),
   },
 
   routeRules: {
@@ -57,6 +57,5 @@ export default defineNuxtConfig({
       },
     },
   },
-  future: { compatibilityVersion: 5 },
   compatibilityDate: '2026-06-06',
 })
