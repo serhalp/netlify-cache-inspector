@@ -1,38 +1,29 @@
 <script setup lang="ts">
-const {
-  runs,
-  error,
-  loading,
-  handleRequestFormSubmit,
-  handleClickClear,
-  getRunFromApiRun,
-  setRuns,
-  setError,
-} = useRunManager()
+// Adding a run navigates to a new permalink; don't yank the user back to the top each time
+definePageMeta({ scrollToTop: false })
+
+const { runs, reportId, error, loading, handleRequestFormSubmit, handleClickClear, loadRun } =
+  useRunManager()
 
 const route = useRoute()
+const runId = typeof route.params.runId === 'string' ? route.params.runId : ''
 
-const {
-  data: initialRuns,
-  pending: initialLoading,
-  error: preloadedRunsError,
-} = await useAsyncData('preloadedRuns', async () => {
-  const { runId } = route.params
-  if (typeof runId === 'string') {
-    const responseBody = await $fetch(`/api/runs/${runId}`)
-    return [getRunFromApiRun(responseBody)]
-  }
-  return []
-})
+const { pending: initialLoading, error: preloadError } = await useAsyncData(
+  `run-${runId}`,
+  (_, options) => loadRun(runId, options?.signal),
+)
 
-if (preloadedRunsError.value) {
-  setError(preloadedRunsError.value.toString())
-}
-if (initialRuns.value) {
-  setRuns(initialRuns.value)
+const initialError = computed(() =>
+  preloadError.value ? getErrorMessage(preloadError.value) : null,
+)
+
+// A missing permalink should be a real 404, not a 200 with an error banner
+if (import.meta.server && preloadError.value) {
+  const event = useRequestEvent()
+  if (event) setResponseStatus(event, preloadError.value.status ?? 500)
 }
 
-const inputUrl = ref(initialRuns.value?.[0]?.url ?? '')
+const inputUrl = ref(runs.value[0]?.url ?? '')
 </script>
 
 <template>
@@ -52,7 +43,8 @@ const inputUrl = ref(initialRuns.value?.[0]?.url ?? '')
 
     <RunDisplay
       :runs="runs"
-      :error="error"
+      :report-id="reportId"
+      :error="error ?? initialError"
       :loading="loading"
       :input-url="inputUrl"
       :on-clear="handleClickClear"
