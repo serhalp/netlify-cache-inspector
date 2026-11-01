@@ -8,9 +8,8 @@ const { runs, reportId, error, loading, handleRequestFormSubmit, handleClickClea
 const route = useRoute()
 const runId = typeof route.params.runId === 'string' ? route.params.runId : ''
 
-const { pending: initialLoading, error: preloadError } = await useAsyncData(
-  `run-${runId}`,
-  (_, options) => loadRun(runId, options?.signal),
+const { pending: initialLoading, error: preloadError } = await useAsyncData(`run-${runId}`, () =>
+  loadRun(runId),
 )
 
 const initialError = computed(() =>

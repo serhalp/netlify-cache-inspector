@@ -74,20 +74,6 @@ describe('useRunManager', () => {
     expect(loading.value).toBe(false)
   })
 
-  it('transforms ApiRun to Run correctly', () => {
-    const { getRunFromApiRun } = useRunManager()
-
-    const run = getRunFromApiRun(apiRun('test-run'))
-
-    expect(run).toEqual({
-      runId: 'test-run',
-      url: 'https://example.com',
-      status: 200,
-      durationInMs: 100,
-      cacheHeaders: { 'cache-control': 'max-age=3600' },
-    })
-  })
-
   it('navigates to the run permalink after the first inspection', async () => {
     resolveFetchOnce(apiRun('run-1'))
 
@@ -307,11 +293,11 @@ describe('useRunManager', () => {
 
       const { runs, loadRun } = useRunManager()
 
-      const runIds = await loadRun('run-1')
+      await loadRun('run-1')
 
-      expect(runIds).toEqual(['run-1'])
       expect(runs.value).toHaveLength(1)
       expect(runs.value[0]?.runId).toBe('run-1')
+      expect(runs.value[0]?.cacheHeaders).toEqual({ 'cache-control': 'max-age=3600' })
       expect(mockFetch).toHaveBeenCalledWith('/api/runs/run-1')
     })
 
@@ -327,28 +313,29 @@ describe('useRunManager', () => {
     })
 
     it('clears a lingering error from a previous page', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
       resolveFetchOnce(apiRun('run-1'))
 
-      const { error, setError, loadRun } = useRunManager()
+      const { error, handleRequestFormSubmit, loadRun } = useRunManager()
 
-      setError('Could not create a report permalink')
+      await handleRequestFormSubmit({ url: 'https://example.com' })
       await loadRun('run-1')
 
       expect(error.value).toBe(null)
     })
 
-    it('ignores a response that arrives after the page was left', async () => {
-      const fetch = deferFetchOnce<ApiRun>()
-      const controller = new AbortController()
+    it('ignores a response that arrives after another page was loaded', async () => {
+      const first = deferFetchOnce<ApiRun>()
+      resolveFetchOnce(apiRun('run-2'))
 
       const { runs, loadRun } = useRunManager()
 
-      const load = loadRun('run-1', controller.signal)
-      controller.abort()
-      fetch.resolve(apiRun('run-1'))
+      const load = loadRun('run-1')
+      await loadRun('run-2')
+      first.resolve(apiRun('run-1'))
       await load
 
-      expect(runs.value).toEqual([])
+      expect(runs.value.map((run) => run.runId)).toEqual(['run-2'])
     })
 
     it('encodes the run ID in the request path', async () => {
@@ -386,9 +373,8 @@ describe('useRunManager', () => {
 
       const { runs, reportId, loadReport } = useRunManager()
 
-      const runIds = await loadReport('report-1')
+      await loadReport('report-1')
 
-      expect(runIds).toEqual(['run-1', 'run-2'])
       expect(runs.value.map((run) => run.runId)).toEqual(['run-1', 'run-2'])
       expect(reportId.value).toBe('report-1')
       expect(mockFetch).toHaveBeenCalledWith('/api/reports/report-1')
@@ -418,43 +404,37 @@ describe('useRunManager', () => {
       expect(reportId.value).toBe('report-2')
     })
 
-    it('ignores a response that arrives after the page was left', async () => {
-      resolveFetchOnce(report)
-      const fetch = deferFetchOnce<ApiReportWithRuns>()
-      const controller = new AbortController()
+    it('ignores a response that arrives after another report was loaded', async () => {
+      const first = deferFetchOnce<ApiReportWithRuns>()
+      const second = { ...report, reportId: 'report-2', runs: [apiRun('run-9')] }
+      resolveFetchOnce(second)
 
       const { runs, reportId, loadReport } = useRunManager()
 
-      await loadReport('report-1')
-      const load = loadReport('report-2', controller.signal)
-      controller.abort()
-      fetch.resolve({ ...report, reportId: 'report-2', runs: [apiRun('run-9')] })
+      const load = loadReport('report-1')
+      await loadReport('report-2')
+      first.resolve(report)
       await load
 
-      expect(reportId.value).toBe('report-1')
-      expect(runs.value.map((run) => run.runId)).toEqual(['run-1', 'run-2'])
+      expect(reportId.value).toBe('report-2')
+      expect(runs.value.map((run) => run.runId)).toEqual(['run-9'])
     })
   })
 
   it('resets all state', async () => {
     resolveFetchOnce(apiRun('run-1'))
+    mockFetch.mockRejectedValueOnce(new Error('HTTP 500'))
 
-    const { runs, error, reportId, handleRequestFormSubmit, setError, reset } = useRunManager()
+    const { runs, error, reportId, handleRequestFormSubmit, reset } = useRunManager()
 
     await handleRequestFormSubmit({ url: 'https://example.com' })
-    setError('Test error')
+    await handleRequestFormSubmit({ url: 'https://example.com' })
+    expect(error.value).toBeTruthy()
+
     reset()
 
     expect(runs.value).toEqual([])
     expect(reportId.value).toBe(null)
     expect(error.value).toBe(null)
-  })
-
-  it('sets error with setError', () => {
-    const { error, setError } = useRunManager()
-
-    setError('Test error')
-
-    expect(error.value).toBe('Test error')
   })
 })

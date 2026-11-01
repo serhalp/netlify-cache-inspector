@@ -16,8 +16,8 @@ export const useRunManager = () => {
   const reportId = useState<string | null>('reportId', () => null)
   const error = useState<string | null>('runsError', () => null)
   const loading = useState<boolean>('runsLoading', () => false)
-  // Bumped whenever the run set is replaced wholesale, so in-flight requests started against an
-  // earlier set (the user navigated away meanwhile) can tell their result is stale and drop it.
+  // Bumped whenever the run set is replaced or a permalink is loaded, so in-flight requests
+  // started against an earlier page can tell their result is stale and drop it.
   const version = useState<number>('runsVersion', () => 0)
 
   const runIds = computed(() => runs.value.map((run) => run.runId))
@@ -72,21 +72,16 @@ export const useRunManager = () => {
 
       runs.value.push(getRunFromApiRun(responseBody))
       error.value = null
+
+      try {
+        await syncRoute()
+      } catch (err: unknown) {
+        // Whatever report the URL still names no longer matches the screen, so offer no link to it
+        reportId.value = null
+        error.value = `Could not create a report permalink: ${getErrorMessage(err)}`
+      }
     } catch (err: unknown) {
       if (version.value === startedAtVersion) error.value = getErrorMessage(err)
-      return
-    } finally {
-      loading.value = false
-    }
-
-    // Hold the form until the URL matches the screen, so a second submit can't interleave
-    loading.value = true
-    try {
-      await syncRoute()
-    } catch (err: unknown) {
-      // Whatever report the URL still names no longer matches the screen, so offer no link to it
-      reportId.value = null
-      error.value = `Could not create a report permalink: ${getErrorMessage(err)}`
     } finally {
       loading.value = false
     }
@@ -97,48 +92,36 @@ export const useRunManager = () => {
     await syncRoute()
   }
 
-  // Runs travel via useState, so the loaders return only IDs to keep the payload small. They
-  // skip matching state, invalidate in-flight submits, and clear state if the fetch fails.
-  const loadRun = async (runId: string, signal?: AbortSignal): Promise<string[]> => {
-    if (runs.value.length !== 1 || runIds.value[0] !== runId) {
-      // A load means the user moved on from the runs an in-flight submit was started against
-      version.value++
-      try {
-        const apiRun = await $fetch<ApiRun>(`/api/runs/${encodeURIComponent(runId)}`)
-        if (signal?.aborted) return runIds.value
-        replaceRuns([getRunFromApiRun(apiRun)], null)
-      } catch (err) {
-        // A failed permalink must not leave the previous page's runs under this URL
-        if (!signal?.aborted) replaceRuns([], null)
-        throw err
-      }
+  // Every load bumps version first, retiring in-flight submits and earlier loads. Matching state
+  // skips the fetch, and a failed load clears the runs so the old page's set can't linger here.
+  const loadRun = async (runId: string): Promise<void> => {
+    const startedAtVersion = ++version.value
+    if (runs.value.length === 1 && runIds.value[0] === runId) return
+    try {
+      const apiRun = await $fetch<ApiRun>(`/api/runs/${encodeURIComponent(runId)}`)
+      if (version.value === startedAtVersion) replaceRuns([getRunFromApiRun(apiRun)], null)
+    } catch (err) {
+      if (version.value === startedAtVersion) replaceRuns([], null)
+      throw err
     }
-    return runIds.value
   }
 
-  const loadReport = async (id: string, signal?: AbortSignal): Promise<string[]> => {
-    if (reportId.value !== id || runs.value.length === 0) {
-      // A load means the user moved on from the runs an in-flight submit was started against
-      version.value++
-      try {
-        const report = await $fetch<ApiReportWithRuns>(`/api/reports/${encodeURIComponent(id)}`)
-        if (signal?.aborted) return runIds.value
+  const loadReport = async (id: string): Promise<void> => {
+    const startedAtVersion = ++version.value
+    if (reportId.value === id && runs.value.length > 0) return
+    try {
+      const report = await $fetch<ApiReportWithRuns>(`/api/reports/${encodeURIComponent(id)}`)
+      if (version.value === startedAtVersion) {
         replaceRuns(report.runs.map(getRunFromApiRun), report.reportId)
-      } catch (err) {
-        // A failed permalink must not leave the previous page's runs under this URL
-        if (!signal?.aborted) replaceRuns([], null)
-        throw err
       }
+    } catch (err) {
+      if (version.value === startedAtVersion) replaceRuns([], null)
+      throw err
     }
-    return runIds.value
   }
 
   const reset = (): void => {
     replaceRuns([], null)
-  }
-
-  const setError = (newError: string | null): void => {
-    error.value = newError
   }
 
   return {
@@ -154,7 +137,5 @@ export const useRunManager = () => {
     loadRun,
     loadReport,
     reset,
-    setError,
-    getRunFromApiRun,
   }
 }

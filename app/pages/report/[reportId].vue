@@ -10,7 +10,7 @@ const requestedReportId = typeof route.params.reportId === 'string' ? route.para
 
 const { pending: initialLoading, error: preloadError } = await useAsyncData(
   `report-${requestedReportId}`,
-  (_, options) => loadReport(requestedReportId, options?.signal),
+  () => loadReport(requestedReportId),
 )
 
 const initialError = computed(() =>
