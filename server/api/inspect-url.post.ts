@@ -1,5 +1,6 @@
 import { createHash } from 'crypto'
 import { createError, defineEventHandler, readBody } from 'nuxt/server'
+import { $fetch } from 'ofetch'
 import { saveRun } from '~server/db'
 
 const generateRunId = (url: string, timestamp: number): string =>
@@ -30,14 +31,18 @@ export default defineEventHandler(async (event) => {
 
   const startTime = Date.now()
   // Use $fetch.raw to get both response status and headers, and ignoreResponseError
-  // to prevent automatic error throwing on 4xx/5xx responses (we want to inspect those too)
-  const { status, headers } = await $fetch.raw(normalizedUrl, {
+  // to prevent automatic error throwing on 4xx/5xx responses (we want to inspect those too).
+  // responseType 'stream' skips downloading the body; we only need headers.
+  const response = await $fetch.raw(normalizedUrl, {
     headers: {
       'x-nf-debug-logging': '1',
     },
     ignoreResponseError: true,
+    responseType: 'stream',
   })
+  const { status, headers } = response
   const durationInMs = Date.now() - startTime
+  await response.body?.cancel()
 
   if (!headers.has('X-NF-Request-Id')) {
     throw createError({
