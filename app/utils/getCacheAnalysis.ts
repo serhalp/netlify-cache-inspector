@@ -1,3 +1,4 @@
+import { getCacheWarnings, type CacheWarning } from './getCacheWarnings'
 import { getServedBy, type ServedBy } from './getServedBy'
 import { parseCacheControl, type ParsedCacheControl } from './parseCacheControl'
 
@@ -78,6 +79,7 @@ export interface CacheAnalysis {
   servedBy: ServedBy
   cacheStatus: ParsedCacheStatusEntry[]
   cacheControl: ParsedCacheControl
+  warnings: CacheWarning[]
 }
 
 export default function getCacheAnalysis(
@@ -92,5 +94,6 @@ export default function getCacheAnalysis(
     servedBy: getServedBy(cacheHeaders, cacheStatus),
     cacheStatus,
     cacheControl: parseCacheControl(cacheHeaders, now),
+    warnings: getCacheWarnings(cacheHeaders),
   }
 }

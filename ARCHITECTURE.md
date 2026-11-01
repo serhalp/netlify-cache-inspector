@@ -38,8 +38,10 @@ uno.config.ts       UnoCSS theme, colors, fonts, shortcuts
 
 - `parseCacheStatus()` -- parses `Cache-Status` header per RFC 9211 into per-layer results
 - `getServedBy()` -- determines response source (CDN edge, durable cache, function, edge function)
-- `parseCacheControl()` -- parses `Cache-Control`, `CDN-Cache-Control`, and debug headers into TTLs for browser, CDN, and Netlify CDN tiers
+- `parseCacheControl()` -- parses `Cache-Control`, `CDN-Cache-Control`, and debug headers into TTLs and `stale-while-revalidate` windows for browser, CDN, and Netlify CDN tiers
+- `getFreshness()` -- classifies each tier as fresh, stale-but-servable under its `stale-while-revalidate` window, or stale
 - `getTimeToLive()` -- calculates remaining cache lifetime from age, date, expires, and max-age
+- `getCacheWarnings()` -- flags common misconfigurations per cache-control header (directive typos, `stale-while-revalidate` equal to `max-age`, `stale-while-revalidate` made inert by `must-revalidate` or set without a lifetime, invalid or missing `stale-while-revalidate` values, `durable` on an Edge Function response)
 
 ## Composables
 
