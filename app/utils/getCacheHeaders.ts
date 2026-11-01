@@ -9,6 +9,7 @@ const CACHE_HEADER_NAMES = [
   'Content-Type',
   'Date',
   'ETag',
+  'Expires',
   'Debug-Netlify-CDN-Cache-Control',
   'Netlify-Cache-Tag',
   'Netlify-Vary',

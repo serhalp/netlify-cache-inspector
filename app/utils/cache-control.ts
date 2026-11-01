@@ -27,6 +27,8 @@ const SUPPORTED_DIRECTIVES = {
   staleIfError: 'stale-if-error',
 }
 
+export const SUPPORTED_DIRECTIVE_NAMES: string[] = Object.values(SUPPORTED_DIRECTIVES)
+
 function parseBooleanOnly(value: string | null | undefined) {
   return value === null
 }
@@ -63,6 +65,10 @@ export class CacheControl {
   staleWhileRevalidate: number | null
   staleIfError: number | null
   extensions: Record<string, string | null>
+  // Every directive found in the parsed header, keyed by lowercase name, including supported
+  // ones. Supported directives also have typed fields above; this keeps their raw values around
+  // so invalid values can be distinguished from absent directives.
+  directives: Record<string, string | null>
 
   constructor() {
     this.maxAge = null
@@ -82,6 +88,7 @@ export class CacheControl {
     this.staleWhileRevalidate = null
     this.staleIfError = null
     this.extensions = {}
+    this.directives = {}
   }
 
   parse(header: string | null | undefined): this {
@@ -127,10 +134,11 @@ export class CacheControl {
     this.staleIfError = parseDuration(values[SUPPORTED_DIRECTIVES.staleIfError])
 
     for (const [key, value] of Object.entries(values)) {
-      if (!Object.keys(SUPPORTED_DIRECTIVES).includes(key)) {
+      if (!SUPPORTED_DIRECTIVE_NAMES.includes(key)) {
         this.extensions[key] = value
       }
     }
+    this.directives = values
 
     return this
   }
