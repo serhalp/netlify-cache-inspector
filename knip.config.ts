@@ -22,6 +22,8 @@ export default {
     config: ['nuxt.config.ts'],
   },
   ignoreFiles: ['uno.config.ts'],
-  ignoreDependencies: ['vue', 'vue-router', 'vue-tsc', 'vitest-environment-nuxt'],
+  // `ofetch` is a Nitro-provided implicit server dependency. Declaring it directly would
+  // install a second copy that bypasses the one Nitro routes to.
+  ignoreDependencies: ['vue', 'vue-router', 'vue-tsc', 'vitest-environment-nuxt', 'ofetch'],
   ignoreBinaries: ['zizmor'],
 } satisfies KnipConfig
