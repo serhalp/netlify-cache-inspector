@@ -17,6 +17,9 @@ const findRowTexts = (wrapper: ReturnType<typeof mountWithHeaders>, labelPrefix:
     .filter((row) => row.find('dt').text().startsWith(labelPrefix))
     .map((row) => row.text())
 
+const findRow = (wrapper: ReturnType<typeof mountWithHeaders>, labelPrefix: string) =>
+  wrapper.findAll('.data-row').find((row) => row.find('dt').text().startsWith(labelPrefix))
+
 describe('CacheAnalysis', () => {
   describe('warnings', () => {
     it('renders no warnings list for a well-formed configuration', () => {
@@ -59,7 +62,7 @@ describe('CacheAnalysis', () => {
         Age: '10',
       })
 
-      expect(wrapper.text()).not.toContain('Stale-while-revalidate')
+      expect(wrapper.text()).not.toContain('SWR')
       expect(wrapper.text()).not.toContain('stale')
       wrapper.unmount()
     })
@@ -71,10 +74,9 @@ describe('CacheAnalysis', () => {
         Age: '10',
       })
 
-      expect(wrapper.text()).toContain('Stale-while-revalidate')
+      expect(wrapper.text()).toContain('SWR')
       expect(wrapper.text()).toContain('600 s')
-      expect(wrapper.text()).not.toContain('serving stale')
-      expect(wrapper.text()).not.toContain('window elapsed')
+      expect(wrapper.findAll('.state-chip')).toHaveLength(0)
       wrapper.unmount()
     })
 
@@ -87,12 +89,12 @@ describe('CacheAnalysis', () => {
 
       const hitRows = findRowTexts(wrapper, 'Hit')
       expect(hitRows[0]).toContain('served stale')
-      const cacheStatusTtlRows = findRowTexts(wrapper, 'TTL')
-      expect(cacheStatusTtlRows[1]).toContain('-40 s')
-      expect(cacheStatusTtlRows[1]).toContain('stale')
-      expect(findRowTexts(wrapper, 'Stale-while-revalidate')[0]).toContain(
-        'stale but servable while revalidating, 560 s left',
-      )
+      const browserTtlRow = findRow(wrapper, 'TTL (browser)')
+      expect(browserTtlRow?.text()).toContain('-40 s')
+      expect(browserTtlRow?.text()).toContain('SWR · 560 s left')
+      expect(browserTtlRow?.find('.state-chip').attributes('title')).toContain('SWR window')
+      expect(findRowTexts(wrapper, 'SWR')[0]).toContain('600 s')
+      expect(findRowTexts(wrapper, 'SWR')[0]).not.toContain('left')
       wrapper.unmount()
     })
 
@@ -115,8 +117,10 @@ describe('CacheAnalysis', () => {
         Age: '700',
       })
 
-      expect(wrapper.text()).toContain('stale, window elapsed')
-      expect(wrapper.text()).not.toContain('served stale')
+      const browserTtlRow = findRow(wrapper, 'TTL (browser)')
+      expect(browserTtlRow?.text()).toContain('stale')
+      expect(browserTtlRow?.text()).not.toContain('served stale')
+      expect(browserTtlRow?.find('.state-chip').attributes('title')).toContain('both elapsed')
       wrapper.unmount()
     })
 
@@ -127,11 +131,20 @@ describe('CacheAnalysis', () => {
         Age: '100',
       })
 
-      const swrRows = findRowTexts(wrapper, 'Stale-while-revalidate')
+      const ttlRows = findRowTexts(wrapper, 'TTL')
+      expect(ttlRows).toHaveLength(3)
+      for (const row of ttlRows) {
+        expect(row).toContain('blocked')
+      }
+      const browserTtlRow = findRow(wrapper, 'TTL (browser)')
+      expect(browserTtlRow?.find('.state-chip').attributes('title')).toContain(
+        'must-revalidate forbids serving stale',
+      )
+      const swrRows = findRowTexts(wrapper, 'SWR')
       expect(swrRows).toHaveLength(3)
       for (const row of swrRows) {
-        expect(row).toContain('stale, must-revalidate forbids serving stale')
-        expect(row).not.toContain('servable')
+        expect(row).toContain('600 s')
+        expect(row).not.toContain('blocked')
       }
       wrapper.unmount()
     })
@@ -144,15 +157,30 @@ describe('CacheAnalysis', () => {
         Age: '10',
       })
 
-      const swrRows = findRowTexts(wrapper, 'Stale-while-revalidate')
+      const swrRows = findRowTexts(wrapper, 'SWR')
       expect(swrRows).toHaveLength(3)
-      expect(swrRows[0]).toContain('(browser)')
+      expect(swrRows[0]).toContain('SWR (browser)')
       expect(swrRows[0]).toContain('600 s')
       // No CDN-Cache-Control, so the CDN tier falls back to Cache-Control's window
-      expect(swrRows[1]).toContain('(other CDNs)')
+      expect(swrRows[1]).toContain('SWR (other CDNs)')
       expect(swrRows[1]).toContain('600 s')
-      expect(swrRows[2]).toContain('(Netlify CDN)')
+      expect(swrRows[2]).toContain('SWR (Netlify CDN)')
       expect(swrRows[2]).toContain('1200 s')
+      wrapper.unmount()
+    })
+
+    it('labels SWR rows compactly and expands the term in the tooltip', () => {
+      const wrapper = mountWithHeaders({
+        'Cache-Status': '"Netlify Edge"; hit; ttl=50',
+        'Cache-Control': 'public, max-age=60, stale-while-revalidate=600',
+        Age: '10',
+      })
+
+      const swrRow = findRow(wrapper, 'SWR (browser)')
+      const label = swrRow?.find('dt')
+      expect(label?.text()).toBe('SWR (browser)')
+      expect(label?.attributes('title')).toContain('Stale-while-revalidate')
+      expect(label?.attributes('aria-label')).toContain('Stale-while-revalidate')
       wrapper.unmount()
     })
   })
