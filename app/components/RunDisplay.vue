@@ -3,6 +3,7 @@ import type { Run } from '~/types/run'
 
 const props = defineProps<{
   runs: readonly Run[]
+  reportId: string | null
   error: string | null
   loading: boolean
   inputUrl: string
@@ -12,6 +13,42 @@ const props = defineProps<{
 const showUrl = computed(() => {
   if (props.runs.length === 0) return true
   return !props.runs.every((run) => run.url === props.inputUrl)
+})
+
+type CopyState = 'idle' | 'copied' | 'failed'
+
+const copyState = ref<CopyState>('idle')
+let copyStateTimer: ReturnType<typeof setTimeout> | undefined
+
+const copyReportLink = async (): Promise<void> => {
+  if (!props.reportId) return
+  try {
+    await navigator.clipboard.writeText(`${window.location.origin}/report/${props.reportId}`)
+    copyState.value = 'copied'
+  } catch {
+    copyState.value = 'failed'
+  }
+
+  clearTimeout(copyStateTimer)
+  copyStateTimer = setTimeout(() => {
+    copyState.value = 'idle'
+  }, 2000)
+}
+
+onBeforeUnmount(() => clearTimeout(copyStateTimer))
+
+watch(
+  () => props.reportId,
+  () => {
+    clearTimeout(copyStateTimer)
+    copyState.value = 'idle'
+  },
+)
+
+const copyLabel = computed(() => {
+  if (copyState.value === 'copied') return 'Link copied!'
+  if (copyState.value === 'failed') return 'Copy failed'
+  return 'Copy report link'
 })
 </script>
 
@@ -27,17 +64,26 @@ const showUrl = computed(() => {
 
     <div class="flex flex-wrap items-stretch gap-5 mt-6">
       <RunPanel
-        v-for="(run, i) in runs"
+        v-for="run in runs"
         v-bind="run"
-        :key="i"
+        :key="run.runId"
         :enable-diff-on-hover="runs.length > 1"
         :show-url="showUrl"
         class="flex-1 min-w-80"
       />
     </div>
 
-    <div v-if="runs.length > 0" class="text-center mt-10">
-      <button class="btn-secondary" @click="onClear()">Clear runs</button>
+    <div v-if="runs.length > 0" class="flex flex-wrap justify-center gap-3 mt-10">
+      <button
+        v-if="reportId"
+        class="btn-secondary"
+        data-testid="copy-report-link"
+        title="Copy a permalink to this report"
+        @click="copyReportLink()"
+      >
+        {{ copyLabel }}
+      </button>
+      <button class="btn-secondary" :disabled="loading" @click="onClear()">Clear runs</button>
     </div>
   </div>
 </template>

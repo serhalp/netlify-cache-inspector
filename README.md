@@ -26,7 +26,7 @@ The dev server starts at http://localhost:3000 if port is 3000 is available.
    - **Cache-control** directives with TTL and stale-while-revalidate calculations
    - **Served-by** detection (CDN edge, durable cache, function, edge function)
    - **Warnings** for common misconfigurations, such as directive typos or `stale-while-revalidate` set equal to `max-age`
-4. Results are persisted so runs can be shared via permalink
+4. Results are persisted so runs, and side-by-side reports of several runs, can be shared via permalink. Reports are immutable: adding a run to one you were sent creates a new link.
 
 ## Deployment
 
@@ -36,7 +36,7 @@ This site deploys automatically to Netlify.
 
 - [Nuxt 5](https://nuxt.com) (Vue 3, file-based routing, server API routes)
 - [UnoCSS](https://unocss.dev) (utility CSS, dark mode, custom theme)
-- [Netlify Blobs](https://docs.netlify.com/blobs/overview/) (run persistence)
+- [Netlify Blobs](https://docs.netlify.com/blobs/overview/) (run and report persistence)
 - [Vitest](https://vitest.dev) + [Vue Test Utils](https://test-utils.vuejs.org) (testing)
 
 ## Contributing
