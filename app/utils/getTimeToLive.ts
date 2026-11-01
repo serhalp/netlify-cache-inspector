@@ -1,3 +1,9 @@
+/**
+ * Remaining TTL in seconds, or `undefined` when the headers carry no expiry information.
+ *
+ * `max-age` takes precedence over `Expires` (RFC 9111), and `Date` anchors the age of the response
+ * when there is no `Age` header.
+ */
 export const getTimeToLive = (
   age: number | undefined,
   date: Date | undefined,
@@ -5,18 +11,19 @@ export const getTimeToLive = (
   maxAge: number | null,
   now: number,
 ): number | undefined => {
-  // TODO(serhalp) This implementation is madness. There must be a simpler way to do this and/or a
-  // library we can use.
+  if (maxAge != null) {
+    const elapsed = age ?? (date != null ? (now - date.getTime()) / 1000 : 0)
+    return maxAge - elapsed
+  }
 
-  const effectiveDate = date ?? new Date(now)
-  const effectiveAge = age ?? (now - effectiveDate.getTime()) / 1000
-  const trulyEffectiveDate = date ?? new Date(now - 1000 * effectiveAge)
+  // With both absolute dates, remaining lifetime is their difference minus the age. `now` is
+  // irrelevant, so don't fall back to it.
+  if (date != null && expiresAt != null) {
+    return (expiresAt.getTime() - date.getTime()) / 1000 - (age ?? 0)
+  }
 
-  const effectiveMaxAge =
-    maxAge ??
-    (expiresAt != null ? (expiresAt.getTime() - trulyEffectiveDate.getTime()) / 1000 : undefined)
-
-  if (effectiveMaxAge != null) {
-    return effectiveMaxAge - effectiveAge
+  // Without `Date`, `Expires` is only comparable to `now`.
+  if (expiresAt != null) {
+    return (expiresAt.getTime() - now) / 1000
   }
 }
