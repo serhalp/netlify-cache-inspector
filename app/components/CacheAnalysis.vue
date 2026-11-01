@@ -71,6 +71,13 @@ const freshnessNotes = computed(() => ({
   netlifyCdn: getFreshnessNote(cacheAnalysis.value.cacheControl.netlifyCdnFreshness),
 }))
 
+// Literal class strings so UnoCSS can see them.
+const FRESHNESS_NOTE_CLASS = 'ml-[0.25em] text-[0.8em] font-500'
+const FRESHNESS_TONE_CLASS: Record<FreshnessNote['tone'], string> = {
+  revalidating: 'text-amber-700 dark:text-amber-400',
+  stale: 'text-red-500',
+}
+
 // Netlify reports a stale response as served either with a negative `ttl` (durable cache) or, for
 // edge hits, with `fwd=stale` and no `ttl`.
 const isServedStale = ({ hit, fwd, ttl }: ParsedCacheStatusEntry['parameters']): boolean =>
@@ -131,18 +138,18 @@ onUnmounted(() => {
 
     <ul
       v-if="cacheAnalysis.warnings.length > 0"
-      class="warnings mb-3"
+      class="warnings mb-3 flex list-none flex-col gap-1.5 p-0"
       aria-label="Possible cache misconfigurations"
     >
       <li
         v-for="(warning, warningIndex) in cacheAnalysis.warnings"
         :key="warningIndex"
-        class="warning tooltip-trigger"
+        class="warning tooltip-trigger flex items-baseline gap-2 rounded-md border-l-[3px] border-solid border-l-amber-600 bg-amber-600/8 px-2.5 py-1.5 text-amber-900 dark:border-l-amber-400 dark:bg-amber-400/10 dark:text-amber-200"
         tabindex="0"
         :title="formatTooltip({ text: warning.detail, url: warning.url })"
         :aria-label="`Warning: ${warning.header} ${warning.message} ${warning.detail}`"
       >
-        <span class="warning-icon" aria-hidden="true">&#x26A0;</span>
+        <span class="shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true">&#x26A0;</span>
         <span>
           <code class="inline-code">{{ warning.header }}</code>
           {{ warning.message }}
@@ -199,7 +206,7 @@ onUnmounted(() => {
                 }}</span>
                 <span
                   v-if="isServedStale(parameters)"
-                  class="freshness-note freshness-revalidating tooltip-trigger"
+                  class="tooltip-trigger ml-[0.25em] text-[0.8em] font-500 text-amber-700 dark:text-amber-400"
                   tabindex="0"
                   :title="formatTooltip(getFieldTooltip('served-stale'))"
                   >served stale</span
@@ -671,7 +678,9 @@ onUnmounted(() => {
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
-            <span v-if="cacheAnalysis.cacheControl.ttl < 0" class="freshness-note freshness-stale"
+            <span
+              v-if="cacheAnalysis.cacheControl.ttl < 0"
+              class="ml-[0.25em] text-[0.8em] font-500 text-red-500"
               >stale</span
             >
             <span
@@ -737,7 +746,7 @@ onUnmounted(() => {
             </span>
             <span
               v-if="freshnessNotes.browser"
-              :class="['freshness-note', `freshness-${freshnessNotes.browser.tone}`]"
+              :class="[FRESHNESS_NOTE_CLASS, FRESHNESS_TONE_CLASS[freshnessNotes.browser.tone]]"
               >{{ freshnessNotes.browser.text }}</span
             >
           </dd>
@@ -770,7 +779,7 @@ onUnmounted(() => {
             {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
             <span
               v-if="cacheAnalysis.cacheControl.cdnTtl < 0"
-              class="freshness-note freshness-stale"
+              class="ml-[0.25em] text-[0.8em] font-500 text-red-500"
               >stale</span
             >
             <span
@@ -835,7 +844,7 @@ onUnmounted(() => {
             </span>
             <span
               v-if="freshnessNotes.cdn"
-              :class="['freshness-note', `freshness-${freshnessNotes.cdn.tone}`]"
+              :class="[FRESHNESS_NOTE_CLASS, FRESHNESS_TONE_CLASS[freshnessNotes.cdn.tone]]"
               >{{ freshnessNotes.cdn.text }}</span
             >
           </dd>
@@ -874,7 +883,7 @@ onUnmounted(() => {
             {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
             <span
               v-if="cacheAnalysis.cacheControl.netlifyCdnTtl < 0"
-              class="freshness-note freshness-stale"
+              class="ml-[0.25em] text-[0.8em] font-500 text-red-500"
               >stale</span
             >
             <span
@@ -940,7 +949,7 @@ onUnmounted(() => {
             </span>
             <span
               v-if="freshnessNotes.netlifyCdn"
-              :class="['freshness-note', `freshness-${freshnessNotes.netlifyCdn.tone}`]"
+              :class="[FRESHNESS_NOTE_CLASS, FRESHNESS_TONE_CLASS[freshnessNotes.netlifyCdn.tone]]"
               >{{ freshnessNotes.netlifyCdn.text }}</span
             >
           </dd>
@@ -1045,42 +1054,6 @@ onUnmounted(() => {
 
 :is(.dark) .separator {
   background: rgba(208, 255, 254, 0.08);
-}
-
-.warnings {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.warning {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.375rem 0.625rem;
-  border-radius: 0.375rem;
-  border-left: 3px solid #d97706;
-  background-color: rgba(217, 119, 6, 0.08);
-  color: #78350f;
-  text-decoration: none;
-}
-
-:is(.dark) .warning {
-  border-left-color: #fbbf24;
-  background-color: rgba(251, 191, 36, 0.1);
-  color: #fde68a;
-}
-
-.warning-icon {
-  color: #d97706;
-  flex-shrink: 0;
-}
-
-:is(.dark) .warning-icon {
-  color: #fbbf24;
 }
 
 .lifecycle-step {
@@ -1260,24 +1233,6 @@ onUnmounted(() => {
 
 :is(.dark) .delta {
   color: #9da7b2;
-}
-
-.freshness-note {
-  font-size: 0.8em;
-  font-weight: 500;
-  margin-left: 0.25em;
-}
-
-.freshness-stale {
-  color: #fe4e5c;
-}
-
-.freshness-revalidating {
-  color: #b45309;
-}
-
-:is(.dark) .freshness-revalidating {
-  color: #fbbf24;
 }
 
 .tooltip-trigger {

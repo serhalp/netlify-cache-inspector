@@ -52,6 +52,14 @@ export default defineConfig({
         50: '#FFFFFF',
       },
       red: { 500: '#fe4e5c', 400: '#ff7a84' },
+      // Cache warnings and stale-serving notes.
+      amber: {
+        900: '#78350f',
+        700: '#b45309',
+        600: '#d97706',
+        400: '#fbbf24',
+        200: '#fde68a',
+      },
       gold: { 300: '#fbb13d' },
       green: { 400: '#3ac364' },
     },
