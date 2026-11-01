@@ -17,7 +17,7 @@ const props = defineProps<{
 const { setHover, clearHover, isKeyHovered, isValueMatching, getDelta } = useDataHover()
 
 const formatSeconds = (seconds: number): string => {
-  return `${seconds} s`
+  return `${Math.round(seconds)} s`
 }
 
 const formatHumanSeconds = (seconds: number): string => {
@@ -41,42 +41,59 @@ const now = ref(Date.now())
 
 const cacheAnalysis = computed(() => getCacheAnalysis(props.cacheHeaders, now.value))
 
-interface FreshnessNote {
-  text: string
-  tone: 'revalidating' | 'stale'
+type TierStateTone = 'swr' | 'stale' | 'blocked'
+
+interface TierState {
+  label: string
+  tone: TierStateTone
+  title: string
 }
 
-// Only meaningful next to a stale-while-revalidate value, so a fresh response gets no note.
-const getFreshnessNote = (freshness: Freshness | undefined): FreshnessNote | undefined => {
-  if (freshness?.state === 'stale-while-revalidate') {
+// One state per tier: the TTL row carries the interpretation, the SWR row stays data-only.
+const getTierState = (
+  freshness: Freshness | undefined,
+  staleWhileRevalidate: number | undefined,
+): TierState | undefined => {
+  if (freshness == null || freshness.state === 'fresh') return undefined
+
+  if (freshness.state === 'stale-while-revalidate') {
+    const remaining = formatSeconds(freshness.staleWhileRevalidateTtl)
     return {
-      text: `stale but servable while revalidating, ${formatSeconds(freshness.staleWhileRevalidateTtl)} left`,
-      tone: 'revalidating',
+      label: `SWR · ${remaining} left`,
+      tone: 'swr',
+      title: `Stale: the TTL has elapsed, but the SWR window allows caches to serve this response while revalidating in the background. ${remaining} left.`,
     }
   }
-  if (freshness?.state === 'stale') {
+
+  if (freshness.staleServingProhibitedBy) {
     return {
-      text: freshness.staleServingProhibitedBy
-        ? `stale, ${freshness.staleServingProhibitedBy} forbids serving stale`
-        : 'stale, window elapsed',
-      tone: 'stale',
+      label: 'blocked',
+      tone: 'blocked',
+      title: `Stale: ${freshness.staleServingProhibitedBy} forbids serving stale responses, so the stale-while-revalidate window has no effect.`,
     }
   }
-  return undefined
+
+  return {
+    label: 'stale',
+    tone: 'stale',
+    title:
+      staleWhileRevalidate != null
+        ? 'Stale: the TTL and stale-while-revalidate window have both elapsed. Caches must revalidate this response before serving it.'
+        : 'Stale: the TTL has elapsed and no stale-while-revalidate window applies. Caches must revalidate this response before serving it.',
+  }
 }
 
-const freshnessNotes = computed(() => ({
-  browser: getFreshnessNote(cacheAnalysis.value.cacheControl.freshness),
-  cdn: getFreshnessNote(cacheAnalysis.value.cacheControl.cdnFreshness),
-  netlifyCdn: getFreshnessNote(cacheAnalysis.value.cacheControl.netlifyCdnFreshness),
-}))
-
-// Literal class strings so UnoCSS can see them.
-const FRESHNESS_NOTE_CLASS = 'ml-[0.25em] text-[0.8em] font-500'
-const FRESHNESS_TONE_CLASS: Record<FreshnessNote['tone'], string> = {
-  revalidating: 'text-amber-700 dark:text-amber-400',
-  stale: 'text-red-500',
-}
+const tierStates = computed(() => {
+  const cacheControl = cacheAnalysis.value.cacheControl
+  return {
+    browser: getTierState(cacheControl.freshness, cacheControl.staleWhileRevalidate),
+    cdn: getTierState(cacheControl.cdnFreshness, cacheControl.cdnStaleWhileRevalidate),
+    netlifyCdn: getTierState(
+      cacheControl.netlifyCdnFreshness,
+      cacheControl.netlifyCdnStaleWhileRevalidate,
+    ),
+  }
+})
 
 // Netlify reports a stale response as served either with a negative `ttl` (durable cache) or, for
 // edge hits, with `fwd=stale` and no `ttl`.
@@ -136,26 +153,32 @@ onUnmounted(() => {
       <code class="inline-code">{{ cacheAnalysis.servedBy.cdnNodes }}</code>
     </div>
 
-    <ul
+    <div
       v-if="cacheAnalysis.warnings.length > 0"
-      class="warnings mb-3 flex list-none flex-col gap-1.5 p-0"
+      class="warnings mb-3 rounded-md border border-solid border-amber-600/25 bg-amber-600/8 px-3 py-2.5 dark:border-amber-400/25 dark:bg-amber-400/8"
+      role="group"
       aria-label="Possible cache misconfigurations"
     >
-      <li
-        v-for="(warning, warningIndex) in cacheAnalysis.warnings"
-        :key="warningIndex"
-        class="warning tooltip-trigger flex items-baseline gap-2 rounded-md border-l-[3px] border-solid border-l-amber-600 bg-amber-600/8 px-2.5 py-1.5 text-amber-900 dark:border-l-amber-400 dark:bg-amber-400/10 dark:text-amber-200"
-        tabindex="0"
-        :title="formatTooltip({ text: warning.detail, url: warning.url })"
-        :aria-label="`Warning: ${warning.header} ${warning.message} ${warning.detail}`"
-      >
-        <span class="shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true">&#x26A0;</span>
-        <span>
-          <code class="inline-code">{{ warning.header }}</code>
-          {{ warning.message }}
-        </span>
-      </li>
-    </ul>
+      <p class="flex items-center gap-2 text-xs font-600 text-amber-900 dark:text-amber-200">
+        <span class="text-amber-600 dark:text-amber-400" aria-hidden="true">&#x26A0;</span>
+        Possible misconfigurations
+      </p>
+      <ul class="mt-1.5 flex list-none flex-col gap-1.5 p-0">
+        <li
+          v-for="(warning, warningIndex) in cacheAnalysis.warnings"
+          :key="warningIndex"
+          class="warning tooltip-trigger flex items-baseline gap-2 text-amber-900 dark:text-amber-200"
+          tabindex="0"
+          :title="formatTooltip({ text: warning.detail, url: warning.url })"
+          :aria-label="`Warning: ${warning.header} ${warning.message} ${warning.detail}`"
+        >
+          <span class="min-w-0 break-words">
+            <code class="inline-code">{{ warning.header }}</code>
+            {{ warning.message }}
+          </span>
+        </li>
+      </ul>
+    </div>
 
     <hr class="separator" />
 
@@ -204,13 +227,12 @@ onUnmounted(() => {
                 <span :class="parameters.hit ? 'text-green-400' : 'text-red-500'">{{
                   parameters.hit ? 'Yes' : 'No'
                 }}</span>
-                <span
+                <StateChip
                   v-if="isServedStale(parameters)"
-                  class="tooltip-trigger ml-[0.25em] text-[0.8em] font-500 text-amber-700 dark:text-amber-400"
-                  tabindex="0"
+                  label="served stale"
+                  tone="swr"
                   :title="formatTooltip(getFieldTooltip('served-stale'))"
-                  >served stale</span
-                >
+                />
               </dd>
             </div>
 
@@ -678,11 +700,7 @@ onUnmounted(() => {
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.ttl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.ttl) }}
-            <span
-              v-if="cacheAnalysis.cacheControl.ttl < 0"
-              class="ml-[0.25em] text-[0.8em] font-500 text-red-500"
-              >stale</span
-            >
+            <StateChip v-if="tierStates.browser" v-bind="tierStates.browser" />
             <span
               v-if="
                 isKeyHovered('TTL (browser)') &&
@@ -703,6 +721,7 @@ onUnmounted(() => {
             class="data-key"
             tabindex="0"
             :title="formatTooltip(getFieldTooltip('swr-browser'))"
+            :aria-label="`SWR (browser): ${getFieldTooltip('swr-browser').text}`"
             @mouseenter="
               handleDataKeyHover('SWR (browser)', cacheAnalysis.cacheControl.staleWhileRevalidate)
             "
@@ -712,9 +731,7 @@ onUnmounted(() => {
             "
             @blur="handleDataKeyLeave"
           >
-            <span class="label-full">Stale-while-revalidate</span>
-            <span class="label-short">SWR</span
-            >{{
+            SWR{{
               cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate ||
               cacheAnalysis.cacheControl.cdnStaleWhileRevalidate
                 ? ' (browser)'
@@ -744,11 +761,6 @@ onUnmounted(() => {
             >
               ({{ getDelta(cacheAnalysis.cacheControl.staleWhileRevalidate) }})
             </span>
-            <span
-              v-if="freshnessNotes.browser"
-              :class="[FRESHNESS_NOTE_CLASS, FRESHNESS_TONE_CLASS[freshnessNotes.browser.tone]]"
-              >{{ freshnessNotes.browser.text }}</span
-            >
           </dd>
         </div>
       </template>
@@ -777,11 +789,7 @@ onUnmounted(() => {
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.cdnTtl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.cdnTtl) }}
-            <span
-              v-if="cacheAnalysis.cacheControl.cdnTtl < 0"
-              class="ml-[0.25em] text-[0.8em] font-500 text-red-500"
-              >stale</span
-            >
+            <StateChip v-if="tierStates.cdn" v-bind="tierStates.cdn" />
             <span
               v-if="
                 isKeyHovered('TTL (CDN)') &&
@@ -802,6 +810,7 @@ onUnmounted(() => {
             class="data-key"
             tabindex="0"
             :title="formatTooltip(getFieldTooltip('swr-cdn'))"
+            :aria-label="`SWR (${cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate ? 'other CDNs' : 'Netlify CDN'}): ${getFieldTooltip('swr-cdn').text}`"
             @mouseenter="
               handleDataKeyHover('SWR (CDN)', cacheAnalysis.cacheControl.cdnStaleWhileRevalidate)
             "
@@ -811,9 +820,7 @@ onUnmounted(() => {
             "
             @blur="handleDataKeyLeave"
           >
-            <span class="label-full">Stale-while-revalidate</span>
-            <span class="label-short">SWR</span>
-            ({{
+            SWR ({{
               cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate
                 ? 'other CDNs'
                 : 'Netlify CDN'
@@ -842,11 +849,6 @@ onUnmounted(() => {
             >
               ({{ getDelta(cacheAnalysis.cacheControl.cdnStaleWhileRevalidate) }})
             </span>
-            <span
-              v-if="freshnessNotes.cdn"
-              :class="[FRESHNESS_NOTE_CLASS, FRESHNESS_TONE_CLASS[freshnessNotes.cdn.tone]]"
-              >{{ freshnessNotes.cdn.text }}</span
-            >
           </dd>
         </div>
       </template>
@@ -881,11 +883,7 @@ onUnmounted(() => {
             :title="formatHumanSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl)"
           >
             {{ formatSeconds(cacheAnalysis.cacheControl.netlifyCdnTtl) }}
-            <span
-              v-if="cacheAnalysis.cacheControl.netlifyCdnTtl < 0"
-              class="ml-[0.25em] text-[0.8em] font-500 text-red-500"
-              >stale</span
-            >
+            <StateChip v-if="tierStates.netlifyCdn" v-bind="tierStates.netlifyCdn" />
             <span
               v-if="
                 isKeyHovered('TTL (Netlify CDN)') &&
@@ -906,6 +904,7 @@ onUnmounted(() => {
             class="data-key"
             tabindex="0"
             :title="formatTooltip(getFieldTooltip('swr-netlify-cdn'))"
+            :aria-label="`SWR (Netlify CDN): ${getFieldTooltip('swr-netlify-cdn').text}`"
             @mouseenter="
               handleDataKeyHover(
                 'SWR (Netlify CDN)',
@@ -921,8 +920,7 @@ onUnmounted(() => {
             "
             @blur="handleDataKeyLeave"
           >
-            <span class="label-full">Stale-while-revalidate</span>
-            <span class="label-short">SWR</span> (Netlify CDN)
+            SWR (Netlify CDN)
           </dt>
           <dd
             class="data-value"
@@ -947,11 +945,6 @@ onUnmounted(() => {
             >
               ({{ getDelta(cacheAnalysis.cacheControl.netlifyCdnStaleWhileRevalidate) }})
             </span>
-            <span
-              v-if="freshnessNotes.netlifyCdn"
-              :class="[FRESHNESS_NOTE_CLASS, FRESHNESS_TONE_CLASS[freshnessNotes.netlifyCdn.tone]]"
-              >{{ freshnessNotes.netlifyCdn.text }}</span
-            >
           </dd>
         </div>
       </template>
@@ -1145,8 +1138,10 @@ onUnmounted(() => {
 
 .data-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.75rem;
+  row-gap: 0.125rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.375rem;
   transition: background-color 0.15s ease;
@@ -1156,6 +1151,7 @@ onUnmounted(() => {
   color: #545a61;
   font-weight: 500;
   min-width: 7rem;
+  flex-shrink: 0;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -1189,6 +1185,7 @@ onUnmounted(() => {
 
 .data-value {
   color: #181a1c;
+  min-width: 0;
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   transition: all 0.15s ease;

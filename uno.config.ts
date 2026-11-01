@@ -51,7 +51,7 @@ export default defineConfig({
         100: '#F6F6F7',
         50: '#FFFFFF',
       },
-      red: { 500: '#fe4e5c', 400: '#ff7a84' },
+      red: { 700: '#b91c1c', 500: '#fe4e5c', 400: '#ff7a84' },
       // Cache warnings and stale-serving notes.
       amber: {
         900: '#78350f',
