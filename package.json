@@ -25,7 +25,7 @@
     "@netlify/nuxt": "1.0.1",
     "date-fns": "^4.4.0",
     "highlight.js": "^11.11.1",
-    "nuxt": "npm:nuxt-nightly@5.0.0-2611041908-8d4cc42",
+    "nuxt": "npm:nuxt-nightly@5.0.0-2611042349-d67ad2c",
     "vue": "^3.5.39",
     "vue-router": "^5.1.0"
   },
