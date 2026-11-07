@@ -168,7 +168,7 @@ importers:
     dependencies:
       '@netlify/blobs':
         specifier: ^11.0.0
-        version: 11.1.7(supports-color@8.1.1)
+        version: 11.1.8(supports-color@8.1.1)
       '@netlify/nuxt':
         specifier: 1.0.1
         version: 1.0.1(@nuxt/schema-nightly@5.0.0-2611052317-a04317f)(confbox@0.3.2)(db0@0.3.4(@electric-sql/pglite@0.3.16))(dotenv@16.6.1)(giget@3.3.1)(ioredis@5.11.1(supports-color@8.1.1))(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.153.0)(rolldown@1.2.15)(rollup@4.62.2)(srvx@1.0.8)(supports-color@8.1.1)(unplugin@3.7.0(esbuild@0.28.1)(rolldown@1.2.15)(rollup@4.62.2)(vite@8.3.5(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.1))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.32))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.32)))
@@ -814,8 +814,8 @@ packages:
     resolution: {integrity: sha512-raH28PHHQ1OPAYBCkE+DOnUTS/1nYFTRiFhvO6kuowkdhPiOsvX3XR/IjhePhP8aUsH5quBwcqQ3GaOgnIwmEw==}
     engines: {node: '>=22.12.0'}
 
-  '@netlify/blobs@11.1.7':
-    resolution: {integrity: sha512-iOOQSC990P5JtvBGfPMngRxId9H7FWJWAZrzGyYWanCreYElkU5VjoTBt0DgJE859ukNGHAwULZlOdiYHESHfA==}
+  '@netlify/blobs@11.1.8':
+    resolution: {integrity: sha512-LgarLBv1r+Wi3vURGkecpwRiLwao8O2brsK/Kvc61T/LZ10xO0mfOiGMo436FFoi78D7LqdTBU5PzId6+9LlwA==}
     engines: {node: '>=22.12.0'}
 
   '@netlify/cache@4.0.0':
@@ -835,8 +835,8 @@ packages:
     resolution: {integrity: sha512-q5g70dO3q/M/XTBQz7uIECJxVlJoS8UBlzpjf22DV6q61UzXa8EONTPXPmvisrFcUi1I3AUKplPcHGQYZZj+Vw==}
     engines: {node: '>=22.12.0'}
 
-  '@netlify/dev-utils@6.0.4':
-    resolution: {integrity: sha512-VZgq2gqRLQual8P2v6B8/W1WgUNYJvVvgqCIbviPR/BcI6hKvxVBdAMjz+84eU3qpfMau1Bn2J70JDSQSNkNgg==}
+  '@netlify/dev-utils@6.0.5':
+    resolution: {integrity: sha512-lcXu4UXhrfpwClSc20f7ZJE7eWmr2PqHsWyRjcxSRum94W0zVzQZvb6y4mungas1TQgCOX4zF1p+arizS0dZ4g==}
     engines: {node: '>=22.12.0'}
 
   '@netlify/dev@5.0.2':
@@ -886,8 +886,8 @@ packages:
     resolution: {integrity: sha512-hgJrSxfzr7ShaVACGr17Ci3a7Y7vO+a75Fwn9fNe2+1aIbVx4aVSLP3cv9Vv9yfy1JbW563AwcveBq9lr9KKzA==}
     engines: {node: '>=14.8.0'}
 
-  '@netlify/otel@7.0.6':
-    resolution: {integrity: sha512-PUE0NwWiXU2xh64WNb2y5cFFjkn3CvMH5ReL1zL8M9cue3BmEpqpCb1VPdsnrMtZdatjqmGDND8ACmGdrR/THg==}
+  '@netlify/otel@7.0.7':
+    resolution: {integrity: sha512-mIvDPK8J8jgWex8t86/lZYXAWCJigBPsy6Cyt6LG2yy49BYsaEmhE62rODbPa3f9t8PLrNPixbZ05d/S5uAdng==}
     engines: {node: '>=22.12.0'}
 
   '@netlify/redirect-parser@16.1.1':
@@ -900,6 +900,10 @@ packages:
 
   '@netlify/runtime-utils@3.0.0':
     resolution: {integrity: sha512-OHo40+V3QZkR+UrDjqhN+LekrAby/dSSJxsvyYs9i88E/mSl3goB/ysoL+VYROm190egxmQyRYlHK7vL4GeHBQ==}
+    engines: {node: '>=22.12.0'}
+
+  '@netlify/runtime-utils@3.0.1':
+    resolution: {integrity: sha512-PythjseqdFTvaTK28IiRZ/w0YOZKgyBDxiXuCNEwCBxidnKZ7najsOMtstwwzmsRtfHbmXHOB5NLaGCnvnvBTg==}
     engines: {node: '>=22.12.0'}
 
   '@netlify/runtime@5.0.2':
@@ -6702,16 +6706,16 @@ snapshots:
   '@netlify/blobs@11.0.2(supports-color@8.1.1)':
     dependencies:
       '@netlify/dev-utils': 6.0.1
-      '@netlify/otel': 7.0.6(supports-color@8.1.1)
+      '@netlify/otel': 7.0.7(supports-color@8.1.1)
       '@netlify/runtime-utils': 3.0.0
     transitivePeerDependencies:
       - supports-color
 
-  '@netlify/blobs@11.1.7(supports-color@8.1.1)':
+  '@netlify/blobs@11.1.8(supports-color@8.1.1)':
     dependencies:
-      '@netlify/dev-utils': 6.0.4
-      '@netlify/otel': 7.0.6(supports-color@8.1.1)
-      '@netlify/runtime-utils': 3.0.0
+      '@netlify/dev-utils': 6.0.5
+      '@netlify/otel': 7.0.7(supports-color@8.1.1)
+      '@netlify/runtime-utils': 3.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -6765,7 +6769,7 @@ snapshots:
       parse-gitignore: 2.0.0
       semver: 7.8.5
 
-  '@netlify/dev-utils@6.0.4':
+  '@netlify/dev-utils@6.0.5':
     dependencies:
       '@whatwg-node/server': 0.11.0
       ansis: 4.3.1
@@ -6920,7 +6924,7 @@ snapshots:
   '@netlify/nuxt@1.0.1(@nuxt/schema-nightly@5.0.0-2611052317-a04317f)(confbox@0.3.2)(db0@0.3.4(@electric-sql/pglite@0.3.16))(dotenv@16.6.1)(giget@3.3.1)(ioredis@5.11.1(supports-color@8.1.1))(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.153.0)(rolldown@1.2.15)(rollup@4.62.2)(srvx@1.0.8)(supports-color@8.1.1)(unplugin@3.7.0(esbuild@0.28.1)(rolldown@1.2.15)(rollup@4.62.2)(vite@8.3.5(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.1))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.32))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.32)))':
     dependencies:
       '@netlify/dev': 5.0.2(db0@0.3.4(@electric-sql/pglite@0.3.16))(ioredis@5.11.1(supports-color@8.1.1))(rollup@4.62.2)(srvx@1.0.8)(supports-color@8.1.1)
-      '@netlify/dev-utils': 6.0.4
+      '@netlify/dev-utils': 6.0.5
       '@nuxt/kit': 4.6.2(@nuxt/schema-nightly@5.0.0-2611052317-a04317f)(confbox@0.3.2)(dotenv@16.6.1)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.153.0)(rolldown@1.2.15)(unplugin@3.7.0(esbuild@0.28.1)(rolldown@1.2.15)(rollup@4.62.2)(vite@8.3.5(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.1))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.32))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.32)))
       h3: 1.15.11
     transitivePeerDependencies:
@@ -6962,7 +6966,7 @@ snapshots:
 
   '@netlify/open-api@2.57.0': {}
 
-  '@netlify/otel@7.0.6(supports-color@8.1.1)':
+  '@netlify/otel@7.0.7(supports-color@8.1.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.9.1)
@@ -6987,9 +6991,11 @@ snapshots:
 
   '@netlify/runtime-utils@3.0.0': {}
 
+  '@netlify/runtime-utils@3.0.1': {}
+
   '@netlify/runtime@5.0.2(supports-color@8.1.1)':
     dependencies:
-      '@netlify/blobs': 11.1.7(supports-color@8.1.1)
+      '@netlify/blobs': 11.1.8(supports-color@8.1.1)
       '@netlify/cache': 4.0.0
       '@netlify/runtime-utils': 3.0.0
       '@netlify/types': 3.0.0
