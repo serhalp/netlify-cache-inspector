@@ -177,7 +177,7 @@ importers:
     dependencies:
       '@netlify/blobs':
         specifier: ^11.0.0
-        version: 11.1.10(supports-color@8.1.1)
+        version: 11.1.11(supports-color@8.1.1)
       '@netlify/nuxt':
         specifier: 1.0.1
         version: 1.0.1(@nuxt/schema-nightly@5.0.0-2611231954-f3bb563)(confbox@0.3.2)(db0@0.3.4(@electric-sql/pglite@0.3.16))(dotenv@16.6.1)(giget@3.3.1)(ioredis@5.11.1(supports-color@8.1.1))(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.153.0)(rolldown@1.2.19)(rollup@4.62.2)(srvx@1.0.8)(supports-color@8.1.1)(unplugin@3.7.0(esbuild@0.28.1)(rolldown@1.2.19)(rollup@4.62.2)(vite@8.3.8(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.1))(webpack@5.105.2(cssnano@8.0.2(postcss@8.5.32))(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.32)))
@@ -921,8 +921,8 @@ packages:
     resolution: {integrity: sha512-raH28PHHQ1OPAYBCkE+DOnUTS/1nYFTRiFhvO6kuowkdhPiOsvX3XR/IjhePhP8aUsH5quBwcqQ3GaOgnIwmEw==}
     engines: {node: '>=22.12.0'}
 
-  '@netlify/blobs@11.1.10':
-    resolution: {integrity: sha512-JCtCRWwlw6FVR3je+Z4wDbOiaiAIcFtc5SwAdF41dqUXP32pEnv/XvNNoBISxxrLPC+OKr4U+q0AbWnlQDWbUg==}
+  '@netlify/blobs@11.1.11':
+    resolution: {integrity: sha512-lwAANKM/FKG8GdLRbDQy2ttGBPSFacF41rdMuC/AnMUI39VKDC7uCkBd0IlsP8H3/LDcC/OqwgmXvjgy22m5Og==}
     engines: {node: '>=22.12.0'}
 
   '@netlify/cache@4.0.0':
@@ -1009,8 +1009,8 @@ packages:
     resolution: {integrity: sha512-OHo40+V3QZkR+UrDjqhN+LekrAby/dSSJxsvyYs9i88E/mSl3goB/ysoL+VYROm190egxmQyRYlHK7vL4GeHBQ==}
     engines: {node: '>=22.12.0'}
 
-  '@netlify/runtime-utils@3.0.1':
-    resolution: {integrity: sha512-PythjseqdFTvaTK28IiRZ/w0YOZKgyBDxiXuCNEwCBxidnKZ7najsOMtstwwzmsRtfHbmXHOB5NLaGCnvnvBTg==}
+  '@netlify/runtime-utils@3.1.0':
+    resolution: {integrity: sha512-mzlRsXQCo9a9Y4W/jiKvPrDOgmoVu+QIsQ2Lehi7hFJD7KlvEsCucJ2i1DOgN3LpYVbo8gyrxmGZFT2Jlf6SHA==}
     engines: {node: '>=22.12.0'}
 
   '@netlify/runtime@5.0.2':
@@ -6901,11 +6901,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@netlify/blobs@11.1.10(supports-color@8.1.1)':
+  '@netlify/blobs@11.1.11(supports-color@8.1.1)':
     dependencies:
       '@netlify/dev-utils': 6.1.1
       '@netlify/otel': 7.0.9(supports-color@8.1.1)
-      '@netlify/runtime-utils': 3.0.1
+      '@netlify/runtime-utils': 3.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -7182,11 +7182,11 @@ snapshots:
 
   '@netlify/runtime-utils@3.0.0': {}
 
-  '@netlify/runtime-utils@3.0.1': {}
+  '@netlify/runtime-utils@3.1.0': {}
 
   '@netlify/runtime@5.0.2(supports-color@8.1.1)':
     dependencies:
-      '@netlify/blobs': 11.1.10(supports-color@8.1.1)
+      '@netlify/blobs': 11.1.11(supports-color@8.1.1)
       '@netlify/cache': 4.0.0
       '@netlify/runtime-utils': 3.0.0
       '@netlify/types': 3.0.0
